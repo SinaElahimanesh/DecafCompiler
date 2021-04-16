@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class CompilerScanner {
 
     public void startScanning(String input) {
-
+        input = input.replaceAll(RegexHandler.comment_regex,"");
         Pattern r = Pattern.compile(RegexHandler.regex);
         Matcher matcher = r.matcher(input);
 
@@ -24,10 +24,7 @@ public class CompilerScanner {
     }
 
     private static Literals findLiterals(String token) {
-
-        if(isLiteral(RegexHandler.comment_regex, token)) {
-            return Literals.COMMENT_LITERAL;
-        } else if(isLiteral(RegexHandler.string_regex, token)) {
+        if(isLiteral(RegexHandler.string_regex, token)) {
             return Literals.T_STRINGLITERAL;
         } else if(token.equalsIgnoreCase("true") || token.equalsIgnoreCase("false")) {
             return Literals.T_BOOLEANLITERAL;

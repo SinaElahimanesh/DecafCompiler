@@ -82,16 +82,8 @@ public class Main {
 
         String test7 = "+ - * < <= != && += -= *= /=\n";
 
-        String test8 = "\"A string walks into a bar and orders a beer.\"\n" +
-                "\"The bartender looks at him and says, we don't serve strings here.\"\n" +
-                "\"The string walks out to the street, and sits on the curb, dejected.\"\n" +
-                "\"Then he has an idea: he ties himself into a bow, and loosens up his\"\n" +
-                "\"ends, making them up into nice tassels.\"\n" +
-                "\"His confidence restored, he walks back into the bar, sits down, and orders\"\n" +
-                "\"another beer.\"\n" +
-                "\"The bartender looks at him suspiciously: he looks a bit like the string\"\n" +
-                "\"that had just walked in. Hey, he says, aren't you a string?\"\n" +
-                "\"Nope, says the string.  I'm a frayed knot.\"\n";
+        String test8 = "//this is a single line comment\n" +
+                "this is not a comment\n";
 
         String test9 = "10\n" +
                 "9.6\n" +
@@ -109,10 +101,9 @@ public class Main {
 
         String test12 = "class Program { void main () {} }";
 
-        String test13 = "class Program { void main () {} }\n" +
-                "/* jkld\n" +
-                "a FdsaljFdas\n" +
-                "ljkas fdslkj */";
+        String test13 = "/* akdf;asdf;ljas;lf\n" +
+                "adfadfgg\n" +
+                "*/ askdfahskdf";
 
         CompilerScanner compilerScanner = new CompilerScanner();
         compilerScanner.startScanning(test13);
