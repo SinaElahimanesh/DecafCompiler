@@ -113,6 +113,7 @@ public class Scanner {
         Pattern r = Pattern.compile(RegexHandler.regex);
         Matcher matcher = r.matcher("{−123−a35 , id3a ,+∗;}[||===!=()&&]<><=>== a[24]=”7”; n!=if;\n" +
                 "false,−if;true32; forpar");
+            Matcher matcher22 = r.matcher("14.2a;sldjf”okok”false f noooo 0x1234fe ");
         System.out.println("");
         System.out.println("");
         System.out.println("");
