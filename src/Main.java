@@ -99,7 +99,22 @@ public class Main {
                 "true\n" +
                 "false\n";
 
+        String test10 = "// this is a single line comment\n" +
+                "this is not a comment\n";
+
+        String test11 = "{-123-a35,id3a,+*;}[||===!=()&&]<><=>==\n" +
+                "    a[24]=\"7\"; n!=if;\n" +
+                "false,-if;true32;\n" +
+                "forpar\n";
+
+        String test12 = "class Program { void main () {} }";
+
+        String test13 = "class Program { void main () {} }\n" +
+                "/* jkld\n" +
+                "a FdsaljFdas\n" +
+                "ljkas fdslkj */";
+
         CompilerScanner compilerScanner = new CompilerScanner();
-        compilerScanner.startScanning(test8);
+        compilerScanner.startScanning(test13);
     }
 }

@@ -5,5 +5,6 @@ public enum Literals {
     T_DOUBLELITERAL,
     T_STRINGLITERAL,
     T_BOOLEANLITERAL,
-    NOT_LITERAL
+    NOT_LITERAL,
+    COMMENT_LITERAL
 }

@@ -13,7 +13,9 @@ public class CompilerScanner {
         KeyWords.setKeywordList();
         while (matcher.find()) {
             Literals literal = findLiterals(matcher.group());
-            if(literal == Literals.NOT_LITERAL) {
+            if(literal == Literals.COMMENT_LITERAL) {
+                //
+            } else if(literal == Literals.NOT_LITERAL) {
                 System.out.println(matcher.group());
             } else {
                 System.out.println(literal.toString() + " " + matcher.group());
@@ -23,7 +25,9 @@ public class CompilerScanner {
 
     private static Literals findLiterals(String token) {
 
-        if(isLiteral(RegexHandler.string_regex, token)) {
+        if(isLiteral(RegexHandler.comment_regex, token)) {
+            return Literals.COMMENT_LITERAL;
+        } else if(isLiteral(RegexHandler.string_regex, token)) {
             return Literals.T_STRINGLITERAL;
         } else if(token.equalsIgnoreCase("true") || token.equalsIgnoreCase("false")) {
             return Literals.T_BOOLEANLITERAL;
