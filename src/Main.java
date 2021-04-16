@@ -93,6 +93,12 @@ public class Main {
                 "\"that had just walked in. Hey, he says, aren't you a string?\"\n" +
                 "\"Nope, says the string.  I'm a frayed knot.\"\n";
 
+        String test9 = "10\n" +
+                "9.6\n" +
+                "\"Hello\"\n" +
+                "true\n" +
+                "false\n";
+
         CompilerScanner compilerScanner = new CompilerScanner();
         compilerScanner.startScanning(test8);
     }
