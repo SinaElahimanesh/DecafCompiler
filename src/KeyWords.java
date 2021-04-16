@@ -9,4 +9,8 @@ public class KeyWords {
         keywordList.addAll(Arrays.asList(keywords));
     }
 
+    public static boolean isKeyWord(String key) {
+        return keywordList.contains(key);
+    }
+
 }
