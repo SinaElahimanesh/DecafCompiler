@@ -8,9 +8,12 @@ public class RegexHandler {
     public static final String operator_regex = "<=|>=|\\+=|-=|\\*=|\\/=|==|!=|&&|\\|\\||\\+|-|\\*|\\/|%|<|>|=|!|;|,|\\.|\\[|\\]|\\(|\\)|\\}|\\{|−|∗";
     public static final String comment_regex= "\\/\\/[^\\n]*\\n|\\/\\*.*\\*\\/";
 
+    // The order is -->  { comment -- string -- operators -- hex_numbers -- double -- int -- identifier & boolean }
+    public static final String regex = "(\\/\\/[^\\n]*\\n|\\/\\*.*\\*\\/)|(”[^”\\n]*”)|(<=|>=|\\+=|-=|\\*=|\\/=|==|!=|&&|\\|\\||\\+|-|\\*|\\/|%|<|>|=|!|;|,|\\.|\\[|\\]|\\(|\\)|\\}|\\{|−|∗)|(0[Xx][\\da-fA-F]+)|(\\d+\\.\\d*([Ee][+-]?\\d+)?)|(\\d+)|([a-zA-Z][\\w_]*)";
 
-    public static final String regex = "(\\/\\/[^\\n]*\\n|\\/\\*.*\\*\\/)|(”[^”\\n]*”)|(true|false)|(<=|>=|\\+=|-=|\\*=|\\/=|==|!=|&&|\\|\\||\\+|-|\\*|\\/|%|<|>|=|!|;|,|\\.|\\[|\\]|\\(|\\)|\\}|\\{|−|∗)|(0[Xx][\\da-fA-F]+)|(\\d+\\.\\d*([Ee][+-]?\\d+)?)|(\\d+)|([a-zA-Z][\\w_]*)";
-    public static final String regex_khodam = "(\\/\\/[\\n]*\\n|\\/\\*.*\\*\\/)|(\\\"[\\\"\\n]*\\\")|(<=|>=|\\+=|-=|\\*=|\\/=|==|!=|&&|\\|\\||\\+|-|\\*|\\/|%|<|>|=|!|;|,|\\.|\\[|\\]|\\(|\\))|($0[Xx][\\da-fA-F]+)|(\\d+\\.\\d*([Ee][+-]?\\d+)?)|(\\d+)|([a-zA-Z][\\w_]*)";
+
+
+//    public static final String regex_last = "(\\/\\/[\\n]*\\n|\\/\\*.*\\*\\/)|(\\\"[\\\"\\n]*\\\")|(<=|>=|\\+=|-=|\\*=|\\/=|==|!=|&&|\\|\\||\\+|-|\\*|\\/|%|<|>|=|!|;|,|\\.|\\[|\\]|\\(|\\))|($0[Xx][\\da-fA-F]+)|(\\d+\\.\\d*([Ee][+-]?\\d+)?)|(\\d+)|([a-zA-Z][\\w_]*)";
 
 //    public static final String identifier_regex = "^[a-zA-Z][\\w_]*";
 //    public static final String decimal_integer_regex = "^\\d+";
