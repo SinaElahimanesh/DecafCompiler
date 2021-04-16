@@ -5,23 +5,185 @@ import java.util.regex.Pattern;
 public class Scanner {
 
     public static void main(String[] args) {
-        String input = "forward55forwardkeeperkhubikeeper";
-        Matcher matcher = rx1.matcher(input);
+        String input = "{−123−a35 , id3a ,+∗;}[||===!=()&&]<><=>==";
+        Matcher matcher1 = rx1.matcher(input);
         Matcher matcher2 = rx2.matcher(input);
+        Matcher matcher3 = rx3.matcher(input);
+        Matcher matcher4 = rx4.matcher(input);
+        Matcher matcher5 = rx5.matcher(input);
+        Matcher matcher6 = rx6.matcher(input);
+        Matcher matcher7 = rx7.matcher(input);
+        Matcher matcher8 = rx8.matcher(input);
+
         ArrayList<Matcher> allMatchers = new ArrayList<>();
-        allMatchers.add(matcher);
+        allMatchers.add(matcher1);
         allMatchers.add(matcher2);
+        allMatchers.add(matcher3);
+        allMatchers.add(matcher4);
+        allMatchers.add(matcher5);
+        allMatchers.add(matcher6);
+        allMatchers.add(matcher7);
+        allMatchers.add(matcher8);
+
+//        matcher2.find();
+//        String string2 = input.substring(matcher2.start(), matcher2.end());
+//        System.out.println(string2);
         boolean isFound = true;
-        while (isFound) {
-            if (matcher.find()) {
-                String string = input.substring(matcher.start(), matcher.end());
+        int l0 = 0;
+        int l1 = 0;
+        int l2 = 0;
+        int l3 = 0;
+        int l4 = 0;
+        int l5 = 0;
+        int l6 = 0;
+        int l7 = 0;
+
+
+        int i=0;
+        int j=0;
+        while (i < input.length()) {
+            String string = "^";
+            if (matcher1.matches()) {
+                string = input.substring(matcher1.start(), matcher1.end());
+                j = i;
+                while (true) {
+                    if (matcher1.find()) {
+                        string = input.substring(matcher1.start(), matcher1.end());
+                        System.out.println(string);
+                    } else if (matcher2.find()) {
+                        string = input.substring(matcher2.start(), matcher2.end());
+                        System.out.println(string);
+                    } else if (matcher3.matches()) {
+                        string = input.substring(matcher3.start(), matcher3.end());
+                        System.out.println(string);
+                    } else if (matcher4.matches()) {
+                        string = input.substring(matcher4.start(), matcher4.end());
+                        System.out.println(string);
+                    } else if (matcher5.matches()) {
+                        string = input.substring(matcher5.start(), matcher5.end());
+                        System.out.println(string);
+                    } else if (matcher6.matches()) {
+                        string = input.substring(matcher6.start(), matcher6.end());
+                        System.out.println(string);
+                    } else if (matcher7.matches()) {
+                        string = input.substring(matcher7.start(), matcher7.end());
+                        System.out.println(string);
+                    } else if (matcher8.matches()) {
+                        string = input.substring(matcher8.start(), matcher8.end());
+                        System.out.println(string);
+                    } else {
+                        isFound = false;
+                        break;
+                    }
+                }
                 System.out.println(string);
-            } else if (matcher2.matches()) {
-                String string = input.substring(matcher2.start(), matcher2.end());
+            } else if (matcher2.find()) {
+                 string = input.substring(matcher2.start(), matcher2.end());
+                System.out.println(string);
+            } else if (matcher3.matches()) {
+                 string = input.substring(matcher3.start(), matcher3.end());
+                System.out.println(string);
+            } else if (matcher4.matches()) {
+                 string = input.substring(matcher4.start(), matcher4.end());
+                System.out.println(string);
+            } else if (matcher5.matches()) {
+                 string = input.substring(matcher5.start(), matcher5.end());
+                System.out.println(string);
+            } else if (matcher6.matches()) {
+                 string = input.substring(matcher6.start(), matcher6.end());
+                System.out.println(string);
+            } else if (matcher7.matches()) {
+                 string = input.substring(matcher7.start(), matcher7.end());
+                System.out.println(string);
+            } else if (matcher8.matches()) {
+                 string = input.substring(matcher8.start(), matcher8.end());
                 System.out.println(string);
             } else {
                 isFound = false;
+                break;
             }
+        }
+
+
+
+
+
+
+        Pattern r = Pattern.compile(RegexHandler.regex);
+        Matcher matcher = r.matcher("{−123−a35 , id3a ,+∗;}[||===!=()&&]<><=>==");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        while (matcher.find()) {
+            System.out.println(matcher.group());
+        }
+
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+
+
+
+
+
+
+        while (input.length() > 0) {
+            System.out.println(input);
+            if (matcher2.matches()) {
+                String string = input.substring(matcher2.start(), matcher2.end());
+                input = input.substring(matcher2.end() + 1);
+                l1 = string.length();
+                System.out.println(string);
+            }
+            if (matcher1.find()) {
+                String string = input.substring(matcher1.start(), matcher1.end());
+                input = input.substring(matcher1.end() + 1);
+                l0 = string.length();
+                System.out.println(string);
+            }
+
+            if (matcher3.matches()) {
+                String string = input.substring(matcher3.start(), matcher3.end());
+                input = input.substring(matcher3.end() + 1);
+                l2 = string.length();
+                System.out.println(string);
+            }
+            if (matcher4.matches()) {
+                String string = input.substring(matcher4.start(), matcher4.end());
+                input = input.substring(matcher4.end() + 1);
+                l3 = string.length();
+                System.out.println(string);
+            }
+            if (matcher5.matches()) {
+                String string = input.substring(matcher5.start(), matcher5.end());
+                input = input.substring(matcher5.end() + 1);
+                l4 = string.length();
+                System.out.println(string);
+            }
+            if (matcher6.matches()) {
+                String string = input.substring(matcher6.start(), matcher6.end());
+                input = input.substring(matcher6.end() + 1);
+                l5 = string.length();
+                System.out.println(string);
+            }
+            if (matcher7.matches()) {
+                String string = input.substring(matcher7.start(), matcher7.end());
+                input = input.substring(matcher7.end() + 1);
+                l6 = string.length();
+                System.out.println(string);
+            }
+            if (matcher8.matches()) {
+                String string = input.substring(matcher8.start(), matcher8.end());
+                input = input.substring(matcher8.end() + 1);
+                l7 = string.length();
+                System.out.println(string);
+            } else {
+                isFound = false;
+                break;
+            }
+            //int min = Math.min
         }
     }
 
@@ -37,12 +199,28 @@ public class Scanner {
     }
 
     public static boolean isFound(ArrayList<Matcher> allMatchers) {
-        return allMatchers.get(0).matches() || allMatchers.get(1).matches();
+        return allMatchers.get(0).matches()
+                || allMatchers.get(1).matches()
+                || allMatchers.get(2).matches()
+                || allMatchers.get(3).matches()
+                || allMatchers.get(4).matches()
+                || allMatchers.get(5).matches()
+                || allMatchers.get(6).matches()
+                || allMatchers.get(7).matches();
     }
 
+//    private static final Pattern
+//            rx1 = Pattern.compile("^(forward|keeper)"),
+//            rx2 = Pattern.compile("^(for|keep)");
     private static final Pattern
-            rx1 = Pattern.compile(RegexHandler.decimal_number_regex),
-            rx2 = Pattern.compile(RegexHandler.decimal_number_regex2);
+            rx1 = Pattern.compile(RegexHandler.identifier_regex),
+        rx2 = Pattern.compile(RegexHandler.decimal_integer_regex),
+        rx3 = Pattern.compile(RegexHandler.hex_integer_regex),
+        rx4 = Pattern.compile(RegexHandler.double_regex),
+        rx5 = Pattern.compile(RegexHandler.string_regex),
+        rx6 = Pattern.compile(RegexHandler.boolean_regex),
+        rx7 = Pattern.compile(RegexHandler.operator_regex),
+        rx8 = Pattern.compile(RegexHandler.comment_regex);
 
 
     public void scanner(String input) {
@@ -52,8 +230,8 @@ public class Scanner {
 
 
 
-        Pattern playerPattern = Pattern.compile(RegexHandler.decimal_number_regex);
-        Matcher playerMatcher = playerPattern.matcher(RegexHandler.decimal_number_regex);
+        Pattern playerPattern = Pattern.compile("(forward|keeper)");
+        Matcher playerMatcher = playerPattern.matcher("");
 
 //        while(playerMatcher.find()) {
 //            String string = str.substring(playerMatcher.start(), playerMatcher.end());
