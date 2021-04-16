@@ -5,22 +5,25 @@ import java.util.regex.Pattern;
 
 public class CompilerScanner {
 
-    public void startScanning(String input) {
+    public String startScanning(String input) {
         input = input.replaceAll(RegexHandler.comment_regex,"");
         Pattern r = Pattern.compile(RegexHandler.regex);
         Matcher matcher = r.matcher(input);
 
         KeyWords.setKeywordList();
+        String output = "";
         while (matcher.find()) {
             Literals literal = findLiterals(matcher.group());
             if(literal == Literals.COMMENT_LITERAL) {
-                //
+                // nothing to do
             } else if(literal == Literals.NOT_LITERAL) {
-                System.out.println(matcher.group());
+                output += (matcher.group() + "\n");
             } else {
                 System.out.println(literal.toString() + " " + matcher.group());
+                output += (literal.toString() + " " + matcher.group() + "\n");
             }
         }
+        return output;
     }
 
     private static Literals findLiterals(String token) {

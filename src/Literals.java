@@ -1,5 +1,4 @@
 public enum Literals {
-    ID,
     T_ID,
     T_INTLITERAL,
     T_DOUBLELITERAL,
