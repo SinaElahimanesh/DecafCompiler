@@ -1,8 +1,13 @@
+import javafx.scene.Parent;
+import parser.CodeGenerator;
+import parser.Parser;
+import scanner.CompilerScanner;
+
 import java.io.*;
+import java.util.Scanner;
 
-public class main {
-
-    public static void main(String[] args) throws IOException {
+public class Main {
+    public static void main(String[] args) {
         try {
             String inputFileName = null;
             String outputFileName = null;
@@ -21,25 +26,39 @@ public class main {
             if (inputFileName != null)
                 reader = new FileReader("tests/" + inputFileName);
             if (outputFileName != null)
-                writer = new FileWriter( "out/" + outputFileName);
+                writer = new FileWriter("out/" + outputFileName);
             // Read with reader and write the output with writer.
 
             int data = reader.read();
-            String input = "";
+            StringBuilder input = new StringBuilder();
             while (data != -1) {
-                input += (char) data;
+                input.append((char) data);
                 data = reader.read();
             }
             reader.close();
-
-            CompilerScanner compilerScanner = new CompilerScanner();
-            String output = compilerScanner.startScanning(input);
+            String output = parser(input.toString());
+            System.out.println(output);
             writer.write(output);
             writer.flush();
         }
-        catch(Exception e) {
-            return;
+        catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+    }
+
+    public static String parser(String input) {
+        CompilerScanner scanner = new CompilerScanner(input);
+        CodeGenerator cg = sem -> {};
+        Parser parser = new Parser(scanner, cg, "src/parser/table.npt", true);
+        parser.parse();
+        return "Done";
+    }
+
+    public static String scanner(String input) {
+        CompilerScanner compilerScanner = new CompilerScanner("");
+        String output = compilerScanner.startScanning(input);
+        System.out.println(output);
+        return output;
     }
 
 
@@ -147,7 +166,7 @@ public class main {
 //                "adfadfgg\n" +
 //                "*/ askdfahskdf";
 //
-//        CompilerScanner compilerScanner = new CompilerScanner();
+//        scanner.CompilerScanner compilerScanner = new scanner.CompilerScanner();
 //        System.out.println(compilerScanner.startScanning(test12));
 //    }
 }

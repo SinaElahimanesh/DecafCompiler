@@ -1,3 +1,5 @@
+package scanner;
+
 public class RegexHandler {
     public static final String identifier_regex = "[a-zA-Z][\\w_]*";
     public static final String decimal_integer_regex = "\\d+";

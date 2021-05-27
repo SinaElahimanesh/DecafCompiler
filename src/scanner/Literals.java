@@ -1,3 +1,5 @@
+package scanner;
+
 public enum Literals {
     T_ID,
     T_INTLITERAL,
