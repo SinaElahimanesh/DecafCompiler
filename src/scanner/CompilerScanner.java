@@ -23,6 +23,8 @@ public class CompilerScanner implements parser.Lexical {
                     // nothing to do
                     break;
                 case NOT_LITERAL:
+                    if (",".equals(matcher.group()))
+                        return "comma";
                     return matcher.group();
                 case T_ID:
                     return "ident";
