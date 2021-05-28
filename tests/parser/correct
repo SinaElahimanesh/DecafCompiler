@@ -1,12 +1,10 @@
 class Main {
-    int x
-    int y;
+    public void main() {
+        int y;
+        int x;
 
-    static void main() {
-        x = 0xf;
-        y = 0xff;
         y += x + y;
-        Print(z);
+        print(z);
         return 0;
     }
 }

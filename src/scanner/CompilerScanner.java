@@ -34,12 +34,9 @@ public class CompilerScanner implements parser.Lexical {
                     return "stringConstant";
                 case T_BOOLEANLITERAL:
                     return "boolConstant";
-                default:
-                    System.out.println(literal.toString() + " " + matcher.group());
-                    return (literal.toString() + " " + matcher.group());
             }
         }
-        return null;
+        return "$";
     }
 
     public String startScanning(String input) {
