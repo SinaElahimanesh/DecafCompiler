@@ -1,9 +1,10 @@
 #!/bin/bash
-mkdir -p out
-mkdir -p report
+directory="$1"
+mkdir -p out/$directory
+mkdir -p report/$directory
 cd ./tests
 prefix="t" ;
-dirlist=(`ls ${prefix}*.in`) ;
+dirlist=(`ls $directory${prefix}*.in`) ;
 OUTPUT_DIRECTORY="out/"
 TEST_DIRECTORY="tests/"
 REPORT_DIRECTORY="report/"
@@ -16,12 +17,12 @@ do
     output_filename="$filename.out"
     report_filename="$filename.report.txt"
     echo "Running Test $filename -------------------------------------"
-    javac src/*.java
+    javac src/*/*.java src/Main.java
     if [ $? -eq 1 ]; then
         echo "Compile Error"
     else
         echo "Code Compiled Successfully"
-        java -cp :src/ main -i $filelist -o $output_filename
+        java -cp :src/ Main -i $filelist -o $output_filename
         if [ $? -eq 0 ]; then
             echo "Code Executed Successfuly!"
             if command -v python3; then
