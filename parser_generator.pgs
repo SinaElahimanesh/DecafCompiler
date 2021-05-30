@@ -486,7 +486,17 @@
         "token": "class",
         "func": "",
         "anchorX": 456.0,
-        "anchorY": 359.5,
+        "anchorY": 389.5,
+        "isGraph": false,
+        "isGlobal": false
+      },
+      {
+        "start": 28,
+        "end": 29,
+        "token": "interface",
+        "func": "",
+        "anchorX": 458.0,
+        "anchorY": 328.5,
         "isGraph": false,
         "isGlobal": false
       },
@@ -953,26 +963,6 @@
         "isGlobal": false
       },
       {
-        "start": 49,
-        "end": 41,
-        "token": "Operator",
-        "func": "",
-        "anchorX": 634.0,
-        "anchorY": 460.5,
-        "isGraph": true,
-        "isGlobal": false
-      },
-      {
-        "start": 49,
-        "end": 41,
-        "token": ";",
-        "func": "",
-        "anchorX": 616.0,
-        "anchorY": 452.5,
-        "isGraph": false,
-        "isGlobal": false
-      },
-      {
         "start": 50,
         "end": 49,
         "token": ".",
@@ -989,6 +979,26 @@
         "func": "",
         "anchorX": 653.0,
         "anchorY": 578.0,
+        "isGraph": false,
+        "isGlobal": false
+      },
+      {
+        "start": 50,
+        "end": 41,
+        "token": "Operator",
+        "func": "",
+        "anchorX": 700.0,
+        "anchorY": 464.0,
+        "isGraph": true,
+        "isGlobal": false
+      },
+      {
+        "start": 50,
+        "end": 41,
+        "token": ";",
+        "func": "",
+        "anchorX": 660.0,
+        "anchorY": 455.0,
         "isGraph": false,
         "isGlobal": false
       },
@@ -2253,7 +2263,7 @@
       {
         "start": 125,
         "end": 126,
-        "token": "II",
+        "token": "||",
         "func": "",
         "anchorX": 476.5,
         "anchorY": 532.5,
@@ -3113,7 +3123,7 @@
       {
         "start": 167,
         "end": 172,
-        "token": "readLine",
+        "token": "ReadLine",
         "func": "",
         "anchorX": 361.0,
         "anchorY": 655.0,
@@ -3133,7 +3143,7 @@
       {
         "start": 167,
         "end": 172,
-        "token": "readInteger",
+        "token": "ReadInteger",
         "func": "",
         "anchorX": 314.5,
         "anchorY": 678.5,
@@ -3563,11 +3573,11 @@
       {
         "start": 191,
         "end": 193,
-        "token": "type",
+        "token": "Type",
         "func": "",
         "anchorX": 494.5,
         "anchorY": 267.5,
-        "isGraph": false,
+        "isGraph": true,
         "isGlobal": false
       },
       {

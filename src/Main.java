@@ -50,8 +50,12 @@ public class Main {
         CompilerScanner scanner = new CompilerScanner(input);
         CodeGenerator cg = sem -> {};
         Parser parser = new Parser(scanner, cg, "src/parser/table.npt", true);
-        parser.parse();
-        return "Done";
+        try {
+            parser.parse();
+            return "OK";
+        } catch (RuntimeException ignored) {
+            return "Syntax Error";
+        }
     }
 
     public static String scanner(String input) {
