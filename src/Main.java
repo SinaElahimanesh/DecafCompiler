@@ -1,13 +1,17 @@
-import javafx.scene.Parent;
+
 import parser.CodeGenerator;
 import parser.Parser;
 import scanner.CompilerScanner;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+//        String str = "(A + B).c = d";
+//        String output2 = parser(str);
+//        System.out.println(output2);
         try {
             String inputFileName = null;
             String outputFileName = null;

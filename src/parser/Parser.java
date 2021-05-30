@@ -178,6 +178,7 @@ public class Parser {
 
     private int nextTokenID() {
         String token = lexical.nextToken();
+//        System.out.println(token);
         for (int i = 0; i < symbols.length; i++) {
             if (symbols[i].equals(token)) {
                 return i;

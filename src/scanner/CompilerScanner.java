@@ -50,19 +50,23 @@ public class CompilerScanner implements parser.Lexical {
         StringBuilder output = new StringBuilder();
         while (matcher.find()) {
             Literals literal = findLiterals(matcher.group());
+//            System.out.println("this is " + literal);
             switch (literal) {
                 case COMMENT_LITERAL:
                     // nothing to do
                     break;
                 case NOT_LITERAL:
+//                    System.out.println("n");
                     output.append(matcher.group()).append("\n");
                     break;
                 default:
-                    System.out.println(literal.toString() + " " + matcher.group());
+//                    System.out.println(literal.toString() + " " + matcher.group());
                     output.append(literal.toString()).append(" ").append(matcher.group()).append("\n");
                     break;
             }
         }
+//        System.out.println(matcher.groupCount());
+//        System.out.println(output);
         return output.toString();
     }
 
