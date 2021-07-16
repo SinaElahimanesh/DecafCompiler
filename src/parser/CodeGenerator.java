@@ -1,5 +1,5 @@
 package parser;
 
 public interface CodeGenerator {
-    void doSemantic(String sem);
+    void doSemantic(String sem, Action action);
 }

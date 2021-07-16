@@ -6,9 +6,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-enum Action {
-    ERROR, SHIFT, GOTO, PUSH_GOTO, REDUCE, ACCEPT
-}
 
 class LLCell {
     private Action action;
@@ -124,14 +121,14 @@ public class Parser {
                     updateRecoveryState(currentNode, tokenText);
                     generateError("Unable to parse input.");
                 case SHIFT:
-                    doSemantics(cell.getFunction());
+                    doSemantics(cell.getFunction(), Action.SHIFT);
                     tokenID = nextTokenID();
                     currentNode = cell.getTarget();
                     recoveryState.clear();
                     break;
                 case GOTO:
                     updateRecoveryState(currentNode, tokenText);
-                    doSemantics(cell.getFunction());
+                    doSemantics(cell.getFunction(), Action.GOTO);
                     currentNode = cell.getTarget();
                     break;
                 case PUSH_GOTO:
@@ -146,7 +143,7 @@ public class Parser {
                     updateRecoveryState(currentNode, tokenText);
                     int graphToken = cell.getTarget();
                     int preNode = parseStack.pop();
-                    doSemantics(parseTable[preNode][graphToken].getFunction());
+                    doSemantics(parseTable[preNode][graphToken].getFunction(), Action.REDUCE);
                     currentNode = parseTable[preNode][graphToken].getTarget();
                     break;
                 case ACCEPT:
@@ -178,7 +175,6 @@ public class Parser {
 
     private int nextTokenID() {
         String token = lexical.nextToken();
-//        System.out.println(token);
         for (int i = 0; i < symbols.length; i++) {
             if (symbols[i].equals(token)) {
                 return i;
@@ -187,12 +183,13 @@ public class Parser {
         throw new RuntimeException("Undefined token: " + token);
     }
 
-    private void doSemantics(List<String> functions) {
+    private void doSemantics(List<String> functions, Action action) {
         if (debugMode) {
             System.out.println("Execute semantic codes: " + functions);
         }
+        codeGenerator.doSemantic("", action);
         for (String function : functions) {
-            codeGenerator.doSemantic(function);
+            codeGenerator.doSemantic(function, action);
         }
     }
 }

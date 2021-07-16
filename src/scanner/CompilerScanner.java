@@ -1,9 +1,11 @@
 package scanner;
 
+import parser.Lexical;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CompilerScanner implements parser.Lexical {
+public class CompilerScanner implements Lexical {
     private Matcher matcher;
 
 
