@@ -1,5 +1,7 @@
 package parser;
 
+import code_generator.SemanticException;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -100,7 +102,7 @@ public class Parser {
         }
     }
 
-    public void parse() {
+    public void parse() throws SemanticException {
         int tokenID = nextTokenID();
         int currentNode = startNode;
         boolean accepted = false;
@@ -183,7 +185,7 @@ public class Parser {
         throw new RuntimeException("Undefined token: " + token);
     }
 
-    private void doSemantics(List<String> functions, Action action) {
+    private void doSemantics(List<String> functions, Action action) throws SemanticException {
         if (debugMode) {
             System.out.println("Execute semantic codes: " + functions);
         }

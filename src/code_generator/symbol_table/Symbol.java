@@ -1,4 +1,4 @@
-package code_generator;
+package code_generator.symbol_table;
 
 public class Symbol {
     private String symbolName;

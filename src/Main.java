@@ -1,4 +1,5 @@
 import code_generator.DecafCodeGenerator;
+import code_generator.SemanticException;
 import jdk.nashorn.internal.runtime.regexp.joni.Syntax;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import parser.CodeGenerator;
@@ -51,13 +52,15 @@ public class Main {
 
     public static String code_generator(String input) {
         CompilerScanner scanner = new CompilerScanner(input);
-        CodeGenerator cg = new DecafCodeGenerator();
+        DecafCodeGenerator cg = new DecafCodeGenerator();
         Parser parser = new Parser(scanner, cg, "src/parser/table.npt", false);
         try {
             parser.parse();
-            return "OK";
+            return cg.get_result();
         } catch (SyntaxException ignored) {
             return "Syntax Error";
+        } catch (SemanticException ignored) {
+            return "Semantic Error";
         }
     }
 
@@ -94,6 +97,8 @@ public class Main {
             return "OK";
         } catch (RuntimeException ignored) {
             return "Syntax Error";
+        } catch (SemanticException ignored) {
+            return "Semantic Error";
         }
     }
 
