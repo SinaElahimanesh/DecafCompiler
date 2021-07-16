@@ -1,3 +1,6 @@
+import code_generator.DecafCodeGenerator;
+import jdk.nashorn.internal.runtime.regexp.joni.Syntax;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import parser.CodeGenerator;
 import parser.Parser;
 import parser.Action;
@@ -37,12 +40,24 @@ public class Main {
                 data = reader.read();
             }
             reader.close();
-            String output = parser(input.toString());
+            String output = code_generator(input.toString());
             System.out.println(output);
             writer.write(output);
             writer.flush();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public static String code_generator(String input) {
+        CompilerScanner scanner = new CompilerScanner(input);
+        CodeGenerator cg = new DecafCodeGenerator();
+        Parser parser = new Parser(scanner, cg, "src/parser/table.npt", false);
+        try {
+            parser.parse();
+            return "OK";
+        } catch (SyntaxException ignored) {
+            return "Syntax Error";
         }
     }
 
