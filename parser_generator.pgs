@@ -1866,7 +1866,7 @@
         "start": 103,
         "end": 104,
         "token": "Expr",
-        "func": "",
+        "func": "print_expression",
         "anchorX": 634.5,
         "anchorY": 505.0,
         "isGraph": true,

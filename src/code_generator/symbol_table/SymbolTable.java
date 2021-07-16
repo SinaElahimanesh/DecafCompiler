@@ -1,30 +1,14 @@
 package code_generator.symbol_table;
 
-import java.util.ArrayList;
+import code_generator.symbol_table.symbols.Symbol;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class SymbolTable {
+    Set<Symbol> symbols = new HashSet<>();
 
-    private static ArrayList<Symbol> allSymbols = new ArrayList<Symbol>();
+    public SymbolTable() {
 
-    public void addSymbol(Symbol symbol) {
-        allSymbols.add(symbol);
-    }
-
-    public boolean doesSymbolNameExists(String ident) {
-        for (Symbol symbol : allSymbols) {
-            if(symbol.getSymbolName().equals(ident)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Symbol getSymbolById(String ident) {
-        for (Symbol symbol : allSymbols) {
-            if(symbol.getSymbolName().equals(ident)) {
-                return symbol;
-            }
-        }
-        return null; // if there is no symbol with this name returns NULL
     }
 }

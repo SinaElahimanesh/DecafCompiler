@@ -2,6 +2,7 @@ package code_generator;
 
 import code_generator.instructions.Directive;
 import code_generator.instructions.MipsLine;
+import code_generator.stack.Scope;
 import code_generator.symbol_table.SymbolType;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import parser.Action;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 
 public class DecafCodeGenerator implements CodeGenerator {
 	ArrayList<MipsLine> mipsLines = new ArrayList<>();
+	ArrayList<Scope> displays = new ArrayList<>();
 	int call_number = 0;
 	int current_call = 0;
 
@@ -34,6 +36,8 @@ public class DecafCodeGenerator implements CodeGenerator {
 					throw new SyntaxException("wrong assignment");
 				}
 				break;
+			case "print_expression":
+
 			default:
 				break;
 		}
