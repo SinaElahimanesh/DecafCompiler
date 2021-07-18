@@ -11,9 +11,9 @@ import code_generator.operand.RegisterBank;
 
 import java.util.ArrayList;
 
-public class IntSymbol extends Symbol implements Primitive {
-	public IntSymbol() {
-		super("int");
+public class BoolSymbol extends Symbol implements Primitive {
+	public BoolSymbol() {
+		super("bool");
 		size = 4;
 	}
 
@@ -21,10 +21,10 @@ public class IntSymbol extends Symbol implements Primitive {
 	@Override
 	public void addition(Register firstRegister, Register secondRegister, Register resultRegister)
 			throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use int addition due to non-int types");
+		if (RegisterBank.getUseCase(firstRegister).getClass() != BoolSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != BoolSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != BoolSymbol.class) {
+			throw new IncompatibleClassChangeError("Can't use bool addition due to non-bool types");
 		}
 
 		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
@@ -43,10 +43,10 @@ public class IntSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use int subtraction due to non-int types");
+		if (RegisterBank.getUseCase(firstRegister).getClass() != BoolSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != BoolSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != BoolSymbol.class) {
+			throw new IncompatibleClassChangeError("Can't use bool subtraction due to non-bool types");
 		}
 
 		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
@@ -65,10 +65,10 @@ public class IntSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use int multiple due to non-int types");
+		if (RegisterBank.getUseCase(firstRegister).getClass() != BoolSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != BoolSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != BoolSymbol.class) {
+			throw new IncompatibleClassChangeError("Can't use bool multiple due to non-bool types");
 		}
 
 		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
@@ -87,10 +87,10 @@ public class IntSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void division(Register firstRegister, Register secondRegister, Register resultRegister) {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use int division due to non-int types");
+		if (RegisterBank.getUseCase(firstRegister).getClass() != BoolSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != BoolSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != BoolSymbol.class) {
+			throw new IncompatibleClassChangeError("Can't use bool division due to non-bool types");
 		}
 
 		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
