@@ -9,15 +9,11 @@ import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
 import code_generator.stack.Display;
-import code_generator.stack.Scope;
 import code_generator.stack.TemporaryMemoryBank;
 import code_generator.symbol_table.SymbolTable;
-import code_generator.symbol_table.SymbolType;
 import code_generator.symbol_table.Variable;
-import code_generator.symbol_table.symbols.IntSymbol;
 import code_generator.symbol_table.symbols.Primitive;
 import code_generator.symbol_table.symbols.Symbol;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import parser.Action;
 import parser.CodeGenerator;
 import scanner.CompilerScanner;
@@ -78,7 +74,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		call_number = current_call;
 	}
 
-	public void assignment_operator() {
+	public void assignment_operator() throws SyntaxException {
 		if (current_call - call_number > 2) {
 			throw new SyntaxException("wrong assignment");
 		}
