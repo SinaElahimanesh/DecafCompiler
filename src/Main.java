@@ -1,6 +1,5 @@
 import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
-import jdk.nashorn.internal.runtime.regexp.joni.Syntax;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import parser.CodeGenerator;
 import parser.Parser;

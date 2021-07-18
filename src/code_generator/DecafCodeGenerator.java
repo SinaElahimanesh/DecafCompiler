@@ -1,9 +1,6 @@
 package code_generator;
 
-import code_generator.instructions.Directive;
-import code_generator.instructions.Instruction;
-import code_generator.instructions.MipsLine;
-import code_generator.instructions.SystemCall;
+import code_generator.instructions.*;
 import code_generator.operand.Immediate;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
@@ -39,6 +36,8 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	Stack<Variable> variables = new Stack<>();
 	Stack<Indirect> addresses = new Stack<>();
+
+	Stack<Label> labels = new Stack<>();
 
 	AssignmentType assignmentType = AssignmentType.NONE;
 
@@ -173,5 +172,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 		}
 
 		return result.toString();
+	}
+
+	public void jumpIfZero() {
+		Symbol symbol = variables.pop().getSymbol();
+		Indirect address = addresses.pop();
+//		if(()symbol)
 	}
 }
