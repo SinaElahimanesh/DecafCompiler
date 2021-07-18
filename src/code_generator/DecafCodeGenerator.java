@@ -11,6 +11,7 @@ import code_generator.operand.RegisterBank;
 import code_generator.stack.Display;
 import code_generator.stack.Scope;
 import code_generator.stack.TemporaryMemoryBank;
+import code_generator.symbol_table.SymbolTable;
 import code_generator.symbol_table.SymbolType;
 import code_generator.symbol_table.Variable;
 import code_generator.symbol_table.symbols.IntSymbol;
@@ -32,6 +33,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	public static ArrayList<MipsLine> mipsLines = new ArrayList<>();
 	Display display = new Display(mipsLines);
 	TemporaryMemoryBank temporaryMemoryBank = new TemporaryMemoryBank();
+	SymbolTable symbolTable = new SymbolTable();
 
 	Stack<Symbol> symbols = new Stack<>();
 
@@ -50,13 +52,14 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	@Override
 	public void doSemantic(String sem, Action action) throws SemanticException {
-		if (action != Action.SHIFT)
-			return;
-		current_call++;
+		if (action == Action.SHIFT) {
+			current_call++;
+		}
+
 		if (sem.equals("")) {
 			return;
 		}
-
+		System.out.println(sem);
 		try {
 			Method semanticMethod = this.getClass().getMethod(sem);
 			semanticMethod.invoke(this);
@@ -79,8 +82,8 @@ public class DecafCodeGenerator implements CodeGenerator {
 		}
 	}
 
-	public void Type_int() {
-		symbols.add(new IntSymbol());
+	public void type() {
+		symbols.add(symbolTable.getSymbol(scanner.getToken()));
 	}
 
 	public void Variable_name() {
@@ -97,7 +100,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		Integer intSymbolSize = 4;
 		Indirect temporary = temporaryMemoryBank.allocateTemporaryMemory(intSymbolSize);
 
-		variables.push(new Variable(new IntSymbol(), "____"));
+		variables.push(new Variable(symbolTable.getSymbol("int"), "____"));
 		addresses.push(temporary);
 
 		mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.read_int)));
@@ -111,6 +114,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 			variables.push(display.getVariable(ident));
 			addresses.push(display.getVariableAddress(ident));
 		} catch (NoSuchFieldException e) {
+			symbolTable.getSymbol(ident);
 			e.printStackTrace();
 			throw new SemanticException("recordIdent: No varibale with name " + ident + " found in display.");
 		}

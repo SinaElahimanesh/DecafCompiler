@@ -123,6 +123,7 @@ public class Parser {
                     updateRecoveryState(currentNode, tokenText);
                     generateError("Unable to parse input.");
                 case SHIFT:
+                    System.err.println("$$$$" + tokenText + "$$$$");
                     doSemantics(cell.getFunction(), Action.SHIFT);
                     tokenID = nextTokenID();
                     currentNode = cell.getTarget();

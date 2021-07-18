@@ -14,7 +14,7 @@ dirlist=(`ls ${prefix}*.in`) ;
 NUMBER_OF_PASSED=0
 NUMBER_OF_FAILED=0
 cd $CURRENT_DIRECTORY
-javac -d out/ src/*/*.java src/Main.java
+javac -d out/ src/*.java src/*/*.java src/*/*/*.java src/*/*/*/*.java
 if [ $? -eq 1 ]; then
     echo "Code did not compile"
 else

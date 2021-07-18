@@ -29,9 +29,9 @@ public class Main {
             Reader reader = null;
             Writer writer = null;
             if (inputFileName != null)
-                reader = new FileReader("tests/" + inputFileName);
+                reader = new FileReader(inputFileName);
             if (outputFileName != null)
-                writer = new FileWriter("out/" + outputFileName);
+                writer = new FileWriter(outputFileName);
             // Read with reader and write the output with writer.
 
             int data = reader.read();
