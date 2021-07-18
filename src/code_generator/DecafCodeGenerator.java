@@ -1,14 +1,12 @@
 package code_generator;
 
 import code_generator.instructions.*;
-import code_generator.operand.Immediate;
-import code_generator.operand.Indirect;
-import code_generator.operand.Register;
-import code_generator.operand.RegisterBank;
+import code_generator.operand.*;
 import code_generator.stack.Display;
 import code_generator.stack.TemporaryMemoryBank;
 import code_generator.symbol_table.SymbolTable;
 import code_generator.symbol_table.Variable;
+import code_generator.symbol_table.symbols.BoolSymbol;
 import code_generator.symbol_table.symbols.Primitive;
 import code_generator.symbol_table.symbols.Symbol;
 import parser.Action;
@@ -172,9 +170,37 @@ public class DecafCodeGenerator implements CodeGenerator {
 		return result.toString();
 	}
 
-	public void jumpIfZero() {
+	public void ifStatement() throws SemanticException, ClassNotFoundException {
 		Symbol symbol = variables.pop().getSymbol();
 		Indirect address = addresses.pop();
-//		if(()symbol)
+
+		if (!(symbol instanceof BoolSymbol)) {
+			throw new SemanticException("Boolean expression: the condition of If statement is not Boolean Expression");
+		}
+		Register value = RegisterBank.allocateRegister(symbol);
+		mipsLines.add(new Instruction("lw", value, address));
+
+		Label jumpLabel = LabelMaker.createNonFunctionLabel();
+		labels.add(jumpLabel);
+		mipsLines.add(new Instruction("bez", value, new LabelOperand(jumpLabel)));
+
+		RegisterBank.freeRegister(value);
+	}
+
+	public void elseStatement() {
+
+		Label jumpLabel = LabelMaker.createNonFunctionLabel();
+		labels.add(jumpLabel);
+		mipsLines.add(new Instruction("j", new LabelOperand(jumpLabel)));
+
+		//
+		Label label = labels.pop();
+		mipsLines.add(label);
+	}
+
+	public void completeElse() {
+		//
+		Label label = labels.pop();
+		mipsLines.add(label);
 	}
 }
