@@ -11,17 +11,17 @@ import code_generator.operand.RegisterBank;
 
 import java.util.ArrayList;
 
-public class IntSymbol extends Symbol implements Primitive {
-	private IntSymbol() {
-		super("int");
+public class FloatSymbol extends Symbol implements Primitive {
+	private FloatSymbol() {
+		super("float");
 		size = 4;
 	}
 
-	private static IntSymbol instance = null;
+	private static FloatSymbol instance = null;
 
-	public static IntSymbol get() {
+	public static FloatSymbol get() {
 		if (instance == null) {
-			return new IntSymbol();
+			return new FloatSymbol();
 		} else {
 			return instance;
 		}
@@ -30,10 +30,10 @@ public class IntSymbol extends Symbol implements Primitive {
 	@Override
 	public void addition(Register firstRegister, Register secondRegister, Register resultRegister)
 			throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use int addition due to non-int types");
+		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
+			throw new IncompatibleClassChangeError("Can't use float addition due to non-float types");
 		}
 
 		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
@@ -52,10 +52,10 @@ public class IntSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use int subtraction due to non-int types");
+		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
+			throw new IncompatibleClassChangeError("Can't use float subtraction due to non-float types");
 		}
 
 		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
@@ -64,7 +64,7 @@ public class IntSymbol extends Symbol implements Primitive {
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("sub", r3, r1, r2));
+		DecafCodeGenerator.mipsLines.add(new Instruction("sub.s", r3, r1, r2));
 		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, new Indirect(0, resultRegister)));
 
 		RegisterBank.freeRegister(r1);
@@ -74,10 +74,10 @@ public class IntSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use int multiple due to non-int types");
+		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
+			throw new IncompatibleClassChangeError("Can't use float multiple due to non-float types");
 		}
 
 		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
@@ -86,7 +86,7 @@ public class IntSymbol extends Symbol implements Primitive {
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("mul", r3, r1, r2));
+		DecafCodeGenerator.mipsLines.add(new Instruction("mul.s", r3, r1, r2));
 		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, new Indirect(0, resultRegister)));
 
 		RegisterBank.freeRegister(r1);
@@ -96,10 +96,10 @@ public class IntSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void division(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use int division due to non-int types");
+		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
+			throw new IncompatibleClassChangeError("Can't use float multiple due to non-float types");
 		}
 
 		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
@@ -108,7 +108,7 @@ public class IntSymbol extends Symbol implements Primitive {
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("div", r3, r1, r2));
+		DecafCodeGenerator.mipsLines.add(new Instruction("div.s", r3, r1, r2));
 		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, new Indirect(0, resultRegister)));
 
 		RegisterBank.freeRegister(r1);

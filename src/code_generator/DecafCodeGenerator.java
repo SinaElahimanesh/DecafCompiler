@@ -6,15 +6,11 @@ import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
 import code_generator.stack.Display;
-import code_generator.stack.Scope;
 import code_generator.stack.TemporaryMemoryBank;
 import code_generator.symbol_table.SymbolTable;
-import code_generator.symbol_table.SymbolType;
 import code_generator.symbol_table.Variable;
-import code_generator.symbol_table.symbols.IntSymbol;
 import code_generator.symbol_table.symbols.Primitive;
 import code_generator.symbol_table.symbols.Symbol;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import parser.Action;
 import parser.CodeGenerator;
 import scanner.CompilerScanner;
@@ -50,7 +46,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	@Override
-	public void doSemantic(String sem, Action action) throws SemanticException {
+	public void doSemantic(String sem, Action action) throws Throwable {
 		if (action == Action.SHIFT) {
 			current_call++;
 		}
@@ -65,9 +61,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			throw new SemanticException("Unknown semantic " + sem + " has been used");
-		} catch (IllegalAccessException | InvocationTargetException e) {
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			throw new SemanticException("Semantic " + sem + " can't be called");
+		} catch (InvocationTargetException e) {
+			throw e.getCause();
 		}
 	}
 
@@ -75,7 +73,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		call_number = current_call;
 	}
 
-	public void assignment_operator() {
+	public void assignment_operator() throws SyntaxException {
 		if (current_call - call_number > 2) {
 			throw new SyntaxException("wrong assignment");
 		}

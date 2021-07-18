@@ -102,7 +102,7 @@ public class Parser {
         }
     }
 
-    public void parse() throws SemanticException {
+    public void parse() throws Throwable {
         int tokenID = nextTokenID();
         int currentNode = startNode;
         boolean accepted = false;
@@ -186,7 +186,7 @@ public class Parser {
         throw new RuntimeException("Undefined token: " + token);
     }
 
-    private void doSemantics(List<String> functions, Action action) throws SemanticException {
+    private void doSemantics(List<String> functions, Action action) throws Throwable {
         if (debugMode) {
             System.out.println("Execute semantic codes: " + functions);
         }

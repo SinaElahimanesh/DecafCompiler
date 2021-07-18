@@ -1,14 +1,12 @@
 import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
+import code_generator.SyntaxException;
 import parser.CodeGenerator;
 import parser.Parser;
 import parser.Action;
 import scanner.CompilerScanner;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -61,6 +59,8 @@ public class Main {
         } catch (SemanticException e) {
             System.out.println(e.getMessage());
             return "Semantic Error";
+        } catch (Throwable throwable) {
+            return "Code Generation Error";
         }
     }
 
@@ -99,6 +99,8 @@ public class Main {
             return "Syntax Error";
         } catch (SemanticException ignored) {
             return "Semantic Error";
+        } catch (Throwable throwable) {
+            return "Code Generation Error";
         }
     }
 
