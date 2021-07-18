@@ -34,9 +34,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 	Stack<Label> labels = new Stack<>();
 
 	AssignmentType assignmentType = AssignmentType.NONE;
+	OpType operand = OpType.NONE;
 
 	int call_number = 0;
 	int current_call = 0;
+	String waitingIdent;
 
 	public DecafCodeGenerator(CompilerScanner scanner) {
 		this.scanner = scanner;
@@ -105,18 +107,35 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void recordIdent() throws SemanticException {
 		String ident = scanner.getToken();
-		try {
-			variables.push(display.getVariable(ident));
-			addresses.push(display.getVariableAddress(ident));
-		} catch (NoSuchFieldException e) {
-			symbolTable.getSymbol(ident);
-			e.printStackTrace();
-			throw new SemanticException("recordIdent: No varibale with name " + ident + " found in display.");
-		}
+		waitingIdent = ident;
 	}
 
 	public void assign() {
 		assignmentType = AssignmentType.ASSIGN;
+	}
+
+	public void subOpSet() {
+		operand = OpType.SUBTRACT;
+	}
+
+	public void addOpSet() {
+		operand = OpType.SUBTRACT;
+	}
+
+	public void addSubOp() {
+		if (operand == OpType.SUBTRACT) {
+			System.out.println("subbbbbb");		
+		} else {
+			System.out.println("addddddd");
+		}
+	}
+
+	public void startScope() {
+
+	}
+
+	public void declareVariable() {
+		
 	}
 
 	public void doAssignment() throws SemanticException, ClassNotFoundException {
