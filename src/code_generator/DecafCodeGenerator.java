@@ -37,6 +37,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	Stack<Indirect> addresses = new Stack<>();
 
 	AssignmentType assignmentType = AssignmentType.NONE;
+	OpType operand = OpType.NONE;
 
 	int call_number = 0;
 	int current_call = 0;
@@ -114,6 +115,30 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void assign() {
 		assignmentType = AssignmentType.ASSIGN;
+	}
+
+	public void subOpSet() {
+		operand = OpType.SUBTRACT;
+	}
+
+	public void addOpSet() {
+		operand = OpType.SUBTRACT;
+	}
+
+	public void addSubOp() {
+		if (operand == OpType.SUBTRACT) {
+			System.out.println("subbbbbb");		
+		} else {
+			System.out.println("addddddd");
+		}
+	}
+
+	public void startScope() {
+
+	}
+
+	public void declareVariable() {
+		
 	}
 
 	public void doAssignment() throws SemanticException, ClassNotFoundException {

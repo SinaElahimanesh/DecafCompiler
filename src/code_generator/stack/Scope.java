@@ -25,18 +25,22 @@ public class Scope {
 	}
 
 	public Variable getVariable(String name) throws NoSuchFieldException {
+		System.out.println("name: "+ name);
 		for (Variable variable: variables) {
+			System.out.println("Variables: " + variable.getName());
 			if (variable.getName().equals(name)) {
 				return variable;
 			}
 		}
 
-		throw new NoSuchFieldException("Scope::getVariableAddress: Variable " + name + " not found.");
+		throw new NoSuchFieldException("Scope::getVariable: Variable " + name + " not found.");
 	}
 
 	public Integer getVariableAddress(String name) throws NoSuchFieldException {
 		Integer currentAddress = -size;
+		System.out.println("name: "+ name);
 		for (Variable variable: variables) {
+			System.out.println("Variables: " + variable.getName());
 			if (variable.getName().equals(name)) {
 				return currentAddress;
 			}
