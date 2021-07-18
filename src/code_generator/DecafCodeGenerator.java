@@ -40,6 +40,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	int call_number = 0;
 	int current_call = 0;
+	String waitingIdent;
 
 	public DecafCodeGenerator(CompilerScanner scanner) {
 		this.scanner = scanner;
@@ -108,14 +109,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void recordIdent() throws SemanticException {
 		String ident = scanner.getToken();
-		try {
-			variables.push(display.getVariable(ident));
-			addresses.push(display.getVariableAddress(ident));
-		} catch (NoSuchFieldException e) {
-			symbolTable.getSymbol(ident);
-			e.printStackTrace();
-			throw new SemanticException("recordIdent: No varibale with name " + ident + " found in display.");
-		}
+		waitingIdent = ident;
 	}
 
 	public void assign() {
