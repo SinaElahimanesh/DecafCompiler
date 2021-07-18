@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 public class CompilerScanner implements Lexical {
     private Matcher matcher;
+    private String token;
 
 
     public CompilerScanner(String input) {
@@ -19,7 +20,8 @@ public class CompilerScanner implements Lexical {
     @Override
     public String nextToken() {
         if (matcher.find()) {
-            Literals literal = findLiterals(matcher.group());
+            token = matcher.group();
+            Literals literal = findLiterals(token);
             switch (literal) {
                 case COMMENT_LITERAL:
                     // nothing to do
@@ -52,23 +54,17 @@ public class CompilerScanner implements Lexical {
         StringBuilder output = new StringBuilder();
         while (matcher.find()) {
             Literals literal = findLiterals(matcher.group());
-//            System.out.println("this is " + literal);
             switch (literal) {
                 case COMMENT_LITERAL:
-                    // nothing to do
                     break;
                 case NOT_LITERAL:
-//                    System.out.println("n");
                     output.append(matcher.group()).append("\n");
                     break;
                 default:
-//                    System.out.println(literal.toString() + " " + matcher.group());
                     output.append(literal.toString()).append(" ").append(matcher.group()).append("\n");
                     break;
             }
         }
-//        System.out.println(matcher.groupCount());
-//        System.out.println(output);
         return output.toString();
     }
 
@@ -99,14 +95,7 @@ public class CompilerScanner implements Lexical {
         return matcher.find();
     }
 
-//    private int numericId(String numeric) {
-//        if(numeric.toLowerCase().contains("0x")) {
-//
-//        } else if(numeric.toLowerCase().contains("0x")) {
-//
-//        } else {
-//
-//        }
-//        return 0;
-//    }
+    public String getToken() {
+        return token;
+    }
 }

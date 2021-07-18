@@ -9,7 +9,7 @@ import java.util.ArrayList;
 //TODO Add all primitive types and support them.
 public interface Primitive {
 	/**
-	 * Gets the address in memory where Registers are stored and where result should be stored, and returns the set
+	 * Gets the address in memory where Registers are stored and where result should be stored, and adds the set
 	 * of lines to add firstRegister and secondRegister in resultRegister.
 	 * <p>
 	 * Note that the registers should contain the address of the data, not the data itself.
@@ -17,17 +17,19 @@ public interface Primitive {
 	 * @param firstRegister  First Register
 	 * @param secondRegister Seciond Register
 	 * @param resultRegister Where FistRegister + secondRegister should be stored
-	 * @return The set of lines to store ` FistRegister + secondRegister` in `resultRegister`
 	 */
-	ArrayList<MipsLine> addition(Register firstRegister, Register secondRegister, Register resultRegister)
+	void addition(Register firstRegister, Register secondRegister, Register resultRegister)
 			throws ClassNotFoundException;
 
-	ArrayList<MipsLine> subtraction(Register firstRegister, Register secondRegister, Register resultRegister)
+	void subtraction(Register firstRegister, Register secondRegister, Register resultRegister)
 			throws ClassNotFoundException;
 
-	ArrayList<MipsLine> multiplication(Register firstRegister, Register secondRegister, Register resultRegister)
+	void multiplication(Register firstRegister, Register secondRegister, Register resultRegister)
 			throws ClassNotFoundException;
 
-	ArrayList<MipsLine> division(Register firstRegister, Register secondRegister, Register resultRegister)
+	void division(Register firstRegister, Register secondRegister, Register resultRegister)
+			throws ClassNotFoundException;
+
+	void print(Register register)
 			throws ClassNotFoundException;
 }

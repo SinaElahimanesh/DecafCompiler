@@ -52,14 +52,15 @@ public class Main {
 
     public static String code_generator(String input) {
         CompilerScanner scanner = new CompilerScanner(input);
-        DecafCodeGenerator cg = new DecafCodeGenerator();
+        DecafCodeGenerator cg = new DecafCodeGenerator(scanner);
         Parser parser = new Parser(scanner, cg, "src/parser/table.npt", false);
         try {
             parser.parse();
             return cg.get_result();
         } catch (SyntaxException ignored) {
             return "Syntax Error";
-        } catch (SemanticException ignored) {
+        } catch (SemanticException e) {
+            System.out.println(e.getMessage());
             return "Semantic Error";
         }
     }
