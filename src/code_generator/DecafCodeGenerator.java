@@ -51,7 +51,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	@Override
-	public void doSemantic(String sem, Action action) throws SemanticException {
+	public void doSemantic(String sem, Action action) throws Throwable {
 		if (action == Action.SHIFT) {
 			current_call++;
 		}
@@ -66,9 +66,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			throw new SemanticException("Unknown semantic " + sem + " has been used");
-		} catch (IllegalAccessException | InvocationTargetException e) {
+		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			throw new SemanticException("Semantic " + sem + " can't be called");
+		} catch (InvocationTargetException e) {
+			throw e.getCause();
 		}
 	}
 

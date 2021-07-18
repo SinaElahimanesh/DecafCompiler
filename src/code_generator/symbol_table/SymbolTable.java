@@ -12,7 +12,7 @@ public class SymbolTable {
     Map<String, Symbol> symbols = new HashMap<>();
 
     public SymbolTable() {
-        symbols.put("int", new IntSymbol());
+        symbols.put("int", IntSymbol.get());
     }
 
     public Symbol getSymbol(String symbolName) {

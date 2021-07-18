@@ -51,7 +51,7 @@ public class BoolSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != BoolSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != BoolSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != BoolSymbol.class) {
@@ -73,7 +73,7 @@ public class BoolSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != BoolSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != BoolSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != BoolSymbol.class) {
@@ -95,7 +95,7 @@ public class BoolSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void division(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void division(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != BoolSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != BoolSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != BoolSymbol.class) {

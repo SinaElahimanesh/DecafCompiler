@@ -51,7 +51,7 @@ public class IntSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
@@ -73,7 +73,7 @@ public class IntSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {
@@ -95,7 +95,7 @@ public class IntSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void division(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void division(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != IntSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != IntSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != IntSymbol.class) {

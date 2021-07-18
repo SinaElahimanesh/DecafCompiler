@@ -51,7 +51,7 @@ public class FloatSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
@@ -73,7 +73,7 @@ public class FloatSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
@@ -95,7 +95,7 @@ public class FloatSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void division(Register firstRegister, Register secondRegister, Register resultRegister) {
+	public void division(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
 		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
 				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
 				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
