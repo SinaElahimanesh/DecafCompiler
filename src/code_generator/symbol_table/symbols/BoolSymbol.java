@@ -12,11 +12,20 @@ import code_generator.operand.RegisterBank;
 import java.util.ArrayList;
 
 public class BoolSymbol extends Symbol implements Primitive {
-	public BoolSymbol() {
+	private BoolSymbol() {
 		super("bool");
 		size = 4;
 	}
 
+	private static BoolSymbol instance = null;
+
+	public static BoolSymbol get() {
+		if (instance == null) {
+			return new BoolSymbol();
+		} else {
+			return instance;
+		}
+	}
 
 	@Override
 	public void addition(Register firstRegister, Register secondRegister, Register resultRegister)

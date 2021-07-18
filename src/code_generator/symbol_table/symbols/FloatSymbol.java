@@ -12,11 +12,20 @@ import code_generator.operand.RegisterBank;
 import java.util.ArrayList;
 
 public class FloatSymbol extends Symbol implements Primitive {
-	public FloatSymbol() {
+	private FloatSymbol() {
 		super("float");
 		size = 4;
 	}
 
+	private static FloatSymbol instance = null;
+
+	public static FloatSymbol get() {
+		if (instance == null) {
+			return new FloatSymbol();
+		} else {
+			return instance;
+		}
+	}
 
 	@Override
 	public void addition(Register firstRegister, Register secondRegister, Register resultRegister)

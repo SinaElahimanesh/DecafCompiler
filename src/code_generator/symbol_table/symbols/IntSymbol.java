@@ -12,11 +12,20 @@ import code_generator.operand.RegisterBank;
 import java.util.ArrayList;
 
 public class IntSymbol extends Symbol implements Primitive {
-	public IntSymbol() {
+	private IntSymbol() {
 		super("int");
 		size = 4;
 	}
 
+	private static IntSymbol instance = null;
+
+	public static IntSymbol get() {
+		if (instance == null) {
+			return new IntSymbol();
+		} else {
+			return instance;
+		}
+	}
 
 	@Override
 	public void addition(Register firstRegister, Register secondRegister, Register resultRegister)
