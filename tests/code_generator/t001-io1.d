@@ -2,12 +2,13 @@ int main() {
     int a;
     int b;
     int c;
+    int d;
 
     a = ReadInteger();
     b = ReadInteger();
     c = ReadInteger();
 
-    Print(a);
-    Print(b);
-    Print(c);
+    d = b + c;
+
+    Print(d);
 }

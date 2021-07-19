@@ -1,17 +1,12 @@
 package code_generator;
 
-import code_generator.instructions.Directive;
-import code_generator.instructions.Instruction;
-import code_generator.instructions.MipsLine;
-import code_generator.instructions.SystemCall;
-import code_generator.operand.Immediate;
-import code_generator.operand.Indirect;
-import code_generator.operand.Register;
-import code_generator.operand.RegisterBank;
+import code_generator.instructions.*;
+import code_generator.operand.*;
 import code_generator.stack.Display;
 import code_generator.stack.TemporaryMemoryBank;
 import code_generator.symbol_table.SymbolTable;
 import code_generator.symbol_table.Variable;
+import code_generator.symbol_table.symbols.BoolSymbol;
 import code_generator.symbol_table.symbols.Primitive;
 import code_generator.symbol_table.symbols.Symbol;
 import parser.Action;
@@ -36,7 +31,10 @@ public class DecafCodeGenerator implements CodeGenerator {
 	Stack<Variable> variables = new Stack<>();
 	Stack<Indirect> addresses = new Stack<>();
 
+	Stack<Label> labels = new Stack<>();
+
 	AssignmentType assignmentType = AssignmentType.NONE;
+	OpType operand = OpType.NONE;
 
 	int lastLValue = 0;
 	int currentCall = 0;
@@ -133,6 +131,23 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void doAssignment() throws SemanticException, ClassNotFoundException, NoSuchFieldException {
+	public void subOpSet() {
+		operand = OpType.SUBTRACT;
+	}
+
+	public void addOpSet() {
+		operand = OpType.SUBTRACT;
+	}
+
+	public void addSubOp() {
+		if (operand == OpType.SUBTRACT) {
+			System.out.println("subbbbbb");
+		} else {
+			System.out.println("addddddd");
+		}
+	}
+
+	public void doAssignment() throws SemanticException, ClassNotFoundException {
 		if (!variables.get(variables.size() - 1).getSymbol().equals(variables.get(variables.size() - 2).getSymbol())) {
 			throw new SemanticException("doAssignment: Incompatible types");
 		}
@@ -190,5 +205,39 @@ public class DecafCodeGenerator implements CodeGenerator {
 		}
 
 		return result.toString();
+	}
+
+	public void ifStatement() throws SemanticException, ClassNotFoundException {
+		Symbol symbol = variables.pop().getSymbol();
+		Indirect address = addresses.pop();
+
+		if (!(symbol instanceof BoolSymbol)) {
+			throw new SemanticException("Boolean expression: the condition of If statement is not Boolean Expression");
+		}
+		Register value = RegisterBank.allocateRegister(symbol);
+		mipsLines.add(new Instruction("lw", value, address));
+
+		Label jumpLabel = LabelMaker.createNonFunctionLabel();
+		labels.add(jumpLabel);
+		mipsLines.add(new Instruction("bez", value, new LabelOperand(jumpLabel)));
+
+		RegisterBank.freeRegister(value);
+	}
+
+	public void elseStatement() {
+
+		Label jumpLabel = LabelMaker.createNonFunctionLabel();
+		labels.add(jumpLabel);
+		mipsLines.add(new Instruction("j", new LabelOperand(jumpLabel)));
+
+		//
+		Label label = labels.pop();
+		mipsLines.add(label);
+	}
+
+	public void completeElse() {
+		//
+		Label label = labels.pop();
+		mipsLines.add(label);
 	}
 }

@@ -1,5 +1,7 @@
 package code_generator.instructions;
 
+import code_generator.operand.Operand;
+
 public class Label implements MipsLine {
 	String name;
 
