@@ -217,7 +217,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(new Instruction("lw", value, address));
 
 		Label jumpLabel = LabelMaker.createNonFunctionLabel();
-		labels.add(jumpLabel);
+		labels.push(jumpLabel);
 		mipsLines.add(new Instruction("bez", value, new LabelOperand(jumpLabel)));
 
 		RegisterBank.freeRegister(value);
@@ -226,7 +226,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	public void elseStatement() {
 
 		Label jumpLabel = LabelMaker.createNonFunctionLabel();
-		labels.add(jumpLabel);
+		labels.push(jumpLabel);
 		mipsLines.add(new Instruction("j", new LabelOperand(jumpLabel)));
 
 		//
@@ -235,6 +235,36 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void completeElse() {
+		//
+		Label label = labels.pop();
+		mipsLines.add(label);
+	}
+
+	public void whileLabel() {
+		Label label = LabelMaker.createNonFunctionLabel();
+		mipsLines.add(label);
+		//
+		labels.push(label);
+	}
+
+	public void whileLoop() throws SemanticException, ClassNotFoundException {
+		Symbol symbol = variables.pop().getSymbol();
+		Indirect address = addresses.pop();
+
+		if (!(symbol instanceof BoolSymbol)) {
+			throw new SemanticException("Boolean expression: the condition of If statement is not Boolean Expression");
+		}
+		Register value = RegisterBank.allocateRegister(symbol);
+		mipsLines.add(new Instruction("lw", value, address));
+
+		Label jumpLabel = LabelMaker.createNonFunctionLabel();
+		labels.push(jumpLabel);
+		mipsLines.add(new Instruction("bez", value, new LabelOperand(jumpLabel)));
+
+		RegisterBank.freeRegister(value);
+	}
+
+	public void whileComplete() {
 		//
 		Label label = labels.pop();
 		mipsLines.add(label);
