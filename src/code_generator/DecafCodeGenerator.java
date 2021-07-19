@@ -38,9 +38,10 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	AssignmentType assignmentType = AssignmentType.NONE;
 
-	int call_number = 0;
-	int current_call = 0;
-	String waitingIdent;
+	int lastLValue = 0;
+	int currentCall = 0;
+	int lastRecordedIdent = 0;
+	String waitingIdent = null;
 
 	public DecafCodeGenerator(CompilerScanner scanner) {
 		this.scanner = scanner;
@@ -50,7 +51,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	@Override
 	public void doSemantic(String sem, Action action) throws Throwable {
 		if (action == Action.SHIFT) {
-			current_call++;
+			currentCall++;
 		}
 
 		if (sem.equals("")) {
@@ -72,11 +73,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void is_lvalue_friendly() {
-		call_number = current_call;
+		lastLValue = currentCall;
 	}
 
 	public void assignment_operator() throws SyntaxException {
-		if (current_call - call_number > 2) {
+		if (currentCall - lastLValue > 2) {
 			throw new SyntaxException("wrong assignment");
 		}
 	}
@@ -85,10 +86,16 @@ public class DecafCodeGenerator implements CodeGenerator {
 		symbols.add(symbolTable.getSymbol(scanner.getToken()));
 	}
 
-	public void Variable_name() {
+	public void declareVariable() {
+		//FIXME make declarations for ident types right.
 		String name = scanner.getToken();
-		display.allocateVariable(symbols.get(symbols.size() - 1), name);
-		symbols.remove(symbols.get(symbols.size() - 1));
+		if (currentCall < lastRecordedIdent + 3 && waitingIdent != null) {
+			symbols.push(symbolTable.getSymbol(waitingIdent));
+			waitingIdent = null;
+		}
+
+		display.allocateVariable(symbols.peek(), name);
+		symbols.remove(symbols.pop());
 	}
 
 	public void endLine() {
@@ -108,15 +115,24 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void recordIdent() throws SemanticException {
-		String ident = scanner.getToken();
-		waitingIdent = ident;
+		waitingIdent = scanner.getToken();
+		lastRecordedIdent = currentCall;
 	}
 
-	public void assign() {
+	public void assign() throws NoSuchFieldException {
+		loadWaitingIdent();
 		assignmentType = AssignmentType.ASSIGN;
 	}
 
-	public void doAssignment() throws SemanticException, ClassNotFoundException {
+	public void loadWaitingIdent() throws NoSuchFieldException {
+		if (waitingIdent != null && lastRecordedIdent > currentCall - 10) {
+			variables.push(display.getVariable(waitingIdent));
+			addresses.push(display.getVariableAddress(waitingIdent));
+			waitingIdent = null;
+		}
+	}
+
+	public void doAssignment() throws SemanticException, ClassNotFoundException, NoSuchFieldException {
 		if (!variables.get(variables.size() - 1).getSymbol().equals(variables.get(variables.size() - 2).getSymbol())) {
 			throw new SemanticException("doAssignment: Incompatible types");
 		}
@@ -142,7 +158,8 @@ public class DecafCodeGenerator implements CodeGenerator {
 		variables.pop();
 	}
 
-	public void print() throws SemanticException, ClassNotFoundException {
+	public void print() throws SemanticException, ClassNotFoundException, NoSuchFieldException {
+		loadWaitingIdent();
 		Symbol symbol = variables.pop().getSymbol();
 		if (!(symbol instanceof Primitive)) {
 			throw new SemanticException("print: Incompatible type to print");
@@ -158,7 +175,15 @@ public class DecafCodeGenerator implements CodeGenerator {
 		RegisterBank.freeRegister(value);
 	}
 
-	public String get_result() {
+	public void startScope() {
+		display.addNewScope();
+	}
+
+	public void endScope() {
+		display.popScope();
+	}
+
+	public String getResult() {
 		StringBuilder result = new StringBuilder();
 		for (MipsLine line : mipsLines) {
 			result.append(line).append('\n');

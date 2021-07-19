@@ -53,13 +53,15 @@ public class Main {
         Parser parser = new Parser(scanner, cg, "src/parser/table.npt", false);
         try {
             parser.parse();
-            return cg.get_result();
+            return cg.getResult();
         } catch (SyntaxException ignored) {
             return "Syntax Error";
         } catch (SemanticException e) {
             System.out.println(e.getMessage());
             return "Semantic Error";
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            System.out.println(throwable.getMessage());
             return "Code Generation Error";
         }
     }

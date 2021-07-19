@@ -9,10 +9,11 @@ import code_generator.symbol_table.Variable;
 import code_generator.symbol_table.symbols.Symbol;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Display {
 	ArrayList<MipsLine> mipsLines;
-	ArrayList<Scope> scopes = new ArrayList<>();
+	Stack<Scope> scopes = new Stack<>();
 
 	public Display(ArrayList<MipsLine> mipsLines) {
 		this.mipsLines = mipsLines;
@@ -30,6 +31,10 @@ public class Display {
 		return scope;
 	}
 
+	public void popScope() {
+		mipsLines.add(new Instruction("addi", new Register("sp"), new Register("sp"), new Immediate(-scopes.pop().getSize())));
+	}
+
 	public Scope getLastScope() {
 		return scopes.get(scopes.size() - 1);
 	}
@@ -45,9 +50,11 @@ public class Display {
 	}
 
 	public Indirect getVariableAddress(String name) throws NoSuchFieldException {
+		System.out.println("hey hey " + name);
 		Integer currentAddress = 0;
 		for (int i = scopes.size() - 1; i > -1; i--) {
 			if (scopes.get(i).hasVariable(name)) {
+				System.out.println(currentAddress + scopes.get(i).getVariableAddress(name));
 				return new Indirect(currentAddress + scopes.get(i).getVariableAddress(name), new Register("sp"));
 			}
 		}
