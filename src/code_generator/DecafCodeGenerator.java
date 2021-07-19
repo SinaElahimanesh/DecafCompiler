@@ -130,7 +130,6 @@ public class DecafCodeGenerator implements CodeGenerator {
 		}
 	}
 
-	public void doAssignment() throws SemanticException, ClassNotFoundException, NoSuchFieldException {
 	public void subOpSet() {
 		operand = OpType.SUBTRACT;
 	}
