@@ -279,7 +279,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void doubleConstant() {
-		
+
 	}
 
 	public void booleanConstant() {
