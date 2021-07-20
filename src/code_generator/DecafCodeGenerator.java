@@ -4,6 +4,7 @@ import code_generator.instructions.*;
 import code_generator.operand.*;
 import code_generator.stack.Display;
 import code_generator.stack.TemporaryMemoryBank;
+import code_generator.symbol_table.Function;
 import code_generator.symbol_table.SymbolTable;
 import code_generator.symbol_table.Variable;
 import code_generator.symbol_table.symbols.BoolSymbol;
@@ -268,5 +269,56 @@ public class DecafCodeGenerator implements CodeGenerator {
 		//
 		Label label = labels.pop();
 		mipsLines.add(label);
+	}
+
+	public void declareWaitingVariable() throws NoSuchFieldException {
+		//FIXME make declarations for ident types right.
+		String name = scanner.getToken();
+		if (currentCall < lastRecordedIdent + 3 && waitingIdent != null) {
+			symbols.push(symbolTable.getSymbol(waitingIdent));
+			waitingIdent = null;
+		}
+
+		// FIXME add to declaring class symbol fields (if any) as well.
+		Variable variable = display.allocateVariable(symbols.peek(), name);
+
+		if (shouldDeclareArguments)
+		{
+			currentDeclaringFunction.addArgument(variable);
+		}
+
+		symbols.remove(symbols.pop());
+	}
+
+	Boolean shouldDeclareArguments;
+	Function currentDeclaringFunction;
+
+	public void startFunction() {
+		shouldDeclareArguments = true;
+
+		Boolean shouldDeclareArguments = true;
+
+		String name = waitingIdent;
+		waitingIdent = null;
+
+		// FIXME add for classes as well.
+		currentDeclaringFunction = new Function(name);
+
+		currentDeclaringFunction.setReturnType(symbols.pop());
+
+		mipsLines.add(LabelMaker.createFunctionLabel(name));
+
+		startScope();
+		//FIXME is this the best way?
+		display.allocateVariable(currentDeclaringFunction.getReturnType(),
+				"return");
+	}
+
+	public void endDeclareArguments() {
+		shouldDeclareArguments = false;
+	}
+
+	public void endFunction() {
+		mipsLines.add(new Instruction("jr", new Register("ra")));
 	}
 }
