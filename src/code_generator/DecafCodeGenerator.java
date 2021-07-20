@@ -271,6 +271,25 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(label);
 	}
 
+	public void integerConstant() {
+		int integer = Integer.parseInt(scanner.nextToken());
+		Label label = LabelMaker.createIntegerConstantLabel(integer);
+		mipsLines.add(label);
+		mipsLines.add(new DataInstruction(".word", 4));
+	}
+
+	public void doubleConstant() {
+		
+	}
+
+	public void booleanConstant() {
+
+	}
+
+	public void stringConstant() {
+
+	}
+
 	public void declareWaitingVariable() throws NoSuchFieldException {
 		//FIXME make declarations for ident types right.
 		String name = scanner.getToken();

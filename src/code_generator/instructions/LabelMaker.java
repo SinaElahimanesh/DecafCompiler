@@ -32,4 +32,46 @@ public final class LabelMaker {
 		id ++;
 		return new Label("label____" + id.toString());
 	}
+
+	private static int INTEGER_CONSTANT_ID = 0;
+	private static int DOUBLE_CONSTANT_ID = 0;
+	private static int BOOLEAN_CONSTANT_ID = 0;
+	private static int STRING_CONSTANT_ID = 0;
+
+	public static Label createIntegerConstantLabel(int number) {
+		String numberStr = String.valueOf(number);
+		StringBuilder result = new StringBuilder("");
+		for(int i = 0; i < numberStr.length() ; i++){   // while counting characters if less than the length add one
+			char character = numberStr.charAt(i); // start on the first character
+			result.append((int) character);
+		}
+		INTEGER_CONSTANT_ID++;
+		return new Label("INTEGER_LABEL" + result + INTEGER_CONSTANT_ID);
+	}
+
+	public static Label createDoubleConstantLabel(double number) {
+		String numberStr = String.valueOf(number);
+		StringBuilder result = new StringBuilder("");
+		for(int i = 0; i < numberStr.length() ; i++){   // while counting characters if less than the length add one
+			char character = numberStr.charAt(i); // start on the first character
+			result.append((int) character);
+		}
+		DOUBLE_CONSTANT_ID++;
+		return new Label("DOUBLE_LABEL" + result + DOUBLE_CONSTANT_ID);
+	}
+
+	public static Label createBooleanConstantLabel(boolean booli) {
+		BOOLEAN_CONSTANT_ID++;
+		return new Label("BOOLEAN_LABEL" + booli + BOOLEAN_CONSTANT_ID);
+	}
+
+	public static Label createStringConstantLabel(String str) {
+		StringBuilder result = new StringBuilder("");
+		for(int i = 0; i < str.length() ; i++){   // while counting characters if less than the length add one
+			char character = str.charAt(i); // start on the first character
+			result.append((int) character);
+		}
+		STRING_CONSTANT_ID++;
+		return new Label("STRING_LABEL" + result + STRING_CONSTANT_ID);
+	}
 }
