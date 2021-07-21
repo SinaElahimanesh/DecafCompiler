@@ -1,7 +1,6 @@
 package code_generator.stack;
 
-import code_generator.symbol_table.Variable;
-import code_generator.symbol_table.symbols.Symbol;
+import code_review.symbol_table.Variable;
 
 import java.util.ArrayList;
 

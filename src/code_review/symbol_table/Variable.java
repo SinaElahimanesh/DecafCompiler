@@ -1,7 +1,7 @@
-package code_generator.symbol_table;
+package code_review.symbol_table;
 
-import code_generator.symbol_table.symbols.BlankSymbol;
-import code_generator.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.VoidSymbol;
+import code_review.symbol_table.symbols.Symbol;
 
 public class Variable {
 	Symbol symbol;
@@ -9,7 +9,7 @@ public class Variable {
 	String name;
 
 	public Variable() {
-		symbol = BlankSymbol.get();
+		symbol = VoidSymbol.get();
 		accessMode = AccessMode.NONE;
 	}
 

@@ -1,8 +1,8 @@
-package code_generator.symbol_table;
+package code_review.symbol_table;
 
 import code_generator.instructions.Label;
 import code_generator.instructions.LabelMaker;
-import code_generator.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.Symbol;
 
 import java.util.ArrayList;
 

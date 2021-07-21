@@ -1,15 +1,12 @@
-package code_generator.symbol_table.symbols;
+package code_review.symbol_table.symbols;
 
 import code_generator.DecafCodeGenerator;
 import code_generator.instructions.Instruction;
-import code_generator.instructions.MipsLine;
 import code_generator.instructions.SystemCall;
 import code_generator.operand.Immediate;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
-
-import java.util.ArrayList;
 
 public class FloatSymbol extends Symbol implements Primitive {
 	private FloatSymbol() {
@@ -36,9 +33,9 @@ public class FloatSymbol extends Symbol implements Primitive {
 			throw new IncompatibleClassChangeError("Can't use float addition due to non-float types");
 		}
 
-		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
-		Register r2 = RegisterBank.allocateRegister(BlankSymbol.get());
-		Register r3 = RegisterBank.allocateRegister(BlankSymbol.get());
+		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
@@ -58,9 +55,9 @@ public class FloatSymbol extends Symbol implements Primitive {
 			throw new IncompatibleClassChangeError("Can't use float subtraction due to non-float types");
 		}
 
-		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
-		Register r2 = RegisterBank.allocateRegister(BlankSymbol.get());
-		Register r3 = RegisterBank.allocateRegister(BlankSymbol.get());
+		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
@@ -80,9 +77,9 @@ public class FloatSymbol extends Symbol implements Primitive {
 			throw new IncompatibleClassChangeError("Can't use float multiple due to non-float types");
 		}
 
-		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
-		Register r2 = RegisterBank.allocateRegister(BlankSymbol.get());
-		Register r3 = RegisterBank.allocateRegister(BlankSymbol.get());
+		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
@@ -102,9 +99,9 @@ public class FloatSymbol extends Symbol implements Primitive {
 			throw new IncompatibleClassChangeError("Can't use float multiple due to non-float types");
 		}
 
-		Register r1 = RegisterBank.allocateRegister(BlankSymbol.get());
-		Register r2 = RegisterBank.allocateRegister(BlankSymbol.get());
-		Register r3 = RegisterBank.allocateRegister(BlankSymbol.get());
+		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
