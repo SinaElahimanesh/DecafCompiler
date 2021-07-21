@@ -1,10 +1,9 @@
 package code_generator.operand;
 
-import code_generator.symbol_table.symbols.BlankSymbol;
-import code_generator.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.VoidSymbol;
+import code_review.symbol_table.symbols.Symbol;
 
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Returns an unused temporary or saved register (We don't believe in saved register) Try so hard not to use temporary
@@ -47,6 +46,6 @@ public class RegisterBank {
 			return usedRegisters.get(register.name);
 		}
 
-		return BlankSymbol.get();
+		return VoidSymbol.get();
 	}
 }

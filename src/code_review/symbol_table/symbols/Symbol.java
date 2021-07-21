@@ -1,8 +1,8 @@
-package code_generator.symbol_table.symbols;
+package code_review.symbol_table.symbols;
 
-import code_generator.symbol_table.Field;
-import code_generator.symbol_table.Function;
-import code_generator.symbol_table.Variable;
+import code_review.symbol_table.Field;
+import code_review.symbol_table.Function;
+import code_review.symbol_table.Variable;
 
 import java.util.ArrayList;
 

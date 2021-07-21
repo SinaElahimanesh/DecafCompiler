@@ -1,9 +1,6 @@
-package code_generator.symbol_table.symbols;
+package code_review.symbol_table.symbols;
 
-import code_generator.instructions.MipsLine;
 import code_generator.operand.Register;
-
-import java.util.ArrayList;
 
 
 //TODO Add all primitive types and support them.

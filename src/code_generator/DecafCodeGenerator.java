@@ -4,12 +4,13 @@ import code_generator.instructions.*;
 import code_generator.operand.*;
 import code_generator.stack.Display;
 import code_generator.stack.TemporaryMemoryBank;
-import code_generator.symbol_table.Function;
-import code_generator.symbol_table.SymbolTable;
-import code_generator.symbol_table.Variable;
-import code_generator.symbol_table.symbols.BoolSymbol;
-import code_generator.symbol_table.symbols.Primitive;
-import code_generator.symbol_table.symbols.Symbol;
+import code_review.DecafCodeReviewer;
+import code_review.symbol_table.Function;
+import code_review.symbol_table.SymbolTable;
+import code_review.symbol_table.Variable;
+import code_review.symbol_table.symbols.BoolSymbol;
+import code_review.symbol_table.symbols.Primitive;
+import code_review.symbol_table.symbols.Symbol;
 import parser.Action;
 import parser.CodeGenerator;
 import scanner.CompilerScanner;
@@ -21,6 +22,7 @@ import java.util.Stack;
 
 public class DecafCodeGenerator implements CodeGenerator {
 	CompilerScanner scanner;
+	DecafCodeReviewer codeReviewer;
 
 	public static ArrayList<MipsLine> mipsLines = new ArrayList<>();
 	Display display = new Display(mipsLines);
@@ -42,8 +44,9 @@ public class DecafCodeGenerator implements CodeGenerator {
 	int lastRecordedIdent = 0;
 	String waitingIdent = null;
 
-	public DecafCodeGenerator(CompilerScanner scanner) {
+	public DecafCodeGenerator(CompilerScanner scanner, DecafCodeReviewer codeReviewer) {
 		this.scanner = scanner;
+		this.codeReviewer = codeReviewer;
 		mipsLines.add(new Directive("text"));
 	}
 

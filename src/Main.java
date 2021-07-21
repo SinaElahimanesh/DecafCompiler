@@ -1,6 +1,7 @@
 import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
 import code_generator.SyntaxException;
+import code_review.DecafCodeReviewer;
 import parser.CodeGenerator;
 import parser.Parser;
 import parser.Action;
@@ -49,8 +50,13 @@ public class Main {
 
     public static String code_generator(String input) {
         CompilerScanner scanner = new CompilerScanner(input);
-        DecafCodeGenerator cg = new DecafCodeGenerator(scanner);
-        Parser parser = new Parser(scanner, cg, "src/parser/table.npt", false);
+        DecafCodeReviewer cr = new DecafCodeReviewer(scanner);
+        Parser parser = new Parser(scanner, cr, "src/parser/table.npt", false);
+
+        scanner = new CompilerScanner(input);
+        DecafCodeGenerator cg = new DecafCodeGenerator(scanner, cr);
+        parser = new Parser(scanner, cg, "src/parser/table.npt", false);
+
         try {
             parser.parse();
             return cg.getResult();

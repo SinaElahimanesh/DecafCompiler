@@ -1,4 +1,4 @@
-package code_generator.symbol_table;
+package code_review.symbol_table;
 
 /**
  * A union of Variable and Function.

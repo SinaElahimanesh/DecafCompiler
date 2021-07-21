@@ -1,12 +1,10 @@
-package code_generator.symbol_table;
+package code_review.symbol_table;
 
-import code_generator.symbol_table.symbols.IntSymbol;
-import code_generator.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.IntSymbol;
+import code_review.symbol_table.symbols.Symbol;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class SymbolTable {
     Map<String, Symbol> symbols = new HashMap<>();

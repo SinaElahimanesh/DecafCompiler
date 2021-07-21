@@ -5,8 +5,8 @@ import code_generator.instructions.MipsLine;
 import code_generator.operand.Immediate;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
-import code_generator.symbol_table.Variable;
-import code_generator.symbol_table.symbols.Symbol;
+import code_review.symbol_table.Variable;
+import code_review.symbol_table.symbols.Symbol;
 
 import java.util.ArrayList;
 import java.util.Stack;
