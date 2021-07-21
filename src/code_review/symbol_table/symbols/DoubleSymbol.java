@@ -8,17 +8,17 @@ import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
 
-public class FloatSymbol extends Symbol implements Primitive {
-	private FloatSymbol() {
-		super("float");
+public class DoubleSymbol extends Symbol implements Primitive {
+	private DoubleSymbol() {
+		super("double");
 		size = 4;
 	}
 
-	private static FloatSymbol instance = null;
+	private static DoubleSymbol instance = null;
 
-	public static FloatSymbol get() {
+	public static DoubleSymbol get() {
 		if (instance == null) {
-			return new FloatSymbol();
+			return new DoubleSymbol();
 		} else {
 			return instance;
 		}
@@ -27,9 +27,9 @@ public class FloatSymbol extends Symbol implements Primitive {
 	@Override
 	public void addition(Register firstRegister, Register secondRegister, Register resultRegister)
 			throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
+		if (RegisterBank.getUseCase(firstRegister).getClass() != DoubleSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != DoubleSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != DoubleSymbol.class) {
 			throw new IncompatibleClassChangeError("Can't use float addition due to non-float types");
 		}
 
@@ -49,9 +49,9 @@ public class FloatSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
+		if (RegisterBank.getUseCase(firstRegister).getClass() != DoubleSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != DoubleSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != DoubleSymbol.class) {
 			throw new IncompatibleClassChangeError("Can't use float subtraction due to non-float types");
 		}
 
@@ -71,9 +71,9 @@ public class FloatSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
+		if (RegisterBank.getUseCase(firstRegister).getClass() != DoubleSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != DoubleSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != DoubleSymbol.class) {
 			throw new IncompatibleClassChangeError("Can't use float multiple due to non-float types");
 		}
 
@@ -93,9 +93,9 @@ public class FloatSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void division(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != FloatSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != FloatSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != FloatSymbol.class) {
+		if (RegisterBank.getUseCase(firstRegister).getClass() != DoubleSymbol.class ||
+				RegisterBank.getUseCase(secondRegister).getClass() != DoubleSymbol.class ||
+				RegisterBank.getUseCase(resultRegister).getClass() != DoubleSymbol.class) {
 			throw new IncompatibleClassChangeError("Can't use float multiple due to non-float types");
 		}
 

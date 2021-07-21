@@ -49,15 +49,16 @@ public class Main {
     }
 
     public static String code_generator(String input) {
-        CompilerScanner scanner = new CompilerScanner(input);
-        DecafCodeReviewer cr = new DecafCodeReviewer(scanner);
-        Parser parser = new Parser(scanner, cr, "src/parser/table.npt", false);
-
-        scanner = new CompilerScanner(input);
-        DecafCodeGenerator cg = new DecafCodeGenerator(scanner, cr);
-        parser = new Parser(scanner, cg, "src/parser/table.npt", false);
-
         try {
+            CompilerScanner scanner = new CompilerScanner(input);
+            DecafCodeReviewer cr = new DecafCodeReviewer(scanner);
+            Parser parser = new Parser(scanner, cr, "src/parser/table.npt", false);
+            parser.parse();
+
+            scanner = new CompilerScanner(input);
+            DecafCodeGenerator cg = new DecafCodeGenerator(scanner, cr);
+            parser = new Parser(scanner, cg, "src/parser/table.npt", false);
+
             parser.parse();
             return cg.getResult();
         } catch (SyntaxException ignored) {

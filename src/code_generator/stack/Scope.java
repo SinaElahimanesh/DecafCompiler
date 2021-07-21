@@ -1,12 +1,38 @@
 package code_generator.stack;
 
+import code_review.symbol_table.Function;
 import code_review.symbol_table.Variable;
 
 import java.util.ArrayList;
 
 public class Scope {
 	ArrayList<Variable> variables = new ArrayList<>();
+	ArrayList<Function> functions = new ArrayList<>();
 	Integer size = 0;
+
+	public void addFunction(Function function) {
+		functions.add(function);
+	}
+
+	public boolean hasFunction(String name) {
+		for (Function function: functions) {
+			if (function.getName().equals(name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public Function getFunction(String name) throws NoSuchFieldException {
+		for (Function function: functions) {
+			if (function.getName().equals(name)) {
+				return function;
+			}
+		}
+
+		throw new NoSuchFieldException("Scope::getVariable: Variable " + name + " not found.");
+	}
 
 	public void addVariable(Variable variable) {
 		variables.add(variable);

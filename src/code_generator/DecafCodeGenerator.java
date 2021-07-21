@@ -44,9 +44,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 	int lastRecordedIdent = 0;
 	String waitingIdent = null;
 
-	public DecafCodeGenerator(CompilerScanner scanner, DecafCodeReviewer codeReviewer) {
+	public DecafCodeGenerator(CompilerScanner scanner, DecafCodeReviewer codeReviewer) throws SemanticException {
 		this.scanner = scanner;
 		this.codeReviewer = codeReviewer;
+		display.addScope(codeReviewer.getGlobalScope());
+		mipsLines.addAll(codeReviewer.getMipsLines());
 		mipsLines.add(new Directive("text"));
 	}
 

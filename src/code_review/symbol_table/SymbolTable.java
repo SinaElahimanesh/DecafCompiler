@@ -1,7 +1,7 @@
 package code_review.symbol_table;
 
-import code_review.symbol_table.symbols.IntSymbol;
-import code_review.symbol_table.symbols.Symbol;
+import code_generator.SemanticException;
+import code_review.symbol_table.symbols.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +9,18 @@ import java.util.Map;
 public class SymbolTable {
     Map<String, Symbol> symbols = new HashMap<>();
 
-    public SymbolTable() {
-        symbols.put("int", IntSymbol.get());
+    public SymbolTable() throws SemanticException {
+        addSymbol(IntSymbol.get());
+        addSymbol(BoolSymbol.get());
+        addSymbol(DoubleSymbol.get());
+        addSymbol(VoidSymbol.get());
+    }
+
+    public void addSymbol(Symbol symbol) throws SemanticException {
+        if (symbols.containsKey(symbol.getName()))
+            throw new SemanticException("Redeclaration of  type " + symbol.getName());
+
+        symbols.put(symbol.getName(), symbol);
     }
 
     public Symbol getSymbol(String symbolName) {

@@ -17,7 +17,6 @@ public class Display {
 
 	public Display(ArrayList<MipsLine> mipsLines) {
 		this.mipsLines = mipsLines;
-		scopes.add(new Scope());
 	}
 
 	public Scope addNewScope() {
@@ -67,5 +66,9 @@ public class Display {
 		Variable variable = new Variable(type, name);
 		scope.addVariable(variable);
 		return variable;
+	}
+
+	public void addScope(Scope globalScope) {
+		scopes.add(globalScope);
 	}
 }
