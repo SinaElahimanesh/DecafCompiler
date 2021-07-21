@@ -272,17 +272,35 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void integerConstant() {
-		int integer = Integer.parseInt(scanner.nextToken());
-		Label label = LabelMaker.createIntegerConstantLabel(integer);
+		int integer_number = Integer.parseInt(scanner.nextToken());
+		Label label = LabelMaker.createIntegerConstantLabel(integer_number);
 		mipsLines.add(label);
-		mipsLines.add(new DataInstruction(".word", 4));
+		ArrayList<String> parameters = new ArrayList<>();
+		parameters.add(String.valueOf(integer_number));
+		mipsLines.add(new Directive(".word", parameters));
 	}
 
 	public void doubleConstant() {
-
+		double double_number = Double.parseDouble(scanner.nextToken());
+		Label label = LabelMaker.createDoubleConstantLabel(double_number);
+		mipsLines.add(label);
+		ArrayList<String> parameters = new ArrayList<>();
+		parameters.add(String.valueOf(double_number));
+		mipsLines.add(new Directive(".float", parameters));
 	}
 
 	public void booleanConstant() {
+		boolean booli = Boolean.parseBoolean(scanner.nextToken());
+		Label label = LabelMaker.createBooleanConstantLabel(booli);
+		mipsLines.add(label);
+		ArrayList<String> parameters = new ArrayList<>();
+		if(booli) { // it is true
+			parameters.add(String.valueOf(1));
+			mipsLines.add(new Directive(".word", parameters));
+		} else { // it is false
+			parameters.add(String.valueOf(0));
+			mipsLines.add(new Directive(".word", parameters));
+		}
 
 	}
 
