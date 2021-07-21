@@ -8,10 +8,8 @@ public final class VoidSymbol extends Symbol {
 	}
 
 	public static VoidSymbol get() {
-		if (instance == null) {
-			return new VoidSymbol();
-		} else {
-			return instance;
-		}
+		if (instance == null)
+			instance = new VoidSymbol();
+		return instance;
 	}
 }
