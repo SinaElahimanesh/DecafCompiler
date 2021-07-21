@@ -31,13 +31,37 @@ public class Symbol {
         return name;
     }
 
-    /**
-     * These fields should not be modified (neither adding or removing element is prohibietd,
-     * but I'm tired to implement it, just DON'T).
-     * @return List of symbol's fields
-     */
-    public ArrayList<Field> getFields() {
-        return fields;
+    public Integer getVariableAddress(String name) throws NoSuchFieldException {
+        Integer address = 0;
+
+        for (Field field: fields) {
+            if (field.getVariable() != null) {
+                if (field.getVariable().getName().equals(name))
+                    return address;
+
+                address += field.getSize();
+            }
+        }
+
+        throw new NoSuchFieldException("Variable " + name + " not found in class " + this.name);
+    }
+
+    public Variable getVariable(String name) throws NoSuchFieldException {
+        for (Field field: fields)
+            if (field.getVariable() != null)
+                if (field.getVariable().getName().equals(name))
+                    return field.getVariable();
+
+        throw new NoSuchFieldException("Variable " + name + " not found in class " + this.name);
+    }
+
+    public Function getMethod(String name) throws NoSuchFieldException {
+        for (Field field: fields)
+            if (field.getFunction() != null)
+                if (field.getFunction().getName().equals(name))
+                    return field.getFunction();
+
+        throw new NoSuchFieldException("Method " + name + " not found in class " + this.name);
     }
 
     public Integer getSize() {

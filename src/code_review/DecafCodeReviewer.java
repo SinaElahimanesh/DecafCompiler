@@ -1,6 +1,9 @@
 package code_review;
 
 import code_generator.SemanticException;
+import code_generator.instructions.Directive;
+import code_generator.instructions.Label;
+import code_generator.instructions.LabelMaker;
 import code_generator.instructions.MipsLine;
 import code_generator.stack.Scope;
 import code_review.symbol_table.AccessMode;
@@ -15,6 +18,7 @@ import scanner.CompilerScanner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 public class DecafCodeReviewer implements CodeGenerator {
@@ -25,11 +29,13 @@ public class DecafCodeReviewer implements CodeGenerator {
 
 	Symbol currentClassSymbol;
 	Symbol latestRecordedSymbol;
+	Function currentFunction;
 	AccessMode latestAccessMode;
 	String latestRecordedIdent;
 
 	public DecafCodeReviewer(CompilerScanner scanner) throws SemanticException {
 		this.scanner = scanner;
+		mipsLines.add(new Directive("data"));
 		latestAccessMode = AccessMode.NONE;
 	}
 
@@ -81,6 +87,11 @@ public class DecafCodeReviewer implements CodeGenerator {
 		latestRecordedSymbol = null;
 		latestRecordedIdent = null;
 
+		if (currentFunction != null) {
+			currentFunction.addArgument(variable);
+			return;
+		}
+
 		if (currentClassSymbol != null) {
 			variable.setAccessMode(latestAccessMode);
 			latestAccessMode = AccessMode.NONE;
@@ -91,15 +102,43 @@ public class DecafCodeReviewer implements CodeGenerator {
 	}
 
 	public void declareFunction() throws NoSuchFieldException {
-		Function function;
 		if (currentClassSymbol != null) {
-			function = new Function(currentClassSymbol.getName(), latestRecordedIdent);
-			function.setAccessMode(latestAccessMode);
+			currentFunction = new Function(currentClassSymbol.getName(), latestRecordedIdent);
+			currentFunction.setAccessMode(latestAccessMode);
 			latestAccessMode = AccessMode.NONE;
-			currentClassSymbol.addField(function);
+			currentClassSymbol.addField(currentFunction);
 		} else {
-			function = new Function(latestRecordedIdent);
-			globalScope.addFunction(function);
+			currentFunction = new Function(latestRecordedIdent);
+			globalScope.addFunction(currentFunction);
 		}
+	}
+
+	public void endArguments() {
+		currentFunction = null;
+	}
+
+	// Constant Interpretation Methods
+	public void integerConstant() {
+		String integer = scanner.getToken();
+		mipsLines.add(LabelMaker.createConstantLabel(integer));
+		mipsLines.add(new Directive("word", Collections.singletonList(integer)));
+	}
+
+	public void doubleConstant() {
+		String double_ = scanner.getToken();
+		mipsLines.add(LabelMaker.createConstantLabel(double_));
+		mipsLines.add(new Directive("double", Collections.singletonList(double_)));
+	}
+
+	public void boolConstant() {
+		String bool = scanner.getToken();
+		mipsLines.add(LabelMaker.createConstantLabel(bool));
+		mipsLines.add(new Directive("word", Collections.singletonList(bool.equals("true")?"1":"0")));
+	}
+
+	public void stringConstant() {
+		String string = scanner.getToken();
+		mipsLines.add(LabelMaker.createConstantLabel(string));
+		mipsLines.add(new Directive("asciiz", Collections.singletonList(string)));
 	}
 }

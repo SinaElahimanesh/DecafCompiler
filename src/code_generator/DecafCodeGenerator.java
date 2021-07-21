@@ -18,6 +18,8 @@ import scanner.CompilerScanner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Stack;
 
 public class DecafCodeGenerator implements CodeGenerator {
@@ -29,25 +31,24 @@ public class DecafCodeGenerator implements CodeGenerator {
 	TemporaryMemoryBank temporaryMemoryBank = new TemporaryMemoryBank();
 	SymbolTable symbolTable = new SymbolTable();
 
-	Stack<Symbol> symbols = new Stack<>();
-
 	Stack<Variable> variables = new Stack<>();
 	Stack<Indirect> addresses = new Stack<>();
 
 	Stack<Label> labels = new Stack<>();
 
 	AssignmentType assignmentType = AssignmentType.NONE;
-	OpType operand = OpType.NONE;
 
 	int lastLValue = 0;
-	int currentCall = 0;
-	int lastRecordedIdent = 0;
-	String waitingIdent = null;
+	int currentCallId = 0;
+	int lastRecordedIdentCallId = 0;
+	String latestRecordedIdent = null;
+	Symbol latestRecordedSymbol = null;
 
 	public DecafCodeGenerator(CompilerScanner scanner, DecafCodeReviewer codeReviewer) throws SemanticException {
 		this.scanner = scanner;
 		this.codeReviewer = codeReviewer;
 		display.addScope(codeReviewer.getGlobalScope());
+		mipsLines.add(new Directive("globl", Collections.singletonList("main")));
 		mipsLines.addAll(codeReviewer.getMipsLines());
 		mipsLines.add(new Directive("text"));
 	}
@@ -55,7 +56,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	@Override
 	public void doSemantic(String sem, Action action) throws Throwable {
 		if (action == Action.SHIFT) {
-			currentCall++;
+			currentCallId++;
 		}
 
 		if (sem.equals("")) {
@@ -66,8 +67,8 @@ public class DecafCodeGenerator implements CodeGenerator {
 			Method semanticMethod = this.getClass().getMethod(sem);
 			semanticMethod.invoke(this);
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-			throw new SemanticException("Unknown semantic " + sem + " has been used");
+//			e.printStackTrace();
+//			throw new SemanticException("Unknown semantic " + sem + " has been used");
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			throw new SemanticException("Semantic " + sem + " can't be called");
@@ -76,30 +77,27 @@ public class DecafCodeGenerator implements CodeGenerator {
 		}
 	}
 
+	public String getResult() {
+		StringBuilder result = new StringBuilder();
+		for (MipsLine line : mipsLines) {
+			result.append(line).append('\n');
+		}
+
+		return result.toString();
+	}
+
 	public void is_lvalue_friendly() {
-		lastLValue = currentCall;
+		lastLValue = currentCallId;
 	}
 
 	public void assignment_operator() throws SyntaxException {
-		if (currentCall - lastLValue > 2) {
+		if (currentCallId - lastLValue > 2) {
 			throw new SyntaxException("wrong assignment");
 		}
 	}
 
 	public void type() {
-		symbols.add(symbolTable.getSymbol(scanner.getToken()));
-	}
-
-	public void declareVariable() {
-		//FIXME make declarations for ident types right.
-		String name = scanner.getToken();
-		if (currentCall < lastRecordedIdent + 3 && waitingIdent != null) {
-			symbols.push(symbolTable.getSymbol(waitingIdent));
-			waitingIdent = null;
-		}
-
-		display.allocateVariable(symbols.peek(), name);
-		symbols.remove(symbols.pop());
+		latestRecordedSymbol = symbolTable.getSymbol(scanner.getToken());
 	}
 
 	public void endLine() {
@@ -118,9 +116,25 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(new Instruction("sw", new Register("v0"), temporary));
 	}
 
-	public void recordIdent() throws SemanticException {
-		waitingIdent = scanner.getToken();
-		lastRecordedIdent = currentCall;
+	public void recordIdent() throws SemanticException, NoSuchFieldException {
+		latestRecordedIdent = scanner.getToken();
+		lastRecordedIdentCallId = currentCallId;
+		Variable variable = display.getVariable(latestRecordedIdent);
+		if (symbolTable.getSymbol(latestRecordedIdent) != null) {
+			latestRecordedSymbol = symbolTable.getSymbol(latestRecordedIdent);
+		}
+
+		if (variable != null) {
+			variables.add(variable);
+			addresses.add(display.getVariableAddress(latestRecordedIdent));
+		}
+	}
+
+	public void declareInstantVariable() throws SyntaxException {
+		if (!variables.empty())
+			throw new SyntaxException("Declaration while variables is not empty.");
+
+		display.allocateVariable(latestRecordedSymbol, scanner.getToken());
 	}
 
 	public void assign() throws NoSuchFieldException {
@@ -129,26 +143,10 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void loadWaitingIdent() throws NoSuchFieldException {
-		if (waitingIdent != null && lastRecordedIdent > currentCall - 10) {
-			variables.push(display.getVariable(waitingIdent));
-			addresses.push(display.getVariableAddress(waitingIdent));
-			waitingIdent = null;
-		}
-	}
-
-	public void subOpSet() {
-		operand = OpType.SUBTRACT;
-	}
-
-	public void addOpSet() {
-		operand = OpType.SUBTRACT;
-	}
-
-	public void addSubOp() {
-		if (operand == OpType.SUBTRACT) {
-			System.out.println("subbbbbb");
-		} else {
-			System.out.println("addddddd");
+		if (latestRecordedIdent != null && lastRecordedIdentCallId > currentCallId - 10) {
+			variables.push(display.getVariable(latestRecordedIdent));
+			addresses.push(display.getVariableAddress(latestRecordedIdent));
+			latestRecordedIdent = null;
 		}
 	}
 
@@ -201,15 +199,6 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void endScope() {
 		display.popScope();
-	}
-
-	public String getResult() {
-		StringBuilder result = new StringBuilder();
-		for (MipsLine line : mipsLines) {
-			result.append(line).append('\n');
-		}
-
-		return result.toString();
 	}
 
 	public void ifStatement() throws SemanticException, ClassNotFoundException {
@@ -276,73 +265,21 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(label);
 	}
 
-	public void integerConstant() {
-		int integer = Integer.parseInt(scanner.nextToken());
-		Label label = LabelMaker.createIntegerConstantLabel(integer);
-		mipsLines.add(label);
-		mipsLines.add(new DataInstruction(".word", 4));
-	}
-
-	public void doubleConstant() {
-
-	}
-
-	public void booleanConstant() {
-
-	}
-
-	public void stringConstant() {
-
-	}
-
-	public void declareWaitingVariable() throws NoSuchFieldException {
-		//FIXME make declarations for ident types right.
-		String name = scanner.getToken();
-		if (currentCall < lastRecordedIdent + 3 && waitingIdent != null) {
-			symbols.push(symbolTable.getSymbol(waitingIdent));
-			waitingIdent = null;
+	Function currentFunction;
+	public void declareFunction() throws NoSuchFieldException {
+		if (currentClassSymbol != null) {
+			currentFunction = currentClassSymbol.getMethod(latestRecordedIdent);
+			mipsLines.add(LabelMaker.createFunctionLabel(currentClassSymbol.getName(), latestRecordedIdent));
+		} else {
+			currentFunction = codeReviewer.getGlobalScope().getFunction(latestRecordedIdent);
+			mipsLines.add(LabelMaker.createFunctionLabel(latestRecordedIdent));
 		}
-
-		// FIXME add to declaring class symbol fields (if any) as well.
-		Variable variable = display.allocateVariable(symbols.peek(), name);
-
-		if (shouldDeclareArguments)
-		{
-			currentDeclaringFunction.addArgument(variable);
-		}
-
-		symbols.remove(symbols.pop());
+		latestRecordedIdent = null;
 	}
 
-	Boolean shouldDeclareArguments;
-	Function currentDeclaringFunction;
-
-	public void startFunction() {
-		shouldDeclareArguments = true;
-
-		Boolean shouldDeclareArguments = true;
-
-		String name = waitingIdent;
-		waitingIdent = null;
-
-		// FIXME add for classes as well.
-		currentDeclaringFunction = new Function(name);
-
-		currentDeclaringFunction.setReturnType(symbols.pop());
-
-		mipsLines.add(LabelMaker.createFunctionLabel(name));
-
-		startScope();
-		//FIXME is this the best way?
-		display.allocateVariable(currentDeclaringFunction.getReturnType(),
-				"return");
-	}
-
-	public void endDeclareArguments() {
-		shouldDeclareArguments = false;
-	}
-
-	public void endFunction() {
+	public void endFunctionBlock() {
 		mipsLines.add(new Instruction("jr", new Register("ra")));
 	}
+
+	Symbol currentClassSymbol;
 }

@@ -10,4 +10,6 @@ int main() {
     Print(a);
     Print(b);
     Print(c);
+
+    a = 12;
 }

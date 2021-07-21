@@ -1,12 +1,13 @@
 package code_generator.instructions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Directive implements MipsLine {
 	String name;
-	ArrayList<String> parameters;
+	List<String> parameters;
 
-	public Directive(String name, ArrayList<String> parameters) {
+	public Directive(String name, List<String> parameters) {
 		this.name = name;
 		this.parameters = parameters;
 	}
@@ -22,8 +23,9 @@ public class Directive implements MipsLine {
 		directive_string.append('.');
 		directive_string.append(name);
 		directive_string.append(' ');
+		Integer startLength = directive_string.length();
 		for (String parameter: parameters) {
-			if (directive_string.length() != 0) {
+			if (directive_string.length() != startLength) {
 				directive_string.append(", ");
 			}
 
@@ -41,7 +43,7 @@ public class Directive implements MipsLine {
 		this.name = name;
 	}
 
-	public ArrayList<String> getParameters() {
+	public List<String> getParameters() {
 		return parameters;
 	}
 

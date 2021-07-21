@@ -49,7 +49,7 @@ public class Scope {
 		return false;
 	}
 
-	public Variable getVariable(String name) throws NoSuchFieldException {
+	public Variable getVariable(String name) {
 		System.out.println("name: "+ name);
 		for (Variable variable: variables) {
 			System.out.println("Variables: " + variable.getName());
@@ -58,7 +58,7 @@ public class Scope {
 			}
 		}
 
-		throw new NoSuchFieldException("Scope::getVariable: Variable " + name + " not found.");
+		return null;
 	}
 
 	public Integer getVariableAddress(String name) throws NoSuchFieldException {
