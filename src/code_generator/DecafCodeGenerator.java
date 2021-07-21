@@ -308,7 +308,12 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void stringConstant() {
-
+		String str = scanner.nextToken();
+		Label label = LabelMaker.createStringConstantLabel(str);
+		mipsLines.add(label);
+		ArrayList<String> parameters = new ArrayList<>();
+		parameters.add(str);
+		mipsLines.add(new Directive(".asciiz", parameters));
 	}
 
 	public void declareWaitingVariable() throws NoSuchFieldException {
