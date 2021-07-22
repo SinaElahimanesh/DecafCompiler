@@ -172,6 +172,12 @@ public class CallNode implements Node {
 					complete = parenthesisNode.isComplete();
 				}
 				break;
+			default:
+				if (arguments.isEmpty())
+					parenthesisNode.addOperator(operator);
+				else
+					arguments.get(arguments.size() - 1).addOperator(operator);
+				break;
 		}
 	}
 
