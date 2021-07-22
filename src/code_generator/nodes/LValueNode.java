@@ -50,11 +50,11 @@ public class LValueNode implements Node {
 
 	@Override
 	public boolean isLValue() throws SyntaxException, SemanticException {
-		return false;
+		return callNode.isLValue();
 	}
 
 	@Override
 	public boolean isComplete() throws SyntaxException, SemanticException {
-		return false;
+		return callNode.isComplete();
 	}
 }

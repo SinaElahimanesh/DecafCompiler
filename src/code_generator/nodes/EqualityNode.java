@@ -11,10 +11,10 @@ import code_review.symbol_table.symbols.Symbol;
 
 public class EqualityNode implements Node {
 
-  CallNode inner;
+  AdditionNode inner;
 
   public EqualityNode(DecafCodeGenerator codeGenerator) {
-    inner = new CallNode(codeGenerator);
+    inner = new AdditionNode(codeGenerator);
   }
 
   @Override

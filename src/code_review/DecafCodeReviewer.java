@@ -20,7 +20,6 @@ import scanner.CompilerScanner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -49,7 +48,13 @@ public class DecafCodeReviewer implements CodeGenerator {
 		mipsLines.add(new Directive("word", Collections.singletonList("0")));
 		mipsLines.add(new Label("or__tmp"));
 		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-
+		mipsLines.add(new Label("add__tmp"));
+		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+		mipsLines.add(new Label("mult__tmp"));
+		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+		mipsLines.add(new Label("unary__tmp"));
+		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+		
 		mipsLines.add(new Label("string__newline"));
 		mipsLines.add(new Directive("asciiz", Collections.singletonList("\"\\n\"")));
 

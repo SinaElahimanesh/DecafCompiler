@@ -5,7 +5,16 @@ int a(int x) {
 }
 
 int main() {
-   Print(false || true && false);
+   Print(2 + 3 + 5);
+   Print(2 - 3 + 6 * 10);
+   Print(1 - 2 + 3 - 4);
+   Print(5 / 2);
+   Print(5 * 2);
+   Print(5 % 2);
+   Print((3+5)/2);
+   Print((3+5)/-2);
+   Print((3+5)/--2);
+   Print((3+5)/---2); 
 }
 
 void b(int x, double y) {

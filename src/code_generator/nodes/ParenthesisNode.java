@@ -131,7 +131,7 @@ public class ParenthesisNode implements Node {
 	}
 
 	@Override
-	public void addOperator(String operator) throws SyntaxException {
+	public void addOperator(String operator) throws SyntaxException, SemanticException {
 		if (complete)
 			throw new SyntaxException("Passing " + operator + " to complete parenthesis.");
 
@@ -147,11 +147,16 @@ public class ParenthesisNode implements Node {
 			case ")":
 				if (parenthesisNodeType != ParenthesisNodeType.EXPRESSION)
 					throw new SyntaxException("Passing ) to parenthesis with type " + parenthesisNodeType);
-
-				complete = true;
+				if (!assignmentNode.isComplete()) {
+					assignmentNode.addOperator(operator);
+				} else {
+					complete = true;
+				}
+				break;
 			default:
 				if (parenthesisNodeType != ParenthesisNodeType.EXPRESSION)
 					throw new SyntaxException("Passing operator to not expression parenthesis.");
+				assignmentNode.addOperator(operator);
 		}
 	}
 
