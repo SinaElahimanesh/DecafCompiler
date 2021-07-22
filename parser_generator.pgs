@@ -1556,7 +1556,7 @@
         "start": 92,
         "end": 93,
         "token": "comma",
-        "func": "",
+        "func": "operator",
         "anchorX": 470.5,
         "anchorY": 440.5,
         "isGraph": false,
