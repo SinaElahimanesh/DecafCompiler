@@ -5,7 +5,7 @@ int a(int x) {
 }
 
 int main() {
-   a(13);
+   a(13 && 12);
 }
 
 void b(int x, double y) {

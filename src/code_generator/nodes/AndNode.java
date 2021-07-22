@@ -2,6 +2,7 @@ package code_generator.nodes;
 
 import java.util.ArrayList;
 
+import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
 import code_generator.SyntaxException;
 import code_generator.instructions.Instruction;
@@ -16,6 +17,13 @@ public class AndNode implements Node {
   ArrayList<EqualityNode> children;
   Indirect address;
   Symbol symbol;
+  DecafCodeGenerator codeGenerator;
+
+  public AndNode(DecafCodeGenerator codeGenerator) {
+    this.codeGenerator = codeGenerator;
+    children = new ArrayList<>();
+    children.add(new EqualityNode(codeGenerator));
+  }
 
   private EqualityNode lastChild() throws SyntaxException {
     if (children.size() == 0) throw new SyntaxException("AndNode has no child");
@@ -73,7 +81,7 @@ public class AndNode implements Node {
     } catch(SyntaxException | SemanticException e) {
       if (operator.equals("&&")) {
         if (lastChild().isComplete()) {
-          children.add(new EqualityNode());
+          children.add(new EqualityNode(codeGenerator));
         } else {
           throw new SyntaxException("Unexpected && operator");
         }
