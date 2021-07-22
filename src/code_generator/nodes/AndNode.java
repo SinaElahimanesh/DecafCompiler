@@ -48,7 +48,7 @@ public class AndNode implements Node {
     child.implement(mipsLines);
     address = child.getAddress();
     symbol = child.getSymbol();
-    if (!symbol.equals(BoolSymbol.get())) {
+    if (!symbol.equals(BoolSymbol.get()) && children.size() > 1) {
 			throw new SemanticException("And is only for bool");
 		}
     for (int i = 1; i < children.size(); i += 1) {
