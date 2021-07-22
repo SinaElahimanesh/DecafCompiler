@@ -108,7 +108,7 @@ public class CallNode implements Node {
 					mipsLines.add(new Instruction("sw", register, new Indirect(argumentMemory, new Register("sp"))));
 					RegisterBank.freeRegister(register);
 					argumentMemory += 4;
-				} catch (ClassNotFoundException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					System.exit(1);
 				}

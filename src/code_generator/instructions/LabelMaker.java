@@ -40,6 +40,10 @@ public final class LabelMaker {
 	}
 
 	public static Label createConstantLabel(String constant, String type, int size) {
+		if (type.equals("bool")) {
+			if (constant.equals("true")) return new Label("bool__true");
+			if (constant.equals("false")) return new Label("bool__false");
+		}
 		String labelName = type + "_constant____" +
 				String.format("%x", new BigInteger(1, constant.getBytes(StandardCharsets.UTF_8)));
 		return new Label(labelName);

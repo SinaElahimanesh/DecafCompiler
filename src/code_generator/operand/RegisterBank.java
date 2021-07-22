@@ -22,7 +22,7 @@ public class RegisterBank {
 	 */
 	static HashMap<String, Symbol> usedRegisters = new HashMap<>();
 
-	public static Register allocateRegister(Symbol useCase) throws ClassNotFoundException {
+	public static Register allocateRegister(Symbol useCase) {
 		for (String registerName: registerNames) {
 			if (!usedRegisters.containsKey(registerName)) {
 				if (registerName.charAt(0) == 't') {
@@ -34,7 +34,9 @@ public class RegisterBank {
 				return register;
 			}
 		}
-		throw new ClassNotFoundException("No registers are free");
+		new ClassNotFoundException("No registers are free").printStackTrace();
+		System.exit(1);
+		return null;
 	}
 
 	public static void freeRegister(Register register) {

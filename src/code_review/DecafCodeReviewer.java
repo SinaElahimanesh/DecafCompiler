@@ -40,6 +40,16 @@ public class DecafCodeReviewer implements CodeGenerator {
 		this.scanner = scanner;
 		mipsLines.add(new Directive("data"));
 
+		mipsLines.add(new Label("bool__false"));
+		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+		mipsLines.add(new Label("bool__true"));
+		mipsLines.add(new Directive("word", Collections.singletonList("1")));
+
+		mipsLines.add(new Label("and__tmp"));
+		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+		mipsLines.add(new Label("or__tmp"));
+		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+
 		mipsLines.add(new Label("string__newline"));
 		mipsLines.add(new Directive("asciiz", Collections.singletonList("\"\\n\"")));
 

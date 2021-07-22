@@ -6,6 +6,7 @@ import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
 import code_generator.SyntaxException;
 import code_generator.instructions.Instruction;
+import code_generator.instructions.Label;
 import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
@@ -17,6 +18,7 @@ public class OrNode implements Node {
 
   ArrayList<AndNode> children;
   Indirect address;
+	static Indirect globalTmp = new Indirect(new Label("or__tmp"), new Register("zero"));
   Symbol symbol;
   DecafCodeGenerator codeGenerator;
 
@@ -47,28 +49,29 @@ public class OrNode implements Node {
     child.implement(mipsLines);
     address = child.getAddress();
     symbol = child.getSymbol();
-		if (children.size() > 1 && !symbol.equals(BoolSymbol.get())) {
+		if (children.size() == 1) return;
+		if (!symbol.equals(BoolSymbol.get())) {
 			throw new SemanticException("Or is only for bool");
 		}
+		address = globalTmp;
+		Register register = RegisterBank.allocateRegister(symbol);
+		mipsLines.add(new Instruction("lw", register, child.getAddress()));
+		mipsLines.add(new Instruction("sw", register, address));
+		RegisterBank.freeRegister(register);
     for (int i = 1; i < children.size(); i += 1) {
       child = children.get(i);
       child.implement(mipsLines);
 			if (!child.getSymbol().equals(symbol)) {
       	throw new SemanticException("Or is only for bool");
 			}
-      try {
-        Register register1 = RegisterBank.allocateRegister(symbol);
-        Register register2 = RegisterBank.allocateRegister(symbol);
-        mipsLines.add(new Instruction("lw", register1, child.getAddress()));
-        mipsLines.add(new Instruction("lw", register2, address));
-				mipsLines.add(new Instruction("or", register1, register1, register2));
-				mipsLines.add(new Instruction("sw", register1, address));
-        RegisterBank.freeRegister(register1);
-        RegisterBank.freeRegister(register2);
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-        System.exit(1);  
-      }
+      Register register1 = RegisterBank.allocateRegister(symbol);
+			Register register2 = RegisterBank.allocateRegister(symbol);
+			mipsLines.add(new Instruction("lw", register1, child.getAddress()));
+			mipsLines.add(new Instruction("lw", register2, address));
+			mipsLines.add(new Instruction("or", register1, register1, register2));
+			mipsLines.add(new Instruction("sw", register1, address));
+			RegisterBank.freeRegister(register1);
+			RegisterBank.freeRegister(register2);
     }
   }
 

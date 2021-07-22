@@ -5,7 +5,7 @@ int a(int x) {
 }
 
 int main() {
-   print(true && false);
+   Print(false || true && false);
 }
 
 void b(int x, double y) {
