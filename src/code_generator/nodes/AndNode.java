@@ -27,7 +27,6 @@ public class AndNode implements Node {
   }
 
   private EqualityNode lastChild() throws SyntaxException {
-    if (children.size() == 0) throw new SyntaxException("AndNode has no child");
     return children.get(children.size() - 1);
   }
 
@@ -48,7 +47,7 @@ public class AndNode implements Node {
     child.implement(mipsLines);
     address = child.getAddress();
     symbol = child.getSymbol();
-    if (!symbol.equals(BoolSymbol.get()) && children.size() > 1) {
+    if (children.size() > 1 && !symbol.equals(BoolSymbol.get())) {
 			throw new SemanticException("And is only for bool");
 		}
     for (int i = 1; i < children.size(); i += 1) {
