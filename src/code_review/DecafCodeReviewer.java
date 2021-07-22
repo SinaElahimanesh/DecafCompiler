@@ -142,7 +142,7 @@ public class DecafCodeReviewer implements CodeGenerator {
 	public void integerConstant() {
 		String integer = scanner.getToken();
 		mipsLines.add(LabelMaker.createConstantLabel(integer, "integer", 4));
-		mipsLines.add(new Directive("word", Collections.singletonList(integer)));
+		mipsLines.add(new Directive("word", Collections.singletonList(integer.toLowerCase(Locale.ROOT))));
 	}
 
 	public void doubleConstant() {

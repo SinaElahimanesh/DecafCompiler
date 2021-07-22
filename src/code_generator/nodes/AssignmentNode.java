@@ -10,11 +10,12 @@ import code_review.symbol_table.symbols.Symbol;
 import java.util.ArrayList;
 
 public class AssignmentNode implements Node {
-	ArrayList<OrNode> orNodes;
+	ArrayList<OrNode> orNodes = new ArrayList<>();
 	DecafCodeGenerator codeGenerator;
 
 	AssignmentNode(DecafCodeGenerator codeGenerator) {
 		this.codeGenerator = codeGenerator;
+		orNodes.add(new OrNode(codeGenerator));
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class AssignmentNode implements Node {
 	public void implement(ArrayList<MipsLine> mipsLines) throws SyntaxException, SemanticException {
 		if (orNodes.size() > 2)
 			throw new SyntaxException("More than one assignment operators used in an expression.");
-
+		orNodes.get(0).implement(mipsLines);
 	}
 
 	@Override

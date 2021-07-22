@@ -67,7 +67,7 @@ public class CallNode implements Node {
 							" and " + arguments.size() + " for function " + function.getName());
 				}
 				for (int i = 0; i < arguments.size(); i++) {
-					if (arguments.get(i).getSymbol() != function.getArguments().get(i).getSymbol()) {
+					if (!arguments.get(i).getSymbol().equals(function.getArguments().get(i).getSymbol())) {
 						throw new SemanticException("Incompatible argumnets with type " +
 								arguments.get(i).getSymbol().getName() +
 								" and " + function.getArguments().get(i).getSymbol().getName());

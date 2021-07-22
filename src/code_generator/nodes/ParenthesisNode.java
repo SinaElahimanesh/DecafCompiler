@@ -19,7 +19,7 @@ public class ParenthesisNode implements Node {
 	DecafCodeGenerator codeGenerator;
 
 	ParenthesisNodeType parenthesisNodeType;
-	AssignmentNode assignmentNode;
+	OrNode assignmentNode;
 	Label constantValue;
 	String ident;
 
@@ -141,7 +141,9 @@ public class ParenthesisNode implements Node {
 				if (parenthesisNodeType != null)
 					throw new SyntaxException("Passing ( to parenthesis with type.");
 				parenthesisNodeType = ParenthesisNodeType.EXPRESSION;
-				assignmentNode = new AssignmentNode(codeGenerator);
+				assignmentNode = new OrNode(codeGenerator);
+				complete = false;
+				break;
 			case ")":
 				if (parenthesisNodeType != ParenthesisNodeType.EXPRESSION)
 					throw new SyntaxException("Passing ) to parenthesis with type " + parenthesisNodeType);
@@ -163,11 +165,11 @@ public class ParenthesisNode implements Node {
 		return complete;
 	}
 
-	public AssignmentNode getExpressionNode() {
+	public OrNode getExpressionNode() {
 		return assignmentNode;
 	}
 
-	public void setExpressionNode(AssignmentNode assignmentNode) {
+	public void setExpressionNode(OrNode assignmentNode) {
 		this.assignmentNode = assignmentNode;
 	}
 
