@@ -25,7 +25,9 @@ public final class LabelMaker {
 	 * @return A label appropriate for the input function
 	 */
 	public static Label createFunctionLabel(String functionName) {
-		return new Label(functionName);
+		if (functionName.equals("main"))
+			return new Label(functionName);
+		return new Label("____" + functionName);
 	}
 
 	/**
