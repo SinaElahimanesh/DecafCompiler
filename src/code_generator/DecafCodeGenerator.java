@@ -208,9 +208,16 @@ public class DecafCodeGenerator implements CodeGenerator {
 			mipsLines.add(LabelMaker.createFunctionLabel(latestRecordedIdent));
 		}
 		latestRecordedIdent = null;
+
+		display.addNewScope();
+		display.allocateVariable(currentFunction.getReturnType(), "return");
+		for (Variable variable: currentFunction.getArguments()) {
+			display.allocateVariable(variable.getSymbol(), variable.getName());
+		}
 	}
 
 	public void endFunctionBlock() {
+		display.popScope();
 		mipsLines.add(new Instruction("jr", new Register("ra")));
 	}
 

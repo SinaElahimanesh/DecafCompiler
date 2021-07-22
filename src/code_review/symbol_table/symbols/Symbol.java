@@ -67,4 +67,10 @@ public class Symbol {
     public Integer getSize() {
         return size;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (! (obj instanceof Symbol)) return false;
+        return ((Symbol) obj).getName().equals(getName());
+    }
 }

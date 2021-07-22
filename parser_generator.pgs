@@ -3030,7 +3030,7 @@
         "start": 165,
         "end": 170,
         "token": "ident",
-        "func": "idnet;recordIdent;is_lvalue_friendly",
+        "func": "ident;recordIdent;is_lvalue_friendly",
         "anchorX": 303.0,
         "anchorY": 518.5,
         "isGraph": false,

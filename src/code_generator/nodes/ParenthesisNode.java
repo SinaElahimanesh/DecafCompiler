@@ -158,6 +158,11 @@ public class ParenthesisNode implements Node {
 		return lValue;
 	}
 
+	@Override
+	public boolean isComplete() throws SyntaxException, SemanticException {
+		return complete;
+	}
+
 	public AssignmentNode getExpressionNode() {
 		return assignmentNode;
 	}

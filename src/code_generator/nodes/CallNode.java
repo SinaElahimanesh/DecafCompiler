@@ -56,7 +56,7 @@ public class CallNode implements Node {
 		Function function = parenthesisNode.function;
 
 		// Set arguments
-		if (arguments.size() > 1 || arguments.get(0).complete) {
+		if (arguments.size() > 1 || arguments.get(0).isComplete()) {
 			for (OrNode argument : arguments) {
 				argument.implement(mipsLines);
 			}
@@ -99,7 +99,7 @@ public class CallNode implements Node {
 				return;
 			}
 
-			int argumentMemory = TemporaryMemoryBank.size + 4;
+			int argumentMemory = TemporaryMemoryBank.size + 8;
 
 			for (OrNode argument : arguments) {
 				try {
@@ -115,9 +115,12 @@ public class CallNode implements Node {
 			}
 		}
 
+		Indirect returnAddress = TemporaryMemoryBank.allocateTemporaryMemory(4);
+		mipsLines.add(new Instruction("sw", new Register("ra"), returnAddress));
 		mipsLines.add(new Instruction("addi", new Register("sp"), new Register("sp"), new Immediate(TemporaryMemoryBank.size)));
 		mipsLines.add(new Instruction("jal", new LabelOperand(function.getStartLabel())));
 		mipsLines.add(new Instruction("addi", new Register("sp"), new Register("sp"), new Immediate(-TemporaryMemoryBank.size)));
+		mipsLines.add(new Instruction("lw", new Register("ra"), returnAddress));
 		address = TemporaryMemoryBank.allocateTemporaryMemory(4);
 		symbol = function.getReturnType();
 	}
@@ -126,8 +129,10 @@ public class CallNode implements Node {
 	public void addIdent(String token) throws SyntaxException, SemanticException {
 		if (arguments.size() > 0)
 			arguments.get(arguments.size() - 1).addIdent(token);
-		else
+		else {
 			parenthesisNode.addIdent(token);
+			complete = parenthesisNode.isComplete();
+		}
 	}
 
 	@Override
@@ -148,7 +153,7 @@ public class CallNode implements Node {
 			case "(":
 				if (arguments.size() > 0)
 					arguments.get(arguments.size() - 1).addOperator(operator);
-				else if (!parenthesisNode.complete) {
+				else if (!parenthesisNode.isComplete()) {
 					parenthesisNode.addOperator(operator);
 				} else {
 					arguments.add(new OrNode(codeGenerator));
@@ -164,7 +169,7 @@ public class CallNode implements Node {
 					}
 				} else {
 					parenthesisNode.addOperator(operator);
-					complete = parenthesisNode.complete;
+					complete = parenthesisNode.isComplete();
 				}
 				break;
 		}
@@ -173,5 +178,10 @@ public class CallNode implements Node {
 	@Override
 	public boolean isLValue() {
 		return arguments.size() == 0 && parenthesisNode.isLValue();
+	}
+
+	@Override
+	public boolean isComplete() throws SyntaxException, SemanticException {
+		return complete;
 	}
 }

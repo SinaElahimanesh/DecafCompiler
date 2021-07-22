@@ -18,10 +18,9 @@ public class IntSymbol extends Symbol implements Primitive {
 
 	public static IntSymbol get() {
 		if (instance == null) {
-			return new IntSymbol();
-		} else {
-			return instance;
+			instance = new IntSymbol();
 		}
+		return instance;
 	}
 
 	@Override

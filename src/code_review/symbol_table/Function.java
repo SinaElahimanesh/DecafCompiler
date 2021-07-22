@@ -11,7 +11,7 @@ public class Function {
 	String name;
 	Symbol returnType;
 	AccessMode accessMode;
-	ArrayList<Variable> arguments;
+	ArrayList<Variable> arguments = new ArrayList<>();
 
 	/**
 	 * This constructor should be used only when it's a function, not a method in a class.

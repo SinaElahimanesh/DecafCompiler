@@ -21,4 +21,6 @@ public interface Node {
 	void addOperator(String operator) throws SyntaxException, SemanticException;
 
 	boolean isLValue() throws SyntaxException, SemanticException;
+
+	boolean isComplete() throws SyntaxException, SemanticException;
 }

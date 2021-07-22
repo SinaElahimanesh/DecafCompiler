@@ -121,11 +121,15 @@ public class DecafCodeReviewer implements CodeGenerator {
 	public void declareFunction() throws NoSuchFieldException {
 		if (currentClassSymbol != null) {
 			currentFunction = new Function(currentClassSymbol.getName(), latestRecordedIdent);
+			currentFunction.setReturnType(latestRecordedSymbol);
+			latestRecordedSymbol = null;
 			currentFunction.setAccessMode(latestAccessMode);
 			latestAccessMode = AccessMode.NONE;
 			currentClassSymbol.addField(currentFunction);
 		} else {
 			currentFunction = new Function(latestRecordedIdent);
+			currentFunction.setReturnType(latestRecordedSymbol);
+			latestRecordedSymbol = null;
 			globalScope.addFunction(currentFunction);
 		}
 	}

@@ -40,4 +40,9 @@ public class MultiplicationNode implements Node {
 	public boolean isLValue() throws SyntaxException, SemanticException {
 		return false;
 	}
+
+	@Override
+	public boolean isComplete() throws SyntaxException, SemanticException {
+		return false;
+	}
 }

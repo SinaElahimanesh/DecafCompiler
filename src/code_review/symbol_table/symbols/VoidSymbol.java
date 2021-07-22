@@ -5,6 +5,7 @@ public final class VoidSymbol extends Symbol {
 
 	private VoidSymbol() {
 		super("void");
+		size = 4;
 	}
 
 	public static VoidSymbol get() {

@@ -1,4 +1,7 @@
+int d(int x) {
+    Print(x);
+}
+
 int main() {
-    Print(12, 23);
-    Print(1.25, 2.75, 12.);
+   d(13);
 }
