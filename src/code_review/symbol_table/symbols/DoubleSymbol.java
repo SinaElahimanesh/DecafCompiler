@@ -115,8 +115,8 @@ public class DoubleSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void print(Register register) throws ClassNotFoundException {
-		DecafCodeGenerator.mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.print_int)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("addi", new Register("a0"), register, new Immediate(0)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.print_float)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", new Register("f12"), new Indirect(0, register)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("syscall"));
 	}
 }

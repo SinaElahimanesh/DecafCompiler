@@ -52,15 +52,17 @@ public class Function {
 		return returnType;
 	}
 
-	public void setReturnType(Symbol returnType) {
+	public Function setReturnType(Symbol returnType) {
 		this.returnType = returnType;
+		return this;
 	}
 
 	public ArrayList<Variable> getArguments() {
 		return arguments;
 	}
 
-	public void addArgument(Variable argument) {
+	public Function addArgument(Variable argument) {
 		this.arguments.add(argument);
+		return this;
 	}
 }

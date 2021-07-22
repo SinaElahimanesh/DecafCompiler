@@ -1,7 +1,10 @@
 package code_generator.operand;
 
+import code_generator.instructions.Label;
+
 public class Indirect implements Operand {
 	Integer immediate;
+	Label label = null;
 	Register register;
 
 	/**
@@ -14,8 +17,16 @@ public class Indirect implements Operand {
 		this.register = register;
 	}
 
+	public Indirect(Label label, Register register) {
+		this.label = label;
+		this.register = register;
+	}
+
 	@Override
 	public String toString() {
-		return immediate.toString() + '(' + register.toString() + ')';
+		if (label == null)
+			return immediate.toString() + '(' + register.toString() + ')';
+		else
+			return label.getName() + '(' + register.toString() + ')';
 	}
 }

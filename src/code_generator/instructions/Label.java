@@ -9,7 +9,7 @@ public class Label implements MipsLine {
 	 * This method should only be used in LabelMaker in order to prevent bad labeling.
 	 * @param name The name of the label.
 	 */
-	protected Label(String name) {
+	public Label(String name) {
 		this.name = name;
 	}
 
@@ -24,5 +24,13 @@ public class Label implements MipsLine {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getType() {
+		return name.substring(0, name.indexOf('_'));
+	}
+
+	public int getSize() {
+		return Integer.parseInt(name.substring(name.indexOf('_'), name.indexOf("_constant")));
 	}
 }

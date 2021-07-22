@@ -10,7 +10,9 @@ import code_review.symbol_table.AccessMode;
 import code_review.symbol_table.Function;
 import code_review.symbol_table.SymbolTable;
 import code_review.symbol_table.Variable;
+import code_review.symbol_table.symbols.IntSymbol;
 import code_review.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.VoidSymbol;
 import parser.Action;
 import parser.CodeGenerator;
 import scanner.CompilerScanner;
@@ -18,6 +20,7 @@ import scanner.CompilerScanner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -36,6 +39,20 @@ public class DecafCodeReviewer implements CodeGenerator {
 	public DecafCodeReviewer(CompilerScanner scanner) throws SemanticException {
 		this.scanner = scanner;
 		mipsLines.add(new Directive("data"));
+
+		mipsLines.add(new Label("string__newline"));
+		mipsLines.add(new Directive("asciiz", Collections.singletonList("\"\\n\"")));
+
+		globalScope.addFunction(new Function("Print").setReturnType(VoidSymbol.get()));
+		globalScope.addFunction(new Function("ReadInteger").setReturnType(IntSymbol.get()));
+		// FIXME Complete return types and arguments.
+		globalScope.addFunction(new Function("ReadLine"));
+		globalScope.addFunction(new Function("NewArray"));
+		globalScope.addFunction(new Function("getArrVal"));
+		globalScope.addFunction(new Function("btoi"));
+		globalScope.addFunction(new Function("itob"));
+		globalScope.addFunction(new Function("dtoi"));
+		globalScope.addFunction(new Function("itod"));
 		latestAccessMode = AccessMode.NONE;
 	}
 
@@ -120,25 +137,25 @@ public class DecafCodeReviewer implements CodeGenerator {
 	// Constant Interpretation Methods
 	public void integerConstant() {
 		String integer = scanner.getToken();
-		mipsLines.add(LabelMaker.createConstantLabel(integer));
+		mipsLines.add(LabelMaker.createConstantLabel(integer, "integer", 4));
 		mipsLines.add(new Directive("word", Collections.singletonList(integer)));
 	}
 
 	public void doubleConstant() {
 		String double_ = scanner.getToken();
-		mipsLines.add(LabelMaker.createConstantLabel(double_));
-		mipsLines.add(new Directive("double", Collections.singletonList(double_)));
+		mipsLines.add(LabelMaker.createConstantLabel(double_, "double", 4));
+		mipsLines.add(new Directive("float", Collections.singletonList(double_)));
 	}
 
 	public void boolConstant() {
 		String bool = scanner.getToken();
-		mipsLines.add(LabelMaker.createConstantLabel(bool));
+		mipsLines.add(LabelMaker.createConstantLabel(bool, "bool", 4));
 		mipsLines.add(new Directive("word", Collections.singletonList(bool.equals("true")?"1":"0")));
 	}
 
 	public void stringConstant() {
 		String string = scanner.getToken();
-		mipsLines.add(LabelMaker.createConstantLabel(string));
+		mipsLines.add(LabelMaker.createConstantLabel(string, "string", string.length()));
 		mipsLines.add(new Directive("asciiz", Collections.singletonList(string)));
 	}
 }

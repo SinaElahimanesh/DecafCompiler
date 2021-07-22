@@ -37,8 +37,8 @@ public final class LabelMaker {
 		return new Label("label____" + id.toString());
 	}
 
-	public static Label createConstantLabel(String constant) {
-		String labelName = "constant____" +
+	public static Label createConstantLabel(String constant, String type, int size) {
+		String labelName = type + "_constant____" +
 				String.format("%x", new BigInteger(1, constant.getBytes(StandardCharsets.UTF_8)));
 		return new Label(labelName);
 	}

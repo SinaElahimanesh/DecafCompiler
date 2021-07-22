@@ -1,6 +1,7 @@
 package code_generator;
 
 import code_generator.instructions.*;
+import code_generator.nodes.OrNode;
 import code_generator.operand.*;
 import code_generator.stack.Display;
 import code_generator.stack.TemporaryMemoryBank;
@@ -9,7 +10,6 @@ import code_review.symbol_table.Function;
 import code_review.symbol_table.SymbolTable;
 import code_review.symbol_table.Variable;
 import code_review.symbol_table.symbols.BoolSymbol;
-import code_review.symbol_table.symbols.Primitive;
 import code_review.symbol_table.symbols.Symbol;
 import parser.Action;
 import parser.CodeGenerator;
@@ -18,29 +18,24 @@ import scanner.CompilerScanner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Stack;
 
 public class DecafCodeGenerator implements CodeGenerator {
-	CompilerScanner scanner;
-	DecafCodeReviewer codeReviewer;
+	public CompilerScanner scanner;
+	public DecafCodeReviewer codeReviewer;
 
 	public static ArrayList<MipsLine> mipsLines = new ArrayList<>();
-	Display display = new Display(mipsLines);
-	TemporaryMemoryBank temporaryMemoryBank = new TemporaryMemoryBank();
-	SymbolTable symbolTable = new SymbolTable();
+	public Display display = new Display(mipsLines);
+	public SymbolTable symbolTable = new SymbolTable();
 
-	Stack<Variable> variables = new Stack<>();
-	Stack<Indirect> addresses = new Stack<>();
+	public Stack<Variable> variables = new Stack<>();
+	public Stack<Indirect> addresses = new Stack<>();
 
-	Stack<Label> labels = new Stack<>();
+	public Stack<Label> labels = new Stack<>();
 
-	AssignmentType assignmentType = AssignmentType.NONE;
+	public OrNode currentOrNode = new OrNode(this);
 
-	int lastLValue = 0;
-	int currentCallId = 0;
-	int lastRecordedIdentCallId = 0;
 	String latestRecordedIdent = null;
 	Symbol latestRecordedSymbol = null;
 
@@ -55,24 +50,17 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	@Override
 	public void doSemantic(String sem, Action action) throws Throwable {
-		if (action == Action.SHIFT) {
-			currentCallId++;
-		}
-
-		if (sem.equals("")) {
+		if (sem.equals(""))
 			return;
-		}
-		System.out.println(sem);
 		try {
 			Method semanticMethod = this.getClass().getMethod(sem);
 			semanticMethod.invoke(this);
-		} catch (NoSuchMethodException e) {
-//			e.printStackTrace();
-//			throw new SemanticException("Unknown semantic " + sem + " has been used");
+		} catch (NoSuchMethodException ignored) {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			throw new SemanticException("Semantic " + sem + " can't be called");
 		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 			throw e.getCause();
 		}
 	}
@@ -86,14 +74,26 @@ public class DecafCodeGenerator implements CodeGenerator {
 		return result.toString();
 	}
 
-	public void is_lvalue_friendly() {
-		lastLValue = currentCallId;
+	public void integerConstant() throws SyntaxException, SemanticException {
+		String integer = scanner.getToken();
+		currentOrNode.addIdent(LabelMaker.createConstantLabel(integer, "integer", 4).toString());
 	}
 
-	public void assignment_operator() throws SyntaxException {
-		if (currentCallId - lastLValue > 2) {
-			throw new SyntaxException("wrong assignment");
-		}
+	public void doubleConstant() throws SyntaxException, SemanticException {
+		String integer = scanner.getToken();
+		currentOrNode.addIdent(LabelMaker.createConstantLabel(integer, "double", 4).toString());
+	}
+
+	public void operator() throws SyntaxException, SemanticException {
+		currentOrNode.addOperator(scanner.getToken());
+	}
+
+	public void ident() throws SyntaxException, SemanticException {
+		currentOrNode.addIdent(scanner.getToken());
+	}
+
+	public void implementExpression() throws SyntaxException, SemanticException {
+		currentOrNode.implement(mipsLines);
 	}
 
 	public void type() {
@@ -101,24 +101,12 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void endLine() {
-		temporaryMemoryBank.resetMemory();
-	}
-
-	public void readInteger() {
-		Integer intSymbolSize = 4;
-		Indirect temporary = temporaryMemoryBank.allocateTemporaryMemory(intSymbolSize);
-
-		variables.push(new Variable(symbolTable.getSymbol("int"), "____"));
-		addresses.push(temporary);
-
-		mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.read_int)));
-		mipsLines.add(new Instruction("syscall"));
-		mipsLines.add(new Instruction("sw", new Register("v0"), temporary));
+		TemporaryMemoryBank.resetMemory();
+		currentOrNode = new OrNode(this);
 	}
 
 	public void recordIdent() throws SemanticException, NoSuchFieldException {
 		latestRecordedIdent = scanner.getToken();
-		lastRecordedIdentCallId = currentCallId;
 		Variable variable = display.getVariable(latestRecordedIdent);
 		if (symbolTable.getSymbol(latestRecordedIdent) != null) {
 			latestRecordedSymbol = symbolTable.getSymbol(latestRecordedIdent);
@@ -135,62 +123,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 			throw new SyntaxException("Declaration while variables is not empty.");
 
 		display.allocateVariable(latestRecordedSymbol, scanner.getToken());
-	}
-
-	public void assign() throws NoSuchFieldException {
-		loadWaitingIdent();
-		assignmentType = AssignmentType.ASSIGN;
-	}
-
-	public void loadWaitingIdent() throws NoSuchFieldException {
-		if (latestRecordedIdent != null && lastRecordedIdentCallId > currentCallId - 10) {
-			variables.push(display.getVariable(latestRecordedIdent));
-			addresses.push(display.getVariableAddress(latestRecordedIdent));
-			latestRecordedIdent = null;
-		}
-	}
-
-	public void doAssignment() throws SemanticException, ClassNotFoundException {
-		if (!variables.get(variables.size() - 1).getSymbol().equals(variables.get(variables.size() - 2).getSymbol())) {
-			throw new SemanticException("doAssignment: Incompatible types");
-		}
-
-		Symbol lhsSymbol = variables.get(variables.size() - 2).getSymbol();
-		Symbol rhsSymbol = variables.get(variables.size() - 1).getSymbol();
-
-		if (!(lhsSymbol instanceof Primitive)) {
-			throw new SemanticException("doAssignment: Incompatible ");
-		}
-
-		Indirect lhsAddress = addresses.get(addresses.size() - 2);
-		Indirect rhsAddress = addresses.get(addresses.size() - 1);
-
-		Register rhs = RegisterBank.allocateRegister(rhsSymbol);
-
-		mipsLines.add(new Instruction("lw", rhs, rhsAddress));
-		mipsLines.add(new Instruction("sw", rhs, lhsAddress));
-
-		RegisterBank.freeRegister(rhs);
-
-		addresses.pop();		// Removes the rhs to make other assignments possible;
-		variables.pop();
-	}
-
-	public void print() throws SemanticException, ClassNotFoundException, NoSuchFieldException {
-		loadWaitingIdent();
-		Symbol symbol = variables.pop().getSymbol();
-		if (!(symbol instanceof Primitive)) {
-			throw new SemanticException("print: Incompatible type to print");
-		}
-
-		Indirect address = addresses.pop();
-		Register value = RegisterBank.allocateRegister(symbol);
-
-		mipsLines.add(new Instruction("lw", value, address));
-
-		((Primitive) symbol).print(value);
-
-		RegisterBank.freeRegister(value);
+		currentOrNode = new OrNode(this);
 	}
 
 	public void startScope() {
@@ -265,7 +198,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(label);
 	}
 
-	Function currentFunction;
+	public Function currentFunction;
 	public void declareFunction() throws NoSuchFieldException {
 		if (currentClassSymbol != null) {
 			currentFunction = currentClassSymbol.getMethod(latestRecordedIdent);
@@ -281,5 +214,5 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(new Instruction("jr", new Register("ra")));
 	}
 
-	Symbol currentClassSymbol;
+	public Symbol currentClassSymbol;
 }

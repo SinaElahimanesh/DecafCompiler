@@ -4,14 +4,14 @@ import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 
 public class TemporaryMemoryBank {
-	public Integer size = 0;
+	public static Integer size = 0;
 
-	public Indirect allocateTemporaryMemory(Integer size) {
-		this.size += size;
-		return new Indirect(this.size - size, new Register("sp"));
+	public static Indirect allocateTemporaryMemory(Integer size) {
+		TemporaryMemoryBank.size += size;
+		return new Indirect(TemporaryMemoryBank.size - size, new Register("sp"));
 	}
 
-	public void resetMemory() {
+	public static void resetMemory() {
 		size = 0;
 	}
 }
