@@ -275,7 +275,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void integerConstant() {
-		int integer_number = Integer.parseInt(scanner.nextToken());
+		int integer_number = Integer.parseInt(scanner.getToken());
 		Label label = LabelMaker.createIntegerConstantLabel(integer_number);
 		mipsLines.add(label);
 		ArrayList<String> parameters = new ArrayList<>();
@@ -284,7 +284,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void doubleConstant() {
-		double double_number = Double.parseDouble(scanner.nextToken());
+		double double_number = Double.parseDouble(scanner.getToken());
 		Label label = LabelMaker.createDoubleConstantLabel(double_number);
 		mipsLines.add(label);
 		ArrayList<String> parameters = new ArrayList<>();
@@ -293,7 +293,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void booleanConstant() {
-		boolean booli = Boolean.parseBoolean(scanner.nextToken());
+		boolean booli = Boolean.parseBoolean(scanner.getToken());
 		Label label = LabelMaker.createBooleanConstantLabel(booli);
 		mipsLines.add(label);
 		ArrayList<String> parameters = new ArrayList<>();
@@ -308,7 +308,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void stringConstant() {
-		String str = scanner.nextToken();
+		String str = scanner.getToken();
 		Label label = LabelMaker.createStringConstantLabel(str);
 		mipsLines.add(label);
 		ArrayList<String> parameters = new ArrayList<>();
