@@ -10,6 +10,7 @@ import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
+import code_review.symbol_table.symbols.BoolSymbol;
 import code_review.symbol_table.symbols.Symbol;
 
 public class AndNode implements Node {
@@ -47,12 +48,15 @@ public class AndNode implements Node {
     child.implement(mipsLines);
     address = child.getAddress();
     symbol = child.getSymbol();
+    if (!symbol.equals(BoolSymbol.get())) {
+			throw new SemanticException("And is only for bool");
+		}
     for (int i = 1; i < children.size(); i += 1) {
       child = children.get(i);
-      if (!child.getSymbol().equals(symbol)) {
-        throw new SemanticException("Incompatible types in AndNode");
-      }
       child.implement(mipsLines);
+      if (!child.getSymbol().equals(symbol)) {
+        throw new SemanticException("And is only for bool");
+      }
       try {
         Register register1 = RegisterBank.allocateRegister(symbol);
         Register register2 = RegisterBank.allocateRegister(symbol);
