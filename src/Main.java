@@ -1,6 +1,7 @@
 import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
 import code_generator.SyntaxException;
+import code_generator.instructions.SystemCall;
 import code_review.DecafCodeReviewer;
 import parser.CodeGenerator;
 import parser.Parser;
@@ -62,14 +63,35 @@ public class Main {
             parser.parse();
             return cg.getResult();
         } catch (SyntaxException ignored) {
-            return "Syntax Error";
+            String result = ".data\n" +
+                    "err: .asciiz \"Syntax Error\"\n" +
+                    ".text\n" +
+                    "main:\n" +
+                    "li $v0, " + SystemCall.print_string + "\n" +
+                    "la $a0, err\n" +
+                    "syscall\n" +
+                    "jr $ra\n";
+            return result;
         } catch (SemanticException e) {
-//            System.out.println(e.getMessage());
-            return "Semantic Error";
+            String result = ".data\n" +
+                    "err: .asciiz \"Semantic Error\"\n" +
+                    ".text\n" +
+                    "main:\n" +
+                    "li $v0, " + SystemCall.print_string + "\n" +
+                    "la $a0, err\n" +
+                    "syscall\n" +
+                    "jr $ra\n";
+            return result;
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
-//            System.out.println(throwable.getMessage());
-            return "Code Generation Error";
+            String result = ".data\n" +
+                    "err: .asciiz \"Semantic Error\"\n" +
+                    ".text\n" +
+                    "main:\n" +
+                    "li $v0, " + SystemCall.print_string + "\n" +
+                    "la $a0, err\n" +
+                    "syscall\n" +
+                    "jr $ra\n";
+            return result;
         }
     }
 
