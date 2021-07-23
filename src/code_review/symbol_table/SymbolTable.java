@@ -14,6 +14,7 @@ public class SymbolTable {
         addSymbol(BoolSymbol.get());
         addSymbol(DoubleSymbol.get());
         addSymbol(VoidSymbol.get());
+        addSymbol(StringSymbol.get());
     }
 
     public void addSymbol(Symbol symbol) throws SemanticException {
