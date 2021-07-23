@@ -39,22 +39,6 @@ public class DecafCodeReviewer implements CodeGenerator {
 		this.scanner = scanner;
 		mipsLines.add(new Directive("data"));
 
-//		mipsLines.add(new Label("bool__false"));
-//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-//		mipsLines.add(new Label("bool__true"));
-//		mipsLines.add(new Directive("word", Collections.singletonList("1")));
-//
-//		mipsLines.add(new Label("and__tmp"));
-//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-//		mipsLines.add(new Label("or__tmp"));
-//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-//		mipsLines.add(new Label("add__tmp"));
-//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-//		mipsLines.add(new Label("mult__tmp"));
-//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-//		mipsLines.add(new Label("unary__tmp"));
-//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-		
 		mipsLines.add(new Label("string__newline"));
 		mipsLines.add(new Directive("asciiz", Collections.singletonList("\"\\n\"")));
 
@@ -162,25 +146,37 @@ public class DecafCodeReviewer implements CodeGenerator {
 	// Constant Interpretation Methods
 	public void integerConstant() {
 		String integer = scanner.getToken();
-		mipsLines.add(LabelMaker.createConstantLabel(integer, "integer", 4));
+		Label label = LabelMaker.createConstantLabel(integer, "integer", 4);
+		if (mipsLines.contains(label))
+			return;
+		mipsLines.add(label);
 		mipsLines.add(new Directive("word", Collections.singletonList(integer.toLowerCase(Locale.ROOT))));
 	}
 
 	public void doubleConstant() {
 		String double_ = scanner.getToken();
-		mipsLines.add(LabelMaker.createConstantLabel(double_, "double", 4));
+		Label label = LabelMaker.createConstantLabel(double_, "double", 4);
+		if (mipsLines.contains(label))
+			return;
+		mipsLines.add(label);
 		mipsLines.add(new Directive("float", Collections.singletonList(double_)));
 	}
 
 	public void booleanConstant() {
 		String bool = scanner.getToken();
-		mipsLines.add(LabelMaker.createConstantLabel(bool, "bool", 4));
+		Label label = LabelMaker.createConstantLabel(bool, "bool", 4);
+		if (mipsLines.contains(label))
+			return;
+		mipsLines.add(label);
 		mipsLines.add(new Directive("word", Collections.singletonList(bool.equals("true")?"1":"0")));
 	}
 
 	public void stringConstant() {
 		String string = scanner.getToken();
-		mipsLines.add(LabelMaker.createConstantLabel(string, "string", string.length()));
+		Label label = LabelMaker.createConstantLabel(string, "string", 4);
+		if (mipsLines.contains(label))
+			return;
+		mipsLines.add(label);
 		mipsLines.add(new Directive("asciiz", Collections.singletonList(string)));
 	}
 }
