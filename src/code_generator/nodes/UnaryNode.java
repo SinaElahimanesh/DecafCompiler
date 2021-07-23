@@ -10,6 +10,7 @@ import code_generator.operand.Immediate;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
+import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.symbols.BoolSymbol;
 import code_review.symbol_table.symbols.IntSymbol;
 import code_review.symbol_table.symbols.Symbol;
@@ -22,8 +23,8 @@ public class UnaryNode implements Node {
 
 	Symbol symbol;
 	Indirect address;
-	static Indirect globalTmp = new Indirect(new Label("unary__tmp"), new Register("zero"));
-	boolean begin = true;
+	Indirect globalTmp = TemporaryMemoryBank.allocateTemporaryMemory(4);
+  boolean begin = true;
 	String operator;
 
 	public UnaryNode(DecafCodeGenerator codeGenerator) {

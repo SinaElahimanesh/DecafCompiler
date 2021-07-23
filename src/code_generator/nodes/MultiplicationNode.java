@@ -11,6 +11,7 @@ import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
+import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.symbols.DoubleSymbol;
 import code_review.symbol_table.symbols.IntSymbol;
 import code_review.symbol_table.symbols.Symbol;
@@ -20,7 +21,7 @@ public class MultiplicationNode implements Node {
   ArrayList<UnaryNode> children;
   ArrayList<String> operators;
   Indirect address;
-  static Indirect globalTmp = new Indirect(new Label("mult__tmp"), new Register("zero"));
+  Indirect globalTmp = TemporaryMemoryBank.allocateTemporaryMemory(4);
   Symbol symbol;
   DecafCodeGenerator codeGenerator;
 

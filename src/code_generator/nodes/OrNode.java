@@ -11,6 +11,7 @@ import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
+import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.symbols.BoolSymbol;
 import code_review.symbol_table.symbols.Symbol;
 
@@ -18,7 +19,7 @@ public class OrNode implements Node {
 
   ArrayList<AndNode> children;
   Indirect address;
-	static Indirect globalTmp = new Indirect(new Label("or__tmp"), new Register("zero"));
+	Indirect globalTmp = TemporaryMemoryBank.allocateTemporaryMemory(4);
   Symbol symbol;
   DecafCodeGenerator codeGenerator;
 
