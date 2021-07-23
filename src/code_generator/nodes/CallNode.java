@@ -10,6 +10,7 @@ import code_generator.instructions.SystemCall;
 import code_generator.operand.*;
 import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.Function;
+import code_review.symbol_table.symbols.IntSymbol;
 import code_review.symbol_table.symbols.Primitive;
 import code_review.symbol_table.symbols.Symbol;
 
@@ -113,6 +114,15 @@ public class CallNode implements Node {
 					System.exit(1);
 				}
 			}
+		}
+
+		if (function.getName().equals("ReadInteger")) {
+			mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(5)));
+			mipsLines.add(new Instruction("syscall"));
+			symbol = IntSymbol.get();
+			address = TemporaryMemoryBank.allocateTemporaryMemory(4);
+			mipsLines.add(new Instruction("sw", new Register("v0"), address));
+			return;
 		}
 
 		Indirect returnAddress = TemporaryMemoryBank.allocateTemporaryMemory(4);
