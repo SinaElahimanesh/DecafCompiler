@@ -119,4 +119,10 @@ public class DoubleSymbol extends Symbol implements Primitive {
 		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", new Register("f12"), new Indirect(0, register)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("syscall"));
 	}
+
+	@Override
+	public void isLess(Indirect a, Indirect b, Indirect r) throws SemanticException {
+		// TODO Auto-generated method stub
+		
+	}
 }

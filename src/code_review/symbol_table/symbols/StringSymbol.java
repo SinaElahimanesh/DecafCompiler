@@ -116,4 +116,10 @@ public final class StringSymbol extends Symbol implements Primitive {
 		DecafCodeGenerator.mipsLines.add(new Instruction("add", new Register("a0"), new Register("zero"), register));
 		DecafCodeGenerator.mipsLines.add(new Instruction("syscall"));
 	}
+
+	@Override
+	public void isLess(Indirect a, Indirect b, Indirect r) throws SemanticException {
+		// TODO Auto-generated method stub
+		
+	}
 }
