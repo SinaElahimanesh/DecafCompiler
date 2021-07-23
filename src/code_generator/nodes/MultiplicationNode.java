@@ -14,6 +14,7 @@ import code_generator.operand.RegisterBank;
 import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.symbols.DoubleSymbol;
 import code_review.symbol_table.symbols.IntSymbol;
+import code_review.symbol_table.symbols.Primitive;
 import code_review.symbol_table.symbols.Symbol;
 
 public class MultiplicationNode implements Node {
@@ -68,23 +69,13 @@ public class MultiplicationNode implements Node {
       if (!child.getSymbol().equals(symbol)) {
         throw new SemanticException("type mismatch in add or sub");
       }
-        Register register1 = RegisterBank.allocateRegister(symbol);
-        Register register2 = RegisterBank.allocateRegister(symbol);
-        mipsLines.add(new Instruction("lw", register1, child.getAddress()));
-        mipsLines.add(new Instruction("lw", register2, address));
-        if (operators.get(i-1).equals("*")) {
-          mipsLines.add(new Instruction("mul", register1, register1, register2));
-        } else if (operators.get(i-1).equals("/")) {
-          mipsLines.add(new Instruction("div", register2, register1));
-					mipsLines.add(new Instruction("mflo", register1));
-        } else {
-          mipsLines.add(new Instruction("div", register2, register1));  
-        	mipsLines.add(new Instruction("mfhi", register1));
-				}
-				mipsLines.add(new Instruction("sw", register1, address));
-        RegisterBank.freeRegister(register1);
-        RegisterBank.freeRegister(register2);
-      
+			if (operators.get(i-1).equals("*")) {
+			  ((Primitive)symbol).multiplication(address, child.getAddress(), address);
+      } else if (operators.get(i-1).equals("/")) {
+			  ((Primitive)symbol).division(address, child.getAddress(), address);
+      } else {
+			
+			}
     }
   }
 

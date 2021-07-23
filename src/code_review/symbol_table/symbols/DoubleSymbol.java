@@ -25,22 +25,16 @@ public class DoubleSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void addition(Register firstRegister, Register secondRegister, Register resultRegister)
-			throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != DoubleSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != DoubleSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != DoubleSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use float addition due to non-float types");
-		}
+	public void addition(Indirect a, Indirect b, Indirect r) {
+		
+		Register r1 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
 
-		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
-		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
-		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
-
-		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("add", r3, r1, r2));
-		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, new Indirect(0, resultRegister)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r1, a));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r2, b));
+		DecafCodeGenerator.mipsLines.add(new Instruction("add.s", r3, r1, r2));
+		DecafCodeGenerator.mipsLines.add(new Instruction("s.s", r3, r));
 
 		RegisterBank.freeRegister(r1);
 		RegisterBank.freeRegister(r2);
@@ -48,43 +42,34 @@ public class DoubleSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void subtraction(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != DoubleSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != DoubleSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != DoubleSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use float subtraction due to non-float types");
-		}
+	public void subtraction(Indirect a, Indirect b, Indirect r) {
+		
+		Register r1 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
 
-		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
-		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
-		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
-
-		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r1, a));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r2, b));
 		DecafCodeGenerator.mipsLines.add(new Instruction("sub.s", r3, r1, r2));
-		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, new Indirect(0, resultRegister)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("s.s", r3, r));
 
 		RegisterBank.freeRegister(r1);
 		RegisterBank.freeRegister(r2);
 		RegisterBank.freeRegister(r3);
 	}
 
+
 	@Override
-	public void multiplication(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != DoubleSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != DoubleSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != DoubleSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use float multiple due to non-float types");
-		}
+	public void multiplication(Indirect a, Indirect b, Indirect r) {
+		
+		Register r1 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
 
-		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
-		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
-		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
-
-		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r1, a));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r2, b));
 		DecafCodeGenerator.mipsLines.add(new Instruction("mul.s", r3, r1, r2));
-		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, new Indirect(0, resultRegister)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("s.s", r3, r));
 
 		RegisterBank.freeRegister(r1);
 		RegisterBank.freeRegister(r2);
@@ -92,21 +77,16 @@ public class DoubleSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void division(Register firstRegister, Register secondRegister, Register resultRegister) throws ClassNotFoundException {
-		if (RegisterBank.getUseCase(firstRegister).getClass() != DoubleSymbol.class ||
-				RegisterBank.getUseCase(secondRegister).getClass() != DoubleSymbol.class ||
-				RegisterBank.getUseCase(resultRegister).getClass() != DoubleSymbol.class) {
-			throw new IncompatibleClassChangeError("Can't use float multiple due to non-float types");
-		}
+	public void division(Indirect a, Indirect b, Indirect r) {
+		
+		Register r1 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateDoubleRegister(VoidSymbol.get());
 
-		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
-		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
-		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
-
-		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, new Indirect(0, firstRegister)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, new Indirect(0, secondRegister)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r1, a));
+		DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r2, b));
 		DecafCodeGenerator.mipsLines.add(new Instruction("div.s", r3, r1, r2));
-		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, new Indirect(0, resultRegister)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("s.s", r3, r));
 
 		RegisterBank.freeRegister(r1);
 		RegisterBank.freeRegister(r2);

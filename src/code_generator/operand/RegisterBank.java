@@ -17,10 +17,29 @@ public class RegisterBank {
 			"t5", "t6", "t7", "t8", "t9",
 	};
 
+	static String[] doubleRegisterNames = {
+		"f0", "f1", "f2", "f3", "f4",
+		"f5", "f6", "f7",
+	};
+
 	/**
 	 * We use a symbol for registers which contain address of a datatype. This would help others to check type validity.
 	 */
 	static HashMap<String, Symbol> usedRegisters = new HashMap<>();
+
+	
+	public static Register allocateDoubleRegister(Symbol useCase) {
+		for (String registerName: doubleRegisterNames) {
+			if (!usedRegisters.containsKey(registerName)) {
+				Register register = new Register(registerName);
+				usedRegisters.put(registerName, useCase);
+				return register;
+			}
+		}
+		new ClassNotFoundException("No float registers are free").printStackTrace();
+		System.exit(1);
+		return null;
+	}
 
 	public static Register allocateRegister(Symbol useCase) {
 		for (String registerName: registerNames) {
