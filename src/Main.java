@@ -40,11 +40,11 @@ public class Main {
             }
             reader.close();
             String output = code_generator(input.toString());
-            System.out.println(output);
+//            System.out.println(output);
             writer.write(output);
             writer.flush();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
         }
     }
 
@@ -64,11 +64,11 @@ public class Main {
         } catch (SyntaxException ignored) {
             return "Syntax Error";
         } catch (SemanticException e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
             return "Semantic Error";
         } catch (Throwable throwable) {
             throwable.printStackTrace();
-            System.out.println(throwable.getMessage());
+//            System.out.println(throwable.getMessage());
             return "Code Generation Error";
         }
     }
@@ -80,7 +80,7 @@ public class Main {
             int current_call = 0;
             @Override
             public void doSemantic(String sem, Action action) {
-                System.out.println(sem);
+//                System.out.println(sem);
                 if (action != Action.SHIFT)
                     return;
                 current_call ++;
@@ -88,12 +88,12 @@ public class Main {
                     call_number = current_call;
                 else if (sem.equals("assignment_operator")) {
                     if (current_call - call_number > 2) {
-                        System.out.println("##########################");
+//                        System.out.println("##########################");
                         System.out.println(current_call);
                         System.out.println(call_number);
                         throw new RuntimeException("wrong assignment");
                     } else {
-                        System.out.println("##########################");
+//                        System.out.println("##########################");
                         System.out.println(current_call);
                         System.out.println(call_number);
                     }

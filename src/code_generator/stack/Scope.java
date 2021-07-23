@@ -50,9 +50,9 @@ public class Scope {
 	}
 
 	public Variable getVariable(String name) {
-		System.out.println("name: "+ name);
+//		System.out.println("name: "+ name);
 		for (Variable variable: variables) {
-			System.out.println("Variables: " + variable.getName());
+//			System.out.println("Variables: " + variable.getName());
 			if (variable.getName().equals(name)) {
 				return variable;
 			}

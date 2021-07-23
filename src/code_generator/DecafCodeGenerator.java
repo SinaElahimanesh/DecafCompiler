@@ -135,8 +135,6 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void implementExpression() throws SyntaxException, SemanticException {
 		try {
-			if (!currentNode.isComplete())
-				return;
 			currentNode.implement(mipsLines);
 		} catch (SyntaxException | SemanticException e) {
 			if (!canDeclareVariable)
@@ -252,6 +250,12 @@ public class DecafCodeGenerator implements CodeGenerator {
 		canDeclareVariable = false;
 	}
 
+	Stack<Label> endLabels = new Stack<>();
+
+	public void breakLoop() {
+		mipsLines.add(new Instruction("j", new LabelOperand(endLabels.peek())));
+	}
+
 	public void ifStatement() throws SemanticException, ClassNotFoundException, SyntaxException {
 		Symbol symbol = currentNode.getSymbol();
 		Indirect address = currentNode.getAddress();
@@ -290,31 +294,90 @@ public class DecafCodeGenerator implements CodeGenerator {
 	public void whileLabel() {
 		Label label = LabelMaker.createNonFunctionLabel();
 		mipsLines.add(label);
-		//
 		labels.push(label);
 	}
 
-	public void whileLoop() throws SemanticException, ClassNotFoundException {
-		Symbol symbol = variables.pop().getSymbol();
-		Indirect address = addresses.pop();
+	public void startFor() throws SemanticException, SyntaxException {
+		Label endLabel = LabelMaker.createNonFunctionLabel();
+		Label startStep = LabelMaker.createNonFunctionLabel();
+		Label startBody = LabelMaker.createNonFunctionLabel();
+		Label startCondition = LabelMaker.createNonFunctionLabel();
 
-		if (!(symbol instanceof BoolSymbol)) {
+		labels.push(startCondition);
+		labels.push(startBody);
+		labels.push(startStep);
+		labels.push(endLabel);
+
+		endLabels.push(endLabel);
+
+		mipsLines.add(startCondition);
+	}
+
+
+	public void endForCondition() throws SemanticException, SyntaxException {
+		Symbol symbol = currentNode.getSymbol();
+		Indirect address = currentNode.getAddress();
+
+		if (!(symbol instanceof BoolSymbol))
 			throw new SemanticException("Boolean expression: the condition of If statement is not Boolean Expression");
-		}
+
+		Register value = RegisterBank.allocateRegister(symbol);
+		mipsLines.add(new Instruction("lw", value, address));
+
+		Label endLabel = labels.get(labels.size() - 1);
+		Label startStep = labels.get(labels.size() - 2);
+		Label startBody = labels.get(labels.size() - 3);
+		Label startCondition = labels.get(labels.size() - 4);
+
+		mipsLines.add(new Instruction("beq", value, new Register("zero"), new LabelOperand(endLabel)));
+		mipsLines.add(new Instruction("j", new LabelOperand(startBody)));
+		RegisterBank.freeRegister(value);
+		mipsLines.add(startStep); // start step
+	}
+
+	public void endForStep() throws SemanticException, SyntaxException {
+		Label endLabel = labels.get(labels.size() - 1);
+		Label startStep = labels.get(labels.size() - 2);
+		Label startBody = labels.get(labels.size() - 3);
+		Label startCondition = labels.get(labels.size() - 4);
+
+		mipsLines.add(new Instruction("j", new LabelOperand(startCondition)));
+		mipsLines.add(startBody);
+	}
+
+	public void forComplete() throws SemanticException, SyntaxException {
+		Label endLabel = labels.get(labels.size() - 1);
+		Label startStep = labels.get(labels.size() - 2);
+		Label startBody = labels.get(labels.size() - 3);
+		Label startCondition = labels.get(labels.size() - 4);
+
+		mipsLines.add(new Instruction("j", new LabelOperand(startStep)));
+		mipsLines.add(endLabel);
+
+		for (int i = 0; i < 4; i ++) labels.pop();
+	}
+
+	public void whileLoop() throws SemanticException, SyntaxException {
+		Symbol symbol = currentNode.getSymbol();
+		Indirect address = currentNode.getAddress();
+
+		if (!(symbol instanceof BoolSymbol))
+			throw new SemanticException("Boolean expression: the condition of If statement is not Boolean Expression");
+
 		Register value = RegisterBank.allocateRegister(symbol);
 		mipsLines.add(new Instruction("lw", value, address));
 
 		Label jumpLabel = LabelMaker.createNonFunctionLabel();
 		labels.push(jumpLabel);
-		mipsLines.add(new Instruction("bez", value, new LabelOperand(jumpLabel)));
+		mipsLines.add(new Instruction("beq", value, new Register("zero"), new LabelOperand(jumpLabel)));
 
 		RegisterBank.freeRegister(value);
 	}
 
 	public void whileComplete() {
-		//
-		Label label = labels.pop();
-		mipsLines.add(label);
+		Label endLabel = labels.pop();
+		mipsLines.add(new Instruction("j", new LabelOperand(labels.pop())));
+		mipsLines.add(endLabel);
 	}
 
 	public Function currentFunction;

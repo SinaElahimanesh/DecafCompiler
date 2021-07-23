@@ -29,7 +29,7 @@ do
     program_code="$filename.d"
     report_filename="$filename.report.txt"
     echo "Running Test $filename -------------------------------------"
-        java -cp out/ Main -i "$TEST_DIRECTORY$program_code" -o "$OUTPUT_DIRECTORY$output_asm"
+        java -cp out/ Main -i "$TEST_DIRECTORY$program_code" -o "$OUTPUT_DIRECTORY$output_asm" 1> /dev/null 2> /dev/null
         if [ $? -eq 0 ]; then
             echo "MIPS Code Compiled Successfuly!" 
             spim -a -f "$OUTPUT_DIRECTORY$output_asm" < "$TEST_DIRECTORY$program_input" > "$OUTPUT_DIRECTORY$output_filename"

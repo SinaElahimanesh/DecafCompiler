@@ -63,11 +63,9 @@ public class AssignmentNode implements Node {
 			mipsLines.add(new Instruction("sw", r, lhs.getAddress()));
 			RegisterBank.freeRegister(r);	
 		} else if (operator.equals("+=")) {
-			((Primitive)symbol)
-			.addition(rhs.getAddress(),
-			lhs.getAddress(), lhs.getAddress());	
+			((Primitive)lhs.symbol).addition(rhs.getAddress(), lhs.getAddress(), lhs.getAddress());
 		} else if (operator.equals("-=")) {
-			((Primitive)symbol).subtraction(rhs.getAddress(), lhs.getAddress(), lhs.getAddress());	
+			((Primitive)lhs.symbol).subtraction(rhs.getAddress(), lhs.getAddress(), lhs.getAddress());
 		}
 	}
 
@@ -79,7 +77,7 @@ public class AssignmentNode implements Node {
 	@Override
   public void addOperator(String operator) throws SyntaxException, SemanticException {
     try {
-			System.out.println(operator);
+//			System.out.println(operator);
       lastChild().addOperator(operator);
     } catch(SyntaxException | SemanticException e) {
       if (operator.equals("=") || operator.equals("+=") || operator.equals("*=") 

@@ -45,7 +45,7 @@ public class RegisterBank {
 		for (String registerName: registerNames) {
 			if (!usedRegisters.containsKey(registerName)) {
 				if (registerName.charAt(0) == 't') {
-					System.out.println("WARNING::RegisterBank.allocateRegister: Temporary registers are begin used.");
+//					System.out.println("WARNING::RegisterBank.allocateRegister: Temporary registers are begin used.");
 				}
 
 				Register register = new Register(registerName);
