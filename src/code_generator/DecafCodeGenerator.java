@@ -175,8 +175,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void endLine() throws Exception {
-		if (canDeclareVariable && declareVariableWithLine())
-		{
+		if (canDeclareVariable && declareVariableWithLine()) {
 			savedException = null;
 			haveDeclaredVariable = true;
 		}
@@ -209,7 +208,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		if (receivedWords.size() < 2 || receivedWords.size() % 2 == 1) return false;
 		Symbol type = symbolTable.getSymbol(receivedWords.get(0));
 		if (type == null) return false;
-		for (int i = 1; i < receivedWords.size() - 1; i ++) {
+		for (int i = 1; i < receivedWords.size() - 1; i++) {
 			if (i % 2 == 0 && !receivedWords.get(i).equals("]")) return false;
 			if (i % 2 == 1 && !receivedWords.get(i).equals("[")) return false;
 
@@ -220,7 +219,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		if (!receivedTokens.get(receivedTokens.size() - 1).equals("ident"))
 			return false;
 
-		display.allocateVariable(type, receivedWords.get(receivedWords.size()-1));
+		display.allocateVariable(type, receivedWords.get(receivedWords.size() - 1));
 		mipsLines.add(new Instruction("addi", new Register("sp"), new Register("sp"), new Immediate(4)));
 		return true;
 	}
@@ -281,7 +280,9 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void elseStatement() {
 		Label jumpLabel = LabelMaker.createNonFunctionLabel();
+		Label lastLabel = (Label) mipsLines.remove(mipsLines.size() - 1);
 		mipsLines.add(new Instruction("j", new LabelOperand(jumpLabel)));
+		mipsLines.add(lastLabel);
 		labels.push(jumpLabel);
 	}
 
@@ -354,7 +355,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(new Instruction("j", new LabelOperand(startStep)));
 		mipsLines.add(endLabel);
 
-		for (int i = 0; i < 4; i ++) labels.pop();
+		for (int i = 0; i < 4; i++) labels.pop();
 
 		endLabels.pop();
 	}
@@ -384,6 +385,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public Function currentFunction;
 	public Scope currentFunctionScope;
+
 	public void declareFunction() throws NoSuchFieldException {
 		if (currentClassSymbol != null) {
 			currentFunction = currentClassSymbol.getMethod(latestRecordedIdent);
@@ -396,7 +398,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 		currentFunctionScope = display.addNewScope();
 		display.allocateVariable(currentFunction.getReturnType(), "return");
-		for (Variable variable: currentFunction.getArguments()) {
+		for (Variable variable : currentFunction.getArguments()) {
 			display.allocateVariable(variable.getSymbol(), variable.getName());
 		}
 		mipsLines.add(new Instruction("addi", new Register("sp"), new Register("sp"), new Immediate(display.getLastScope().getSize())));
