@@ -48,6 +48,9 @@ public class DecafCodeReviewer implements CodeGenerator {
 		mipsLines.add(new Label("string__false"));
 		mipsLines.add(new Directive("asciiz", Collections.singletonList("\"false\"")));
 
+		mipsLines.add(new Label("float__nim"));
+		mipsLines.add(new Directive("float", Collections.singletonList("0.5")));
+
 		globalScope.addFunction(new Function("Print").setReturnType(VoidSymbol.get()));
 		globalScope.addFunction(new Function("ReadInteger").setReturnType(IntSymbol.get()));
 		// FIXME Complete return types and arguments.
