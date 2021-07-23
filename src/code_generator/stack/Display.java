@@ -38,7 +38,7 @@ public class Display {
 		return scopes.get(scopes.size() - 1);
 	}
 
-	public Variable getVariable(String name) throws NoSuchFieldException {
+	public Variable getVariable(String name) {
 		for (int i = scopes.size() - 1; i > -1; i--) {
 			if (scopes.get(i).getVariable(name) != null) {
 				return scopes.get(i).getVariable(name);

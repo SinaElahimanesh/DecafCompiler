@@ -110,5 +110,10 @@ public class MultiplicationNode implements Node {
   public boolean isComplete() throws SyntaxException, SemanticException {
     return lastChild().isComplete();
   }
-  
+
+  @Override
+  public Symbol getType() throws SyntaxException, SemanticException {
+    return lastChild().getType();
+  }
+
 }

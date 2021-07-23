@@ -30,6 +30,7 @@ public class ParenthesisNode implements Node {
 
 	boolean lValue;
 	boolean complete = false;
+	private Symbol type;
 
 	ParenthesisNode(DecafCodeGenerator codeGenerator) {
 		this.codeGenerator = codeGenerator;
@@ -52,6 +53,8 @@ public class ParenthesisNode implements Node {
 	@Override
 	public void implement(ArrayList<MipsLine> mipsLines) throws SyntaxException, SemanticException {
 		lValue = false;
+		if (type != null)
+			return;
 		switch (parenthesisNodeType) {
 			case THIS:
 				try {
@@ -122,11 +125,17 @@ public class ParenthesisNode implements Node {
 			complete = true;
 		} else if (token.indexOf(':') != -1) {
 			if (parenthesisNodeType != null)
-				throw new SyntaxException("Add `this` to non-empty parenthesis.");
+				throw new SyntaxException("Add " + token + " to non-empty parenthesis.");
 			parenthesisNodeType = ParenthesisNodeType.CONSTANT;
 			constantValue = new Label(token.substring(0, token.length()-1));
 			complete = true;
 		} else {
+			if (parenthesisNodeType != null)
+				throw new SyntaxException("Add ident " + token + " to non-empty parenthesis.");
+			if (codeGenerator.display.getVariable(token) == null && codeGenerator.symbolTable.getSymbol(token) != null) {
+				this.type = codeGenerator.symbolTable.getSymbol(token);
+				parenthesisNodeType = ParenthesisNodeType.IDENT;
+			}
 			this.ident = token;
 			parenthesisNodeType = ParenthesisNodeType.IDENT;
 			lValue = true;
@@ -157,6 +166,11 @@ public class ParenthesisNode implements Node {
 					complete = true;
 				}
 				break;
+			case "[":
+				if (type != null) {
+					type = new ArraySymbol(type);
+					break;
+				}
 			default:
 				if (parenthesisNodeType != ParenthesisNodeType.EXPRESSION)
 					throw new SyntaxException("Passing operator to not expression parenthesis.");
@@ -172,6 +186,11 @@ public class ParenthesisNode implements Node {
 	@Override
 	public boolean isComplete() throws SyntaxException, SemanticException {
 		return complete;
+	}
+
+	@Override
+	public Symbol getType() {
+		return type;
 	}
 
 	public OrNode getExpressionNode() {

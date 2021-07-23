@@ -14,6 +14,7 @@ public class ArraySymbol extends Symbol implements Primitive {
 	public ArraySymbol(Symbol elementType) {
 		super("Array["+elementType.name+"]");
 		this.elementType = elementType;
+		this.size = 4;
 	}
 
 	@Override

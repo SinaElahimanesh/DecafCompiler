@@ -1685,8 +1685,8 @@
         "isFinal": false
       },
       {
-        "x": 735.0,
-        "y": 381.0,
+        "x": 736.0,
+        "y": 380.0,
         "id": 102,
         "isFinal": false
       },
@@ -2745,7 +2745,7 @@
       {
         "start": 149,
         "end": 150,
-        "token": "Type",
+        "token": "ExpressionType",
         "func": "",
         "anchorX": 516.0,
         "anchorY": 1038.0,
@@ -3508,5 +3508,65 @@
       }
     ],
     "start": 191
+  },
+  {
+    "name": "ExpressionType",
+    "nodes": [
+      {
+        "x": 343.0,
+        "y": 316.0,
+        "id": 193,
+        "isFinal": false
+      },
+      {
+        "x": 694.0,
+        "y": 315.0,
+        "id": 194,
+        "isFinal": true
+      }
+    ],
+    "edges": [
+      {
+        "start": 193,
+        "end": 194,
+        "token": "string",
+        "func": "ident",
+        "anchorX": 511.5,
+        "anchorY": 136.5,
+        "isGraph": false,
+        "isGlobal": false
+      },
+      {
+        "start": 193,
+        "end": 194,
+        "token": "double",
+        "func": "ident",
+        "anchorX": 510.5,
+        "anchorY": 207.5,
+        "isGraph": false,
+        "isGlobal": false
+      },
+      {
+        "start": 193,
+        "end": 194,
+        "token": "bool",
+        "func": "ident",
+        "anchorX": 504.5,
+        "anchorY": 368.5,
+        "isGraph": false,
+        "isGlobal": false
+      },
+      {
+        "start": 193,
+        "end": 194,
+        "token": "int",
+        "func": "ident",
+        "anchorX": 517.5,
+        "anchorY": 462.5,
+        "isGraph": false,
+        "isGlobal": false
+      }
+    ],
+    "start": 193
   }
 ]

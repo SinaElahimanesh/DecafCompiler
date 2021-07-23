@@ -10,12 +10,7 @@ import code_generator.instructions.SystemCall;
 import code_generator.operand.*;
 import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.Function;
-import code_review.symbol_table.symbols.BoolSymbol;
-import code_review.symbol_table.symbols.DoubleSymbol;
-import code_review.symbol_table.symbols.IntSymbol;
-import code_review.symbol_table.symbols.Primitive;
-import code_review.symbol_table.symbols.StringSymbol;
-import code_review.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.*;
 
 import java.util.ArrayList;
 
@@ -61,6 +56,26 @@ public class CallNode implements Node {
 
 		// Set arguments
 		if (arguments.size() > 1 || arguments.get(0).isComplete()) {
+			if (function.getName().equals("NewArray")) {
+				if (arguments.size() != 2) throw new SemanticException("bad NewArray input count");
+				if (arguments.get(1).getType() == null) throw new SemanticException("NewArray second argument should be type");
+				arguments.get(0).implement(mipsLines);
+				if (!arguments.get(0).getSymbol().equals(IntSymbol.get())) throw new SemanticException("NewArray first argument should be int");
+
+				symbol = new ArraySymbol(arguments.get(1).getType());
+				address = TemporaryMemoryBank.allocateTemporaryMemory(4);
+
+				mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.allocate)));
+				mipsLines.add(new Instruction("lw", new Register("a0"), arguments.get(0).getAddress()));
+				mipsLines.add(new Instruction("addi", new Register("a0"), new Register("a0"), new Immediate(4)));
+				mipsLines.add(new Instruction("syscall"));
+				mipsLines.add(new Instruction("lw", new Register("a0"), arguments.get(0).getAddress()));
+				mipsLines.add(new Instruction("sw", new Register("a0"), new Indirect(0, new Register("v0"))));
+				mipsLines.add(new Instruction("sw", new Register("v0"), address));
+
+				return;
+			}
+
 			for (OrNode argument : arguments) {
 				argument.implement(mipsLines);
 			}
@@ -280,5 +295,11 @@ public class CallNode implements Node {
 	@Override
 	public boolean isComplete() throws SyntaxException, SemanticException {
 		return complete;
+	}
+
+	@Override
+	public Symbol getType() throws SyntaxException, SemanticException {
+		if (!arguments.isEmpty()) return arguments.get(arguments.size()-1).getType();
+		return parenthesisNode.getType();
 	}
 }

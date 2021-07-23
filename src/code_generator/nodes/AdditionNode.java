@@ -110,4 +110,9 @@ public class AdditionNode implements Node {
 		return lastChild().isComplete();
 	}
 
+	@Override
+	public Symbol getType() throws SyntaxException, SemanticException {
+		return lastChild().getType();
+	}
+
 }

@@ -97,4 +97,9 @@ public class UnaryNode implements Node {
 	public boolean isComplete() throws SyntaxException, SemanticException {
 		return lValueNode.isComplete();
 	}
+
+	@Override
+	public Symbol getType() throws SyntaxException, SemanticException {
+		return lValueNode.getType();
+	}
 }

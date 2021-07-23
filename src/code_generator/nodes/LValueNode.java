@@ -57,4 +57,9 @@ public class LValueNode implements Node {
 	public boolean isComplete() throws SyntaxException, SemanticException {
 		return callNode.isComplete();
 	}
+
+	@Override
+	public Symbol getType() throws SyntaxException, SemanticException {
+		return callNode.getType();
+	}
 }

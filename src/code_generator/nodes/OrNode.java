@@ -44,7 +44,8 @@ public class OrNode implements Node {
 
   @Override
   public void implement(ArrayList<MipsLine> mipsLines) throws SyntaxException, SemanticException {
-    if (!isComplete()) throw new SyntaxException("incomplete OrNode");
+    if (!isComplete())
+    	throw new SyntaxException("incomplete OrNode");
     AndNode child = children.get(0);
     child.implement(mipsLines);
     address = child.getAddress();
@@ -106,5 +107,10 @@ public class OrNode implements Node {
   public boolean isComplete() throws SyntaxException, SemanticException {
     return lastChild().isComplete();
   }
-  
+
+	@Override
+	public Symbol getType() throws SyntaxException, SemanticException {
+		return lastChild().getType();
+	}
+
 }

@@ -22,4 +22,6 @@ public interface Node {
 	boolean isLValue() throws SyntaxException, SemanticException;
 
 	boolean isComplete() throws SyntaxException, SemanticException;
+
+	Symbol getType() throws SyntaxException, SemanticException;
 }
