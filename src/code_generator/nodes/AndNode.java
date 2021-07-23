@@ -6,7 +6,6 @@ import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
 import code_generator.SyntaxException;
 import code_generator.instructions.Instruction;
-import code_generator.instructions.Label;
 import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
@@ -101,7 +100,7 @@ public class AndNode implements Node {
 
   @Override
   public boolean isLValue() throws SyntaxException, SemanticException {
-    return false;
+    return children.size() == 1 && lastChild().isLValue();
   }
 
   @Override

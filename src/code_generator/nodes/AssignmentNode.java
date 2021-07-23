@@ -10,13 +10,17 @@ import code_review.symbol_table.symbols.Symbol;
 import java.util.ArrayList;
 
 public class AssignmentNode implements Node {
-	ArrayList<OrNode> orNodes = new ArrayList<>();
+	ArrayList<OrNode> children = new ArrayList<>();
 	DecafCodeGenerator codeGenerator;
 
 	AssignmentNode(DecafCodeGenerator codeGenerator) {
 		this.codeGenerator = codeGenerator;
-		orNodes.add(new OrNode(codeGenerator));
+		children.add(new OrNode(codeGenerator));
 	}
+
+  private OrNode lastChild() throws SyntaxException {
+    return children.get(children.size() - 1);
+  }
 
 	@Override
 	public Indirect getAddress() throws SyntaxException, SemanticException {
@@ -30,28 +34,39 @@ public class AssignmentNode implements Node {
 
 	@Override
 	public void implement(ArrayList<MipsLine> mipsLines) throws SyntaxException, SemanticException {
-		if (orNodes.size() > 2)
+		if (children.size() > 2)
 			throw new SyntaxException("More than one assignment operators used in an expression.");
-		orNodes.get(0).implement(mipsLines);
+		children.get(0).implement(mipsLines);
 	}
 
 	@Override
 	public void addIdent(String token) throws SyntaxException, SemanticException {
-
+		
 	}
-
 	@Override
-	public void addOperator(String operator) throws SyntaxException, SemanticException {
-
-	}
+  public void addOperator(String operator) throws SyntaxException, SemanticException {
+    try {
+      lastChild().addOperator(operator);
+    } catch(SyntaxException | SemanticException e) {
+      if (operator.equals("=")) {
+        if (lastChild().isComplete()) {
+          children.add(new OrNode(codeGenerator));
+        } else {
+          throw new SyntaxException("Unexpected = operator");
+        }
+      } else {
+        throw e;
+      }
+    }
+  }
 
 	@Override
 	public boolean isLValue() throws SyntaxException, SemanticException {
-		return false;
+		return children.size() == 1 && lastChild().isLValue();
 	}
 
 	@Override
 	public boolean isComplete() throws SyntaxException, SemanticException {
-		return false;
+		return lastChild().isComplete();
 	}
 }

@@ -120,7 +120,7 @@ public class ComparisonNode implements Node {
 
   @Override
   public boolean isLValue() throws SyntaxException, SemanticException {
-    return false;
+    return children.size() == 1 && lastChild().isLValue();
   }
 
   @Override

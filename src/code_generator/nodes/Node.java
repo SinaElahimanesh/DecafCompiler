@@ -4,7 +4,6 @@ import code_generator.SemanticException;
 import code_generator.SyntaxException;
 import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
-import code_review.symbol_table.Function;
 import code_review.symbol_table.symbols.Symbol;
 
 import java.util.ArrayList;
