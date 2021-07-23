@@ -89,6 +89,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 		currentOrNode.addIdent(LabelMaker.createConstantLabel(x, "bool", 4).toString());	
 	}
 
+	public void stringConstant() throws SyntaxException, SemanticException {
+		String x = scanner.getToken();
+		currentOrNode.addIdent(LabelMaker.createConstantLabel(x, "string", 4).toString());
+	}
+
 	public void operator() throws SyntaxException, SemanticException {
 		currentOrNode.addOperator(scanner.getToken());
 	}

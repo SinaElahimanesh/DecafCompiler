@@ -112,6 +112,8 @@ public final class StringSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void print(Register register) throws ClassNotFoundException {
-		DecafCodeGenerator.mipsLines.add(new Instruction("add", new Register("v0"), new Register("zero"), register));
+		DecafCodeGenerator.mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.print_string)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("add", new Register("a0"), new Register("zero"), register));
+		DecafCodeGenerator.mipsLines.add(new Instruction("syscall"));
 	}
 }

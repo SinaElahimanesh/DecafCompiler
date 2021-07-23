@@ -40,26 +40,23 @@ public class BoolSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
-	public void addition(Indirect a, Indirect b, Indirect r) {
-		// TODO Auto-generated method stub
-		
+	public void addition(Indirect a, Indirect b, Indirect r) throws SemanticException {
+		throw new SemanticException("Addition is not defined for booleans");
 	}
 
 	@Override
-	public void subtraction(Indirect a, Indirect b, Indirect r) {
-		// TODO Auto-generated method stub
-		
+	public void subtraction(Indirect a, Indirect b, Indirect r) throws SemanticException {
+		throw new SemanticException("Addition is not defined for booleans");
 	}
 
 	@Override
-	public void multiplication(Indirect a, Indirect b, Indirect r) {
-		// TODO Auto-generated method stub
-		
+	public void multiplication(Indirect a, Indirect b, Indirect r) throws SemanticException {
+		throw new SemanticException("Addition is not defined for booleans");
 	}
 
 	@Override
-	public void division(Indirect a, Indirect b, Indirect r) {
-		// TODO Auto-generated method stub
+	public void division(Indirect a, Indirect b, Indirect r) throws SemanticException {
+		throw new SemanticException("Addition is not defined for booleans");
 	}
 
 	@Override

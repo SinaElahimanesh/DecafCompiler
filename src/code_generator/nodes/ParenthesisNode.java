@@ -8,10 +8,7 @@ import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_review.symbol_table.Function;
-import code_review.symbol_table.symbols.BoolSymbol;
-import code_review.symbol_table.symbols.DoubleSymbol;
-import code_review.symbol_table.symbols.IntSymbol;
-import code_review.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.*;
 
 import java.util.ArrayList;
 
@@ -73,8 +70,7 @@ public class ParenthesisNode implements Node {
 						symbol = BoolSymbol.get();
 						break;
 					case "string":
-						// FIXME Create string symbol.
-//						symbol = StringSymbol.get();
+						symbol = StringSymbol.get();
 						break;
 					default:
 						throw new SyntaxException("Constant with type: " + constantValue.getType());
