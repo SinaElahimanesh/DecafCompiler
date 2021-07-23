@@ -2,10 +2,7 @@ package code_review.symbol_table.symbols;
 
 import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
-import code_generator.instructions.Instruction;
-import code_generator.instructions.Label;
-import code_generator.instructions.LabelMaker;
-import code_generator.instructions.SystemCall;
+import code_generator.instructions.*;
 import code_generator.operand.*;
 
 public final class StringSymbol extends Symbol implements Primitive {
@@ -31,9 +28,9 @@ public final class StringSymbol extends Symbol implements Primitive {
 		DecafCodeGenerator.mipsLines.add(loopLabel);
 		DecafCodeGenerator.mipsLines.add(new Instruction("lb", temp, new Indirect(0, operandAddress)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("sb", temp, new Indirect(0, baseAddress)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("beq", temp, new Register("zero"), new LabelOperand(exitLabel)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("addi", operandAddress, operandAddress, new Immediate(1)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("addi", baseAddress, baseAddress, new Immediate(1)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("beq", temp, new Register("zero"), new LabelOperand(exitLabel)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("j", new LabelOperand(loopLabel)));
 		DecafCodeGenerator.mipsLines.add(exitLabel);
 
@@ -48,7 +45,7 @@ public final class StringSymbol extends Symbol implements Primitive {
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("li", sizeRegister, new Immediate(0)));
 		DecafCodeGenerator.mipsLines.add(loopLabel);
-		DecafCodeGenerator.mipsLines.add(new Instruction("lb", stringAddress));
+		DecafCodeGenerator.mipsLines.add(new Instruction("lb", tempRegister, new Indirect(0, stringAddress)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("beq", tempRegister, new Register("zero"), new LabelOperand(exitLabel)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("addi", sizeRegister, sizeRegister, new Immediate(1)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("addi", stringAddress, stringAddress, new Immediate(1)));
@@ -77,6 +74,7 @@ public final class StringSymbol extends Symbol implements Primitive {
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.allocate)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("add", new Register("a0"), firstSize, secondSize));
+		DecafCodeGenerator.mipsLines.add(new Instruction("addi", new Register("a0"), new Register("a0"), new Immediate(1)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("syscall"));
 
 		DecafCodeGenerator.mipsLines.add(new Instruction("sw", new Register("v0"), r));
@@ -113,7 +111,7 @@ public final class StringSymbol extends Symbol implements Primitive {
 	@Override
 	public void print(Register register) throws ClassNotFoundException {
 		DecafCodeGenerator.mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.print_string)));
-		DecafCodeGenerator.mipsLines.add(new Instruction("add", new Register("a0"), new Register("zero"), register));
+		DecafCodeGenerator.mipsLines.add(new Instruction("lw", new Register("a0"), new Indirect(0, register)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("syscall"));
 	}
 }

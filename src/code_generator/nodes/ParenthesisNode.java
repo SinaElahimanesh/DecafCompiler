@@ -3,10 +3,14 @@ package code_generator.nodes;
 import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
 import code_generator.SyntaxException;
+import code_generator.instructions.Instruction;
 import code_generator.instructions.Label;
 import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
+import code_generator.operand.LabelOperand;
 import code_generator.operand.Register;
+import code_generator.operand.RegisterBank;
+import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.Function;
 import code_review.symbol_table.symbols.*;
 
@@ -71,6 +75,11 @@ public class ParenthesisNode implements Node {
 						break;
 					case "string":
 						symbol = StringSymbol.get();
+						address = TemporaryMemoryBank.allocateTemporaryMemory(4);
+						Register register = RegisterBank.allocateRegister(StringSymbol.get());
+						mipsLines.add(new Instruction("la", register, new LabelOperand(constantValue)));
+						mipsLines.add(new Instruction("sw", register, address));
+						RegisterBank.freeRegister(register);
 						break;
 					default:
 						throw new SyntaxException("Constant with type: " + constantValue.getType());
@@ -114,7 +123,6 @@ public class ParenthesisNode implements Node {
 		} else if (token.indexOf(':') != -1) {
 			if (parenthesisNodeType != null)
 				throw new SyntaxException("Add `this` to non-empty parenthesis.");
-
 			parenthesisNodeType = ParenthesisNodeType.CONSTANT;
 			constantValue = new Label(token.substring(0, token.length()-1));
 			complete = true;
