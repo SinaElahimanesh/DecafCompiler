@@ -12,8 +12,10 @@ import java.util.ArrayList;
 public class AssignmentNode implements Node {
 	ArrayList<OrNode> children = new ArrayList<>();
 	DecafCodeGenerator codeGenerator;
+	Symbol symbol;
+	Indirect address;
 
-	AssignmentNode(DecafCodeGenerator codeGenerator) {
+	public AssignmentNode(DecafCodeGenerator codeGenerator) {
 		this.codeGenerator = codeGenerator;
 		children.add(new OrNode(codeGenerator));
 	}
@@ -24,32 +26,44 @@ public class AssignmentNode implements Node {
 
 	@Override
 	public Indirect getAddress() throws SyntaxException, SemanticException {
-		return null;
+		return address;
 	}
 
 	@Override
 	public Symbol getSymbol() throws SyntaxException, SemanticException {
-		return null;
+		return symbol;
 	}
 
 	@Override
 	public void implement(ArrayList<MipsLine> mipsLines) throws SyntaxException, SemanticException {
 		if (children.size() > 2)
 			throw new SyntaxException("More than one assignment operators used in an expression.");
-		children.get(0).implement(mipsLines);
+		
+		OrNode rhs = children.get(children.size() - 1);
+		rhs.implement(mipsLines);
+		if (children.size() == 1) {
+			symbol = rhs.symbol;
+			address = rhs.address;
+			return;
+		}
+		
 	}
 
 	@Override
 	public void addIdent(String token) throws SyntaxException, SemanticException {
-		
+		lastChild().addIdent(token);	
 	}
+
 	@Override
   public void addOperator(String operator) throws SyntaxException, SemanticException {
     try {
+			System.out.println(operator);
       lastChild().addOperator(operator);
     } catch(SyntaxException | SemanticException e) {
       if (operator.equals("=")) {
         if (lastChild().isComplete()) {
+					System.out.println("faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+					System.exit(1);
           children.add(new OrNode(codeGenerator));
         } else {
           throw new SyntaxException("Unexpected = operator");

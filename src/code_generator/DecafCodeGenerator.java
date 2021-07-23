@@ -1,7 +1,7 @@
 package code_generator;
 
 import code_generator.instructions.*;
-import code_generator.nodes.OrNode;
+import code_generator.nodes.AssignmentNode;
 import code_generator.operand.*;
 import code_generator.stack.Display;
 import code_generator.stack.Scope;
@@ -36,7 +36,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public Stack<Label> labels = new Stack<>();
 
-	public OrNode currentOrNode = new OrNode(this);
+	public AssignmentNode currentNode = new AssignmentNode(this);
 
 	String latestRecordedIdent = null;
 	Symbol latestRecordedSymbol = null;
@@ -78,36 +78,36 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void integerConstant() throws SyntaxException, SemanticException {
 		String integer = scanner.getToken();
-		currentOrNode.addIdent(LabelMaker.createConstantLabel(integer, "integer", 4).toString());
+		currentNode.addIdent(LabelMaker.createConstantLabel(integer, "integer", 4).toString());
 	}
 
 	public void doubleConstant() throws SyntaxException, SemanticException {
 		String integer = scanner.getToken();
-		currentOrNode.addIdent(LabelMaker.createConstantLabel(integer, "double", 4).toString());
+		currentNode.addIdent(LabelMaker.createConstantLabel(integer, "double", 4).toString());
 	}
 
 	public void booleanConstant() throws SyntaxException, SemanticException {
 		String x = scanner.getToken();
-		currentOrNode.addIdent(LabelMaker.createConstantLabel(x, "bool", 4).toString());	
+		currentNode.addIdent(LabelMaker.createConstantLabel(x, "bool", 4).toString());	
 	}
 
 	public void stringConstant() throws SyntaxException, SemanticException {
 		String x = scanner.getToken();
-		currentOrNode.addIdent(LabelMaker.createConstantLabel(x, "string", 4).toString());
+		currentNode.addIdent(LabelMaker.createConstantLabel(x, "string", 4).toString());
 	}
 
 	public void operator() throws SyntaxException, SemanticException {
-		currentOrNode.addOperator(scanner.getToken());
+		currentNode.addOperator(scanner.getToken());
 	}
 
 	public void ident() throws SyntaxException, SemanticException {
-		currentOrNode.addIdent(scanner.getToken());
+		currentNode.addIdent(scanner.getToken());
 	}
 
 	public void implementExpression() throws SyntaxException, SemanticException {
-		if (!currentOrNode.isComplete())
+		if (!currentNode.isComplete())
 			return;
-		currentOrNode.implement(mipsLines);
+		currentNode.implement(mipsLines);
 	}
 
 	public void type() {
@@ -115,11 +115,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void returnValue() throws SyntaxException, SemanticException, NoSuchFieldException {
-		if (!currentOrNode.getSymbol().equals(currentFunction.getReturnType()))
+		if (!currentNode.getSymbol().equals(currentFunction.getReturnType()))
 			throw new SemanticException("Incompatible returned function with type");
 		Indirect returnAddress = display.getVariableAddress("return");
-		Indirect returnResultAddress = currentOrNode.getAddress();
-		Register register = RegisterBank.allocateRegister(currentOrNode.getSymbol());
+		Indirect returnResultAddress = currentNode.getAddress();
+		Register register = RegisterBank.allocateRegister(currentNode.getSymbol());
 		mipsLines.add(new Instruction("lw", register, returnResultAddress));
 		mipsLines.add(new Instruction("sw", register, returnAddress));
 
@@ -140,7 +140,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void endLine() {
 		TemporaryMemoryBank.resetMemory();
-		currentOrNode = new OrNode(this);
+		currentNode = new AssignmentNode(this);
 	}
 
 	public void recordIdent() throws SemanticException, NoSuchFieldException {
@@ -161,7 +161,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 			throw new SyntaxException("Declaration while variables is not empty.");
 
 		display.allocateVariable(latestRecordedSymbol, scanner.getToken());
-		currentOrNode = new OrNode(this);
+		currentNode = new AssignmentNode(this);
 	}
 
 	public void startScope() {
@@ -173,10 +173,10 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void ifStatement() throws SemanticException, ClassNotFoundException, SyntaxException {
-		Symbol symbol = currentOrNode.getSymbol();
-		Indirect address = currentOrNode.getAddress();
+		Symbol symbol = currentNode.getSymbol();
+		Indirect address = currentNode.getAddress();
 
-		currentOrNode = new OrNode(this);
+		currentNode = new AssignmentNode(this);
 
 		if (!(symbol instanceof BoolSymbol)) {
 			throw new SemanticException("Boolean expression: the condition of If statement is not Boolean Expression");
