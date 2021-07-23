@@ -1376,7 +1376,7 @@
         "start": 82,
         "end": 80,
         "token": "break",
-        "func": "break",
+        "func": "breakLoop",
         "anchorX": 444.5,
         "anchorY": 463.0,
         "isGraph": false,

@@ -355,6 +355,8 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(endLabel);
 
 		for (int i = 0; i < 4; i ++) labels.pop();
+
+		endLabels.pop();
 	}
 
 	public void whileLoop() throws SemanticException, SyntaxException {
