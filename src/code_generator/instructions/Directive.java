@@ -23,7 +23,7 @@ public class Directive implements MipsLine {
 		directive_string.append('.');
 		directive_string.append(name);
 		directive_string.append(' ');
-		Integer startLength = directive_string.length();
+		int startLength = directive_string.length();
 		for (String parameter: parameters) {
 			if (directive_string.length() != startLength) {
 				directive_string.append(", ");
