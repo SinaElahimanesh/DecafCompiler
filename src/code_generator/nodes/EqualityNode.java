@@ -72,7 +72,7 @@ public class EqualityNode implements Node {
       child = children.get(i);
       child.implement(mipsLines);
       if (!child.getSymbol().equals(symbol)) {
-        throw new SemanticException("type mismatch in add or sub");
+        throw new SemanticException("type mismatch in equality");
       }
 			if (operators.get(i-1).equals("==")) {
 			  ((Primitive)symbol).isEqual(address, child.getAddress(), address);

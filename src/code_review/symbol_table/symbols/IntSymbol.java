@@ -122,7 +122,18 @@ public class IntSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void isLess(Indirect a, Indirect b, Indirect r) throws SemanticException {
-		// TODO Auto-generated method stub
 		
+		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
+
+		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, a));
+		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, b));
+		DecafCodeGenerator.mipsLines.add(new Instruction("slt", r3, r1, r2));
+		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, r));
+
+		RegisterBank.freeRegister(r1);
+		RegisterBank.freeRegister(r2);
+		RegisterBank.freeRegister(r3);
 	}
 }
