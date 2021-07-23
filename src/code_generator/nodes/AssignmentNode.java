@@ -8,6 +8,8 @@ import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
+import code_review.symbol_table.symbols.DoubleSymbol;
+import code_review.symbol_table.symbols.IntSymbol;
 import code_review.symbol_table.symbols.Primitive;
 import code_review.symbol_table.symbols.Symbol;
 
@@ -54,6 +56,7 @@ public class AssignmentNode implements Node {
 		String operator = operators.get(0);
 		OrNode lhs = children.get(0);
 		lhs.implement(mipsLines);
+		symbol = lhs.getSymbol();
 		if (!lhs.isLValue()) throw new SemanticException("Can not assign");
 		if (lhs.getSymbol() != rhs.getSymbol())
 			throw new SemanticException("mismatch type in assign");
@@ -63,9 +66,21 @@ public class AssignmentNode implements Node {
 			mipsLines.add(new Instruction("sw", r, lhs.getAddress()));
 			RegisterBank.freeRegister(r);	
 		} else if (operator.equals("+=")) {
-			((Primitive)lhs.symbol).addition(rhs.getAddress(), lhs.getAddress(), lhs.getAddress());
+			if (!(symbol instanceof Primitive))
+				throw new SemanticException("can not += on non primitive");
+			((Primitive)symbol).addition(lhs.getAddress(), rhs.getAddress(), lhs.getAddress());
 		} else if (operator.equals("-=")) {
-			((Primitive)lhs.symbol).subtraction(rhs.getAddress(), lhs.getAddress(), lhs.getAddress());
+			if (!symbol.equals(IntSymbol.get()) && !symbol.equals(DoubleSymbol.get()))
+				throw new SemanticException("can not -= on non number");
+			((Primitive)symbol).subtraction(lhs.getAddress(), rhs.getAddress(), lhs.getAddress());
+		} else if (operator.equals("*=")) {
+			if (!symbol.equals(IntSymbol.get()) && !symbol.equals(DoubleSymbol.get()))
+				throw new SemanticException("can not *= on non number");
+			((Primitive)symbol).multiplication(lhs.getAddress(), rhs.getAddress(), lhs.getAddress());
+		} else if (operator.equals("/=")) {
+			if (!symbol.equals(IntSymbol.get()) && !symbol.equals(DoubleSymbol.get()))
+				throw new SemanticException("can not /= on non number");
+			((Primitive)symbol).division(lhs.getAddress(), rhs.getAddress(), lhs.getAddress());
 		}
 	}
 
