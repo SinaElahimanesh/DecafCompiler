@@ -151,10 +151,13 @@ public class ParenthesisNode implements Node {
 				if (complete)
 					throw new SyntaxException("Passing " + operator + " to complete parenthesis.");
 
-				if (parenthesisNodeType != null)
-					throw new SyntaxException("Passing ( to parenthesis with type.");
-				parenthesisNodeType = ParenthesisNodeType.EXPRESSION;
-				assignmentNode = new OrNode(codeGenerator);
+				if (parenthesisNodeType == null) {
+					parenthesisNodeType = ParenthesisNodeType.EXPRESSION;
+					assignmentNode = new OrNode(codeGenerator);
+				}
+				else {
+					assignmentNode.addOperator(operator);
+				}
 				complete = false;
 				break;
 			case ")":
