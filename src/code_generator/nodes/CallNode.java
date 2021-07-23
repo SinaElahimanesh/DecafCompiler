@@ -12,6 +12,7 @@ import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.Function;
 import code_review.symbol_table.symbols.IntSymbol;
 import code_review.symbol_table.symbols.Primitive;
+import code_review.symbol_table.symbols.StringSymbol;
 import code_review.symbol_table.symbols.Symbol;
 
 import java.util.ArrayList;
@@ -122,6 +123,17 @@ public class CallNode implements Node {
 			symbol = IntSymbol.get();
 			address = TemporaryMemoryBank.allocateTemporaryMemory(4);
 			mipsLines.add(new Instruction("sw", new Register("v0"), address));
+			return;
+		}
+
+		if (function.getName().equals("ReadLine")) {
+			symbol = StringSymbol.get();
+			address = TemporaryMemoryBank.allocateTemporaryMemory(1024);
+			mipsLines.add(new Instruction("add", new Register("a0"), new Register("sp"), new Register("zero")));
+			mipsLines.add(new Instruction("addi", new Register("a0"), new Immediate(address.getImmediate())));
+			mipsLines.add(new Instruction("li", new Register("a1"), new Immediate(1024)));
+			mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(8)));
+			mipsLines.add(new Instruction("syscall"));
 			return;
 		}
 

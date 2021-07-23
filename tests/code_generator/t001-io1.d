@@ -1,5 +1,5 @@
 int main() {
-    Print("ba " + a(12) + " va okay.");
+    Print(ReadLine());
 }
 
 string a(int x) {

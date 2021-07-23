@@ -22,6 +22,10 @@ public class Indirect implements Operand {
 		this.register = register;
 	}
 
+	public Integer getImmediate() {
+		return immediate;
+	}
+
 	@Override
 	public String toString() {
 		if (label == null)
