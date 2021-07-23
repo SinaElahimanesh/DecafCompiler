@@ -71,4 +71,16 @@ public class Display {
 	public void addScope(Scope globalScope) {
 		scopes.add(globalScope);
 	}
+
+	public int findScopeDepth(Scope scope) {
+		int result = 0;
+		for (int i = scopes.size()-1; i >= 0; i --) {
+			result += scopes.get(i).size;
+			if (scopes.get(i) == scope) {
+				return result;
+			}
+		}
+
+		return result;
+	}
 }

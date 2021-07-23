@@ -4,6 +4,7 @@ import code_generator.instructions.*;
 import code_generator.nodes.OrNode;
 import code_generator.operand.*;
 import code_generator.stack.Display;
+import code_generator.stack.Scope;
 import code_generator.stack.TemporaryMemoryBank;
 import code_review.DecafCodeReviewer;
 import code_review.symbol_table.Function;
@@ -11,6 +12,7 @@ import code_review.symbol_table.SymbolTable;
 import code_review.symbol_table.Variable;
 import code_review.symbol_table.symbols.BoolSymbol;
 import code_review.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.VoidSymbol;
 import parser.Action;
 import parser.CodeGenerator;
 import scanner.CompilerScanner;
@@ -108,6 +110,30 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void type() {
 		latestRecordedSymbol = symbolTable.getSymbol(scanner.getToken());
+	}
+
+	public void returnValue() throws SyntaxException, SemanticException, NoSuchFieldException {
+		if (!currentOrNode.getSymbol().equals(currentFunction.getReturnType()))
+			throw new SemanticException("Incompatible returned function with type");
+		Indirect returnAddress = display.getVariableAddress("return");
+		Indirect returnResultAddress = currentOrNode.getAddress();
+		Register register = RegisterBank.allocateRegister(currentOrNode.getSymbol());
+		mipsLines.add(new Instruction("lw", register, returnResultAddress));
+		mipsLines.add(new Instruction("sw", register, returnAddress));
+
+		RegisterBank.freeRegister(register);
+	}
+
+	public void assertVoidFunction() throws SemanticException {
+		if (!currentFunction.getReturnType().equals(VoidSymbol.get())) {
+			throw new SemanticException("You can't just return from non-void function.");
+		}
+	}
+
+	public void returnFunction() {
+		int scopesDepth = display.findScopeDepth(currentFunctionScope);
+		mipsLines.add(new Instruction("addi", new Register("sp"), new Register("sp"), new Immediate(-scopesDepth)));
+		mipsLines.add(new Instruction("jr", new Register("ra")));
 	}
 
 	public void endLine() {
@@ -209,6 +235,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public Function currentFunction;
+	public Scope currentFunctionScope;
 	public void declareFunction() throws NoSuchFieldException {
 		if (currentClassSymbol != null) {
 			currentFunction = currentClassSymbol.getMethod(latestRecordedIdent);
@@ -219,7 +246,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		}
 		latestRecordedIdent = null;
 
-		display.addNewScope();
+		currentFunctionScope = display.addNewScope();
 		display.allocateVariable(currentFunction.getReturnType(), "return");
 		for (Variable variable: currentFunction.getArguments()) {
 			display.allocateVariable(variable.getSymbol(), variable.getName());

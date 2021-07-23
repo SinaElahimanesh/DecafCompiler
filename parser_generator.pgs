@@ -1320,7 +1320,7 @@
         "start": 78,
         "end": 76,
         "token": ";",
-        "func": "endLine;returnFunction",
+        "func": "endLine;assertVoidFunction;returnFunction",
         "anchorX": 608.0,
         "anchorY": 401.5,
         "isGraph": false,
