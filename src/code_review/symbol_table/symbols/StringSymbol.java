@@ -106,6 +106,11 @@ public final class StringSymbol extends Symbol implements Primitive {
 	}
 
 	@Override
+	public void isEqual(Indirect a, Indirect b, Indirect r) throws SemanticException {
+
+	}
+
+	@Override
 	public void print(Register register) throws ClassNotFoundException {
 		DecafCodeGenerator.mipsLines.add(new Instruction("add", new Register("v0"), new Register("zero"), register));
 	}

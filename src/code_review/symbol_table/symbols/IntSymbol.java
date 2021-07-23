@@ -1,6 +1,7 @@
 package code_review.symbol_table.symbols;
 
 import code_generator.DecafCodeGenerator;
+import code_generator.SemanticException;
 import code_generator.instructions.Instruction;
 import code_generator.instructions.SystemCall;
 import code_generator.operand.Immediate;
@@ -91,6 +92,11 @@ public class IntSymbol extends Symbol implements Primitive {
 		RegisterBank.freeRegister(r1);
 		RegisterBank.freeRegister(r2);
 		RegisterBank.freeRegister(r3);
+	}
+
+	@Override
+	public void isEqual(Indirect a, Indirect b, Indirect r) throws SemanticException {
+
 	}
 
 	@Override

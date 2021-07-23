@@ -1,6 +1,7 @@
 package code_review.symbol_table.symbols;
 
 import code_generator.DecafCodeGenerator;
+import code_generator.SemanticException;
 import code_generator.instructions.Instruction;
 import code_generator.instructions.Label;
 import code_generator.instructions.LabelMaker;
@@ -59,5 +60,10 @@ public class BoolSymbol extends Symbol implements Primitive {
 	@Override
 	public void division(Indirect a, Indirect b, Indirect r) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void isEqual(Indirect a, Indirect b, Indirect r) throws SemanticException {
+
 	}
 }
