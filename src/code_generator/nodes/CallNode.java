@@ -61,7 +61,19 @@ public class CallNode implements Node {
 				argument.implement(mipsLines);
 			}
 
-			if (function.getName().equals("Print")) {
+			if (!function.getName().equals("Print")) {
+				if (function.getArguments().size() != arguments.size()) {
+					throw new SemanticException("Incompatible arguments size " + function.getArguments().size() +
+							" and " + arguments.size() + " for function " + function.getName());
+				}
+				for (int i = 0; i < arguments.size(); i++) {
+					if (!arguments.get(i).getSymbol().equals(function.getArguments().get(i).getSymbol())) {
+						throw new SemanticException("Incompatible argumnets with type " +
+								arguments.get(i).getSymbol().getName() +
+								" and " + function.getArguments().get(i).getSymbol().getName());
+					}
+				}
+			} else {
 				for (OrNode argument : arguments) {
 					if (argument.getSymbol() instanceof Primitive) {
 						try {
@@ -85,29 +97,6 @@ public class CallNode implements Node {
 				address = null;
 				symbol = null;
 				return;
-			}
-
-			if (function.getName().equals("ReadInteger")) {
-
-				mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(SystemCall.print_string)));
-				mipsLines.add(new Instruction("la", new Register("a0"), new LabelOperand(new Label("string__newline"))));
-				mipsLines.add(new Instruction("syscall"));
-
-				address = null;
-				symbol = null;
-				return;
-			}
-
-			if (function.getArguments().size() != arguments.size()) {
-				throw new SemanticException("Incompatible arguments size " + function.getArguments().size() +
-						" and " + arguments.size() + " for function " + function.getName());
-			}
-			for (int i = 0; i < arguments.size(); i++) {
-				if (!arguments.get(i).getSymbol().equals(function.getArguments().get(i).getSymbol())) {
-					throw new SemanticException("Incompatible argumnets with type " +
-							arguments.get(i).getSymbol().getName() +
-							" and " + function.getArguments().get(i).getSymbol().getName());
-				}
 			}
 
 			int argumentMemory = TemporaryMemoryBank.size + 8;
