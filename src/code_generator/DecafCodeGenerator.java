@@ -399,6 +399,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 		for (Variable variable: currentFunction.getArguments()) {
 			display.allocateVariable(variable.getSymbol(), variable.getName());
 		}
+		mipsLines.add(new Instruction("addi", new Register("sp"), new Register("sp"), new Immediate(display.getLastScope().getSize())));
 	}
 
 	public void endFunctionBlock() {
