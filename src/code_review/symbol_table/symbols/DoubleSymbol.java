@@ -97,6 +97,20 @@ public class DoubleSymbol extends Symbol implements Primitive {
 	@Override
 	public void isEqual(Indirect a, Indirect b, Indirect r) throws SemanticException {
 
+		Register r1 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r2 = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register r3 = RegisterBank.allocateRegister(VoidSymbol.get());
+
+		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r1, a));
+		DecafCodeGenerator.mipsLines.add(new Instruction("lw", r2, b));
+		DecafCodeGenerator.mipsLines.add(new Instruction("subu", r3, r1, r2));
+		DecafCodeGenerator.mipsLines.add(new Instruction("sltu", r3, new Register("zero"), r3));
+		DecafCodeGenerator.mipsLines.add(new Instruction("xori", r3, r3, new Immediate(1)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("sw", r3, r));
+
+		RegisterBank.freeRegister(r1);
+		RegisterBank.freeRegister(r2);
+		RegisterBank.freeRegister(r3);
 	}
 
 	@Override
