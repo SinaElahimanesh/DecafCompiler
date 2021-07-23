@@ -3,8 +3,11 @@ package code_generator.nodes;
 import code_generator.DecafCodeGenerator;
 import code_generator.SemanticException;
 import code_generator.SyntaxException;
+import code_generator.instructions.Instruction;
 import code_generator.instructions.MipsLine;
 import code_generator.operand.Indirect;
+import code_generator.operand.Register;
+import code_generator.operand.RegisterBank;
 import code_review.symbol_table.symbols.Symbol;
 
 import java.util.ArrayList;
@@ -46,7 +49,13 @@ public class AssignmentNode implements Node {
 			address = rhs.address;
 			return;
 		}
-		
+		OrNode lhs = children.get(0);
+		lhs.implement(mipsLines);
+		if (!lhs.isLValue()) throw new SemanticException("Can not assign");
+		Register r = RegisterBank.allocateRegister(symbol);
+		mipsLines.add(new Instruction("lw", r, rhs.getAddress()));
+		mipsLines.add(new Instruction("sw", r, lhs.getAddress()));
+		RegisterBank.freeRegister(r);
 	}
 
 	@Override
@@ -62,9 +71,7 @@ public class AssignmentNode implements Node {
     } catch(SyntaxException | SemanticException e) {
       if (operator.equals("=")) {
         if (lastChild().isComplete()) {
-					System.out.println("faaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-					System.exit(1);
-          children.add(new OrNode(codeGenerator));
+					children.add(new OrNode(codeGenerator));
         } else {
           throw new SyntaxException("Unexpected = operator");
         }
