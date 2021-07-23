@@ -1,9 +1,12 @@
 int main() {
-    Print("ba " + a(12) + " va okay.");
+    Print(f(5));
 }
 
-string a(int x) {
-    Print(x);
-    return "s";
-    Print(x);
+int f(int x) {
+    if (x == 1)
+        return 1;
+    if (x == 0)
+        return 1;
+
+    return f(x-1) + f(x-2);
 }
