@@ -20,11 +20,6 @@ public class Display {
 	}
 
 	public Scope addNewScope() {
-		mipsLines.add(new Instruction("addi",
-				new Register("sp"),
-				new Register("sp"),
-				new Immediate(scopes.get(scopes.size() - 1).getSize())));
-
 		Scope scope = new Scope();
 		scopes.add(scope);
 		return scope;
