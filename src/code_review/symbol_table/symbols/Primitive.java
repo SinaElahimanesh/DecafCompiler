@@ -11,5 +11,6 @@ public interface Primitive {
 	void multiplication(Indirect a, Indirect b, Indirect r) throws SemanticException;
 	void division(Indirect a, Indirect b, Indirect r) throws SemanticException;
 	void isEqual(Indirect a, Indirect b, Indirect r) throws SemanticException;
+	void isLess(Indirect a, Indirect b, Indirect r) throws SemanticException;
 	void print(Register r) throws ClassNotFoundException, SemanticException;
 }

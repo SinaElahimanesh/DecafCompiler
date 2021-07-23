@@ -63,4 +63,10 @@ public class BoolSymbol extends Symbol implements Primitive {
 	public void isEqual(Indirect a, Indirect b, Indirect r) throws SemanticException {
 
 	}
+
+	@Override
+	public void isLess(Indirect a, Indirect b, Indirect r) throws SemanticException {
+		// TODO Auto-generated method stub
+		
+	}
 }
