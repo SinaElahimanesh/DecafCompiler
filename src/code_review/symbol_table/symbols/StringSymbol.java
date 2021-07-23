@@ -105,7 +105,38 @@ public final class StringSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void isEqual(Indirect a, Indirect b, Indirect r) throws SemanticException {
+		Register aAddress = RegisterBank.allocateRegister(StringSymbol.get());
+		Register aValue = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register bAddress = RegisterBank.allocateRegister(StringSymbol.get());
+		Register bValue = RegisterBank.allocateRegister(VoidSymbol.get());
+		Register result = RegisterBank.allocateRegister(VoidSymbol.get());
 
+		Label loopLabel = LabelMaker.createNonFunctionLabel();
+		Label trueLabel = LabelMaker.createNonFunctionLabel();
+		Label exitLabel = LabelMaker.createNonFunctionLabel();
+
+		DecafCodeGenerator.mipsLines.add(new Instruction("li", result, new Immediate(0)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("lw", aAddress, a));
+		DecafCodeGenerator.mipsLines.add(new Instruction("lw", bAddress, b));
+
+		DecafCodeGenerator.mipsLines.add(loopLabel);
+		DecafCodeGenerator.mipsLines.add(new Instruction("lb", aValue, new Indirect(0, aAddress)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("lb", bValue, new Indirect(0, bAddress)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("bne", aValue, bValue, new LabelOperand(exitLabel)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("beq", aValue, new Register("zero"), new LabelOperand(trueLabel)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("addi", aAddress, aAddress, new Immediate(1)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("addi", bAddress, bAddress, new Immediate(1)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("j", new LabelOperand(loopLabel)));
+		DecafCodeGenerator.mipsLines.add(trueLabel);
+		DecafCodeGenerator.mipsLines.add(new Instruction("li", result, new Immediate(1)));
+		DecafCodeGenerator.mipsLines.add(exitLabel);
+		DecafCodeGenerator.mipsLines.add(new Instruction("sw", result, r));
+
+		RegisterBank.freeRegister(aValue);
+		RegisterBank.freeRegister(aAddress);
+		RegisterBank.freeRegister(bValue);
+		RegisterBank.freeRegister(bAddress);
+		RegisterBank.freeRegister(result);
 	}
 
 	@Override
@@ -117,7 +148,6 @@ public final class StringSymbol extends Symbol implements Primitive {
 
 	@Override
 	public void isLess(Indirect a, Indirect b, Indirect r) throws SemanticException {
-		// TODO Auto-generated method stub
-		
+		throw new SemanticException("Comparing strings is not allowed.");
 	}
 }

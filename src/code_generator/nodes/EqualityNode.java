@@ -13,11 +13,7 @@ import code_generator.operand.Indirect;
 import code_generator.operand.Register;
 import code_generator.operand.RegisterBank;
 import code_generator.stack.TemporaryMemoryBank;
-import code_review.symbol_table.symbols.BoolSymbol;
-import code_review.symbol_table.symbols.DoubleSymbol;
-import code_review.symbol_table.symbols.IntSymbol;
-import code_review.symbol_table.symbols.Primitive;
-import code_review.symbol_table.symbols.Symbol;
+import code_review.symbol_table.symbols.*;
 
 public class EqualityNode implements Node {
 
@@ -57,8 +53,8 @@ public class EqualityNode implements Node {
     address = child.getAddress();
     symbol = child.getSymbol();
     if (children.size() == 1) return;
-		if (!symbol.equals(IntSymbol.get()) && !symbol.equals(DoubleSymbol.get())) {
-			throw new SemanticException("mult is only for numbers");
+		if (!symbol.equals(IntSymbol.get()) && !symbol.equals(DoubleSymbol.get()) && !symbol.equals(StringSymbol.get())) {
+			throw new SemanticException("Equality is only for numbers");
 		}
     if (children.size() != 2) {
     	throw new SemanticException("can not cascade equality operators");  

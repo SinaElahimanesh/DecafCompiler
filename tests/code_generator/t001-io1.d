@@ -1,8 +1,9 @@
 int main() {
-    Print("12" + "34");
-    a("salam", "khu" + "bi");
-}
-
-void a(string a, string b) {
-    Print((a + " ") + b + (" " + a), "yay");
+    Print("true:\t", "salam" == "sal" + "am");
+    Print("true:\t", "salam" == "salam");
+    Print("$$$$", "sal" + "am", "$$$$");
+    Print("$$$$", "salam", "$$$$");
+    Print("false:\t", "salam" != "sal" + "am");
+    Print("false:\t", "salnm" == "sal" + "am");
+    Print("true:\t", "salnm" != "sal" + "am");
 }
