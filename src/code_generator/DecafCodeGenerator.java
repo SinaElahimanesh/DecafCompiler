@@ -105,6 +105,8 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void implementExpression() throws SyntaxException, SemanticException {
+		if (!currentOrNode.isComplete())
+			return;
 		currentOrNode.implement(mipsLines);
 	}
 
