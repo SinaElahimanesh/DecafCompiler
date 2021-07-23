@@ -37,6 +37,7 @@ public final class LabelMaker {
 	private static int DOUBLE_CONSTANT_ID = 0;
 	private static int BOOLEAN_CONSTANT_ID = 0;
 	private static int STRING_CONSTANT_ID = 0;
+	private static int ARRAY_ID = 0;
 
 	public static Label createIntegerConstantLabel(int number) {
 		String numberStr = String.valueOf(number);
@@ -73,5 +74,10 @@ public final class LabelMaker {
 		}
 		STRING_CONSTANT_ID++;
 		return new Label("STRING_LABEL" + result + STRING_CONSTANT_ID);
+	}
+
+	public static Label createArrayLabel() {
+		ARRAY_ID++;
+		return new Label("ARRAY_LABEL" + ARRAY_ID);
 	}
 }

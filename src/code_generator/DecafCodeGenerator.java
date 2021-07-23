@@ -9,6 +9,7 @@ import code_review.symbol_table.Function;
 import code_review.symbol_table.SymbolTable;
 import code_review.symbol_table.Variable;
 import code_review.symbol_table.symbols.BoolSymbol;
+import code_review.symbol_table.symbols.IntSymbol;
 import code_review.symbol_table.symbols.Primitive;
 import code_review.symbol_table.symbols.Symbol;
 import parser.Action;
@@ -305,6 +306,35 @@ public class DecafCodeGenerator implements CodeGenerator {
 			mipsLines.add(new Directive(".word", parameters));
 		}
 
+	}
+
+	public void newArray() throws SemanticException, ClassNotFoundException {
+
+		// type
+		Symbol typeSymbol = variables.pop().getSymbol();
+		Indirect typeAddress = addresses.pop();
+		int typeSize = typeSymbol.getSize();
+
+		// size
+		Symbol symbol = variables.pop().getSymbol();
+		Indirect address = addresses.pop();
+		if (!(symbol instanceof IntSymbol)) {
+			throw new SemanticException("Integer Expression: expression must be integer!");
+		}
+		Register value = RegisterBank.allocateRegister(symbol);
+		mipsLines.add(new Instruction("lw", value, address));
+
+
+		Label label = LabelMaker.createArrayLabel();
+		mipsLines.add(label);
+
+		ArrayList<String> parameters = new ArrayList<>();
+		int spaceSize = 0;//value * typeSize;
+		parameters.add(String.valueOf(spaceSize));
+		mipsLines.add(new Directive(".space", parameters));
+
+
+		RegisterBank.freeRegister(value);
 	}
 
 	public void stringConstant() {
