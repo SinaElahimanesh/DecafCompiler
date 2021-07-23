@@ -10,6 +10,8 @@ import code_generator.instructions.SystemCall;
 import code_generator.operand.*;
 import code_generator.stack.TemporaryMemoryBank;
 import code_review.symbol_table.Function;
+import code_review.symbol_table.symbols.BoolSymbol;
+import code_review.symbol_table.symbols.DoubleSymbol;
 import code_review.symbol_table.symbols.IntSymbol;
 import code_review.symbol_table.symbols.Primitive;
 import code_review.symbol_table.symbols.StringSymbol;
@@ -63,19 +65,70 @@ public class CallNode implements Node {
 				argument.implement(mipsLines);
 			}
 
-			if (!function.getName().equals("Print")) {
-				if (function.getArguments().size() != arguments.size()) {
-					throw new SemanticException("Incompatible arguments size " + function.getArguments().size() +
-							" and " + arguments.size() + " for function " + function.getName());
+			if (function.getName().equals("btoi")) {
+				if (arguments.size() != 1) throw new SemanticException("bad btoi input count");
+				OrNode argument = arguments.get(0);
+				if (!argument.getSymbol().equals(BoolSymbol.get())) {
+					throw new SemanticException("bad btoi input type");
 				}
-				for (int i = 0; i < arguments.size(); i++) {
-					if (!arguments.get(i).getSymbol().equals(function.getArguments().get(i).getSymbol())) {
-						throw new SemanticException("Incompatible argumnets with type " +
-								arguments.get(i).getSymbol().getName() +
-								" and " + function.getArguments().get(i).getSymbol().getName());
-					}
+				symbol = IntSymbol.get();
+				address = argument.getAddress();
+				return;
+			}
+
+			if (function.getName().equals("itob")) {
+				if (arguments.size() != 1) throw new SemanticException("bad itob input count");
+				OrNode argument = arguments.get(0);
+				if (!argument.getSymbol().equals(IntSymbol.get())) {
+					throw new SemanticException("bad itob input type");
 				}
-			} else {
+				symbol = BoolSymbol.get();
+				address = TemporaryMemoryBank.allocateTemporaryMemory(4);
+				Register r = RegisterBank.allocateRegister(argument.getSymbol());
+				DecafCodeGenerator.mipsLines.add(new Instruction("lw", r, argument.getAddress()));
+				DecafCodeGenerator.mipsLines.add(new Instruction("sltu", r, new Register("zero"), r));
+				DecafCodeGenerator.mipsLines.add(new Instruction("sw", r, address));
+				RegisterBank.freeRegister(r);
+				return;
+			}
+
+			if (function.getName().equals("dtoi")) {
+				if (arguments.size() != 1) throw new SemanticException("bad dtoi input count");
+				OrNode argument = arguments.get(0);
+				if (!argument.getSymbol().equals(DoubleSymbol.get())) {
+					throw new SemanticException("bad dtoi input type");
+				}
+				symbol = IntSymbol.get();
+				address = TemporaryMemoryBank.allocateTemporaryMemory(4);
+				Register r = RegisterBank.allocateDoubleRegister(argument.getSymbol());
+				Register nim = RegisterBank.allocateDoubleRegister(argument.getSymbol());
+				DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r, argument.getAddress()));
+				DecafCodeGenerator.mipsLines.add(new Instruction("l.s", nim, new LabelOperand(new Label("float__nim"))));
+				DecafCodeGenerator.mipsLines.add(new Instruction("add.s", r, r, nim));
+				DecafCodeGenerator.mipsLines.add(new Instruction("cvt.w.s", r, r));
+				DecafCodeGenerator.mipsLines.add(new Instruction("s.s", r, address));
+				RegisterBank.freeRegister(r);
+				RegisterBank.freeRegister(nim);
+				return;
+			}
+
+			if (function.getName().equals("itod")) {
+				if (arguments.size() != 1) throw new SemanticException("bad itod input count");
+				OrNode argument = arguments.get(0);
+				if (!argument.getSymbol().equals(IntSymbol.get())) {
+					throw new SemanticException("bad itod input type");
+				}
+				symbol = DoubleSymbol.get();
+				address = TemporaryMemoryBank.allocateTemporaryMemory(4);
+				Register r = RegisterBank.allocateDoubleRegister(argument.getSymbol());
+				DecafCodeGenerator.mipsLines.add(new Instruction("l.s", r, argument.getAddress()));
+				DecafCodeGenerator.mipsLines.add(new Instruction("cvt.s.w", r, r));
+				DecafCodeGenerator.mipsLines.add(new Instruction("s.s", r, address));
+				RegisterBank.freeRegister(r);
+				return;
+			}
+
+			if (function.getName().equals("Print")) {
 				for (OrNode argument : arguments) {
 					if (argument.getSymbol() instanceof Primitive) {
 						try {
@@ -99,6 +152,19 @@ public class CallNode implements Node {
 				address = null;
 				symbol = null;
 				return;
+			}
+
+
+			if (function.getArguments().size() != arguments.size()) {
+				throw new SemanticException("Incompatible arguments size " + function.getArguments().size() +
+						" and " + arguments.size() + " for function " + function.getName());
+			}
+			for (int i = 0; i < arguments.size(); i++) {
+				if (!arguments.get(i).getSymbol().equals(function.getArguments().get(i).getSymbol())) {
+					throw new SemanticException("Incompatible argumnets with type " +
+							arguments.get(i).getSymbol().getName() +
+							" and " + function.getArguments().get(i).getSymbol().getName());
+				}
 			}
 
 			int argumentMemory = TemporaryMemoryBank.size + 8;
