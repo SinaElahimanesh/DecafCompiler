@@ -1,3 +1,8 @@
+
+int test(int a, int b) {
+    return a * b;
+}
+
 int main() {
     int a;
     int b;
@@ -5,6 +10,5 @@ int main() {
     a = ReadInteger();
     b = ReadInteger();
 
-    Print(a);
-    Print(b);
+    Print(test(a, b));
 }
