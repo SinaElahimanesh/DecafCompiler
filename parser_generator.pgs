@@ -957,8 +957,8 @@
         "end": 56,
         "token": ")",
         "func": "ifStatement",
-        "anchorX": 709.0,
-        "anchorY": 501.0,
+        "anchorX": 715.0,
+        "anchorY": 671.0,
         "isGraph": false,
         "isGlobal": false
       },
@@ -967,8 +967,8 @@
         "end": 57,
         "token": "Stmt",
         "func": "completeIf",
-        "anchorX": 841.0,
-        "anchorY": 499.5,
+        "anchorX": 822.0,
+        "anchorY": 600.5,
         "isGraph": true,
         "isGlobal": false
       },
@@ -977,8 +977,8 @@
         "end": 58,
         "token": "else",
         "func": "elseStatement",
-        "anchorX": 986.5,
-        "anchorY": 499.0,
+        "anchorX": 1003.5,
+        "anchorY": 670.0,
         "isGraph": false,
         "isGlobal": false
       },
@@ -987,8 +987,8 @@
         "end": 59,
         "token": "Stmt",
         "func": "completeIf",
-        "anchorX": 1161.5,
-        "anchorY": 499.0,
+        "anchorX": 1185.5,
+        "anchorY": 627.0,
         "isGraph": true,
         "isGlobal": false
       }
@@ -1041,8 +1041,8 @@
         "end": 62,
         "token": "while",
         "func": "whileLabel",
-        "anchorX": 366.0,
-        "anchorY": 473.0,
+        "anchorX": 385.0,
+        "anchorY": 580.0,
         "isGraph": false,
         "isGlobal": false
       },
@@ -1070,9 +1070,9 @@
         "start": 64,
         "end": 65,
         "token": ")",
-        "func": "whileLoop",
-        "anchorX": 780.0,
-        "anchorY": 465.5,
+        "func": "whileLoop;endLine",
+        "anchorX": 736.0,
+        "anchorY": 585.5,
         "isGraph": false,
         "isGlobal": false
       },
@@ -1081,8 +1081,8 @@
         "end": 60,
         "token": "Stmt",
         "func": "whileComplete",
-        "anchorX": 943.0,
-        "anchorY": 468.0,
+        "anchorX": 891.0,
+        "anchorY": 700.0,
         "isGraph": true,
         "isGlobal": false
       }
