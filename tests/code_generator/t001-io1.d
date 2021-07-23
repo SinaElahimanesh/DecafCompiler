@@ -6,8 +6,8 @@ void k(int a) {
 }
 
 int main() {
-    int[] a;
-    a = NewArray(10, int);
+    int[][] a;
+    a = NewArray(10, int[]);
     k(3);
 }
 

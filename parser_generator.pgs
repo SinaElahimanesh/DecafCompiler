@@ -3523,6 +3523,12 @@
         "y": 315.0,
         "id": 194,
         "isFinal": true
+      },
+      {
+        "x": 930.0,
+        "y": 311.0,
+        "id": 195,
+        "isFinal": false
       }
     ],
     "edges": [
@@ -3563,6 +3569,26 @@
         "func": "ident",
         "anchorX": 517.5,
         "anchorY": 462.5,
+        "isGraph": false,
+        "isGlobal": false
+      },
+      {
+        "start": 194,
+        "end": 195,
+        "token": "[",
+        "func": "operator",
+        "anchorX": 802.0,
+        "anchorY": 246.0,
+        "isGraph": false,
+        "isGlobal": false
+      },
+      {
+        "start": 195,
+        "end": 194,
+        "token": "]",
+        "func": "operator",
+        "anchorX": 812.0,
+        "anchorY": 313.0,
         "isGraph": false,
         "isGlobal": false
       }
