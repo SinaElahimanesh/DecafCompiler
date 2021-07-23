@@ -128,9 +128,12 @@ public class CallNode implements Node {
 
 		if (function.getName().equals("ReadLine")) {
 			symbol = StringSymbol.get();
-			address = TemporaryMemoryBank.allocateTemporaryMemory(1024);
-			mipsLines.add(new Instruction("add", new Register("a0"), new Register("sp"), new Register("zero")));
-			mipsLines.add(new Instruction("addi", new Register("a0"), new Immediate(address.getImmediate())));
+			address = TemporaryMemoryBank.allocateTemporaryMemory(4);
+			mipsLines.add(new Instruction("li", new Register("a0"), new Immediate(1024)));
+			mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(9)));
+			mipsLines.add(new Instruction("syscall"));
+			mipsLines.add(new Instruction("sw", new Register("v0"), address));
+			mipsLines.add(new Instruction("add", new Register("a0"), new Register("v0"), new Register("zero")));
 			mipsLines.add(new Instruction("li", new Register("a1"), new Immediate(1024)));
 			mipsLines.add(new Instruction("li", new Register("v0"), new Immediate(8)));
 			mipsLines.add(new Instruction("syscall"));
