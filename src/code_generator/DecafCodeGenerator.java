@@ -170,9 +170,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 		display.popScope();
 	}
 
-	public void ifStatement() throws SemanticException, ClassNotFoundException {
-		Symbol symbol = variables.pop().getSymbol();
-		Indirect address = addresses.pop();
+	public void ifStatement() throws SemanticException, ClassNotFoundException, SyntaxException {
+		Symbol symbol = currentOrNode.getSymbol();
+		Indirect address = currentOrNode.getAddress();
+
+		currentOrNode = new OrNode(this);
 
 		if (!(symbol instanceof BoolSymbol)) {
 			throw new SemanticException("Boolean expression: the condition of If statement is not Boolean Expression");
@@ -182,20 +184,19 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 		Label jumpLabel = LabelMaker.createNonFunctionLabel();
 		labels.push(jumpLabel);
-		mipsLines.add(new Instruction("bez", value, new LabelOperand(jumpLabel)));
+		mipsLines.add(new Instruction("beq", value, new Register("zero"), new LabelOperand(jumpLabel)));
 
 		RegisterBank.freeRegister(value);
 	}
 
+	public void completeIf() {
+		mipsLines.add(labels.pop());
+	}
+
 	public void elseStatement() {
-
 		Label jumpLabel = LabelMaker.createNonFunctionLabel();
-		labels.push(jumpLabel);
 		mipsLines.add(new Instruction("j", new LabelOperand(jumpLabel)));
-
-		//
-		Label label = labels.pop();
-		mipsLines.add(label);
+		labels.push(jumpLabel);
 	}
 
 	public void completeElse() {
