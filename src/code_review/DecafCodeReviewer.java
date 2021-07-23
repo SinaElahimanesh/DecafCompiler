@@ -39,24 +39,30 @@ public class DecafCodeReviewer implements CodeGenerator {
 		this.scanner = scanner;
 		mipsLines.add(new Directive("data"));
 
-		mipsLines.add(new Label("bool__false"));
-		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-		mipsLines.add(new Label("bool__true"));
-		mipsLines.add(new Directive("word", Collections.singletonList("1")));
-
-		mipsLines.add(new Label("and__tmp"));
-		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-		mipsLines.add(new Label("or__tmp"));
-		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-		mipsLines.add(new Label("add__tmp"));
-		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-		mipsLines.add(new Label("mult__tmp"));
-		mipsLines.add(new Directive("word", Collections.singletonList("0")));
-		mipsLines.add(new Label("unary__tmp"));
-		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+//		mipsLines.add(new Label("bool__false"));
+//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+//		mipsLines.add(new Label("bool__true"));
+//		mipsLines.add(new Directive("word", Collections.singletonList("1")));
+//
+//		mipsLines.add(new Label("and__tmp"));
+//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+//		mipsLines.add(new Label("or__tmp"));
+//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+//		mipsLines.add(new Label("add__tmp"));
+//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+//		mipsLines.add(new Label("mult__tmp"));
+//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
+//		mipsLines.add(new Label("unary__tmp"));
+//		mipsLines.add(new Directive("word", Collections.singletonList("0")));
 		
 		mipsLines.add(new Label("string__newline"));
 		mipsLines.add(new Directive("asciiz", Collections.singletonList("\"\\n\"")));
+
+		mipsLines.add(new Label("string__true"));
+		mipsLines.add(new Directive("asciiz", Collections.singletonList("\"true\"")));
+
+		mipsLines.add(new Label("string__false"));
+		mipsLines.add(new Directive("asciiz", Collections.singletonList("\"false\"")));
 
 		globalScope.addFunction(new Function("Print").setReturnType(VoidSymbol.get()));
 		globalScope.addFunction(new Function("ReadInteger").setReturnType(IntSymbol.get()));
@@ -166,7 +172,7 @@ public class DecafCodeReviewer implements CodeGenerator {
 		mipsLines.add(new Directive("float", Collections.singletonList(double_)));
 	}
 
-	public void boolConstant() {
+	public void booleanConstant() {
 		String bool = scanner.getToken();
 		mipsLines.add(LabelMaker.createConstantLabel(bool, "bool", 4));
 		mipsLines.add(new Directive("word", Collections.singletonList(bool.equals("true")?"1":"0")));
