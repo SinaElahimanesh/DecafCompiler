@@ -63,9 +63,7 @@ public class Scope {
 
 	public Integer getVariableAddress(String name) throws NoSuchFieldException {
 		Integer currentAddress = -size;
-		System.out.println("name: "+ name);
 		for (Variable variable: variables) {
-			System.out.println("Variables: " + variable.getName());
 			if (variable.getName().equals(name)) {
 				return currentAddress;
 			}

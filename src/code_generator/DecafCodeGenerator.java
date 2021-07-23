@@ -10,6 +10,7 @@ import code_review.DecafCodeReviewer;
 import code_review.symbol_table.Function;
 import code_review.symbol_table.SymbolTable;
 import code_review.symbol_table.Variable;
+import code_review.symbol_table.symbols.ArraySymbol;
 import code_review.symbol_table.symbols.BoolSymbol;
 import code_review.symbol_table.symbols.Symbol;
 import code_review.symbol_table.symbols.VoidSymbol;
@@ -40,6 +41,11 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	String latestRecordedIdent = null;
 	Symbol latestRecordedSymbol = null;
+
+	boolean haveDeclaredVariable = false;
+	boolean canDeclareVariable = true;
+
+	Exception savedException;
 
 	public DecafCodeGenerator(CompilerScanner scanner, DecafCodeReviewer codeReviewer) throws SemanticException {
 		this.scanner = scanner;
@@ -88,7 +94,7 @@ public class DecafCodeGenerator implements CodeGenerator {
 
 	public void booleanConstant() throws SyntaxException, SemanticException {
 		String x = scanner.getToken();
-		currentNode.addIdent(LabelMaker.createConstantLabel(x, "bool", 4).toString());	
+		currentNode.addIdent(LabelMaker.createConstantLabel(x, "bool", 4).toString());
 	}
 
 	public void stringConstant() throws SyntaxException, SemanticException {
@@ -96,21 +102,53 @@ public class DecafCodeGenerator implements CodeGenerator {
 		currentNode.addIdent(LabelMaker.createConstantLabel(x, "string", 4).toString());
 	}
 
+	ArrayList<String> receivedWords = new ArrayList<>();
+	ArrayList<String> receivedTokens = new ArrayList<>();
+
 	public void operator() throws SyntaxException, SemanticException {
-		currentNode.addOperator(scanner.getToken());
+		receivedWords.add(scanner.getToken());
+		receivedTokens.add("operator");
+
+		try {
+			currentNode.addOperator(scanner.getToken());
+		} catch (SyntaxException | SemanticException e) {
+			if (!canDeclareVariable)
+				throw e;
+			if (!(savedException instanceof SyntaxException))
+				savedException = e;
+		}
 	}
 
 	public void ident() throws SyntaxException, SemanticException {
-		currentNode.addIdent(scanner.getToken());
+		receivedWords.add(scanner.getToken());
+		receivedTokens.add("ident");
+
+		try {
+			currentNode.addIdent(scanner.getToken());
+		} catch (SyntaxException | SemanticException e) {
+			if (!canDeclareVariable)
+				throw e;
+			if (!(savedException instanceof SyntaxException))
+				savedException = e;
+		}
 	}
 
 	public void implementExpression() throws SyntaxException, SemanticException {
-		if (!currentNode.isComplete())
-			return;
-		currentNode.implement(mipsLines);
+		try {
+			if (!currentNode.isComplete())
+				return;
+			currentNode.implement(mipsLines);
+		} catch (SyntaxException | SemanticException e) {
+			if (!canDeclareVariable)
+				throw e;
+			if (!(savedException instanceof SyntaxException))
+				savedException = e;
+		}
 	}
 
 	public void type() {
+		receivedWords.add(scanner.getToken());
+		receivedTokens.add("type");
 		latestRecordedSymbol = symbolTable.getSymbol(scanner.getToken());
 	}
 
@@ -138,8 +176,21 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(new Instruction("jr", new Register("ra")));
 	}
 
-	public void endLine() {
+	public void endLine() throws Exception {
+		if (canDeclareVariable && declareVariableWithLine())
+		{
+			savedException = null;
+			haveDeclaredVariable = true;
+		}
+
+		if (savedException != null)
+			throw savedException;
+		if (!haveDeclaredVariable)
+			canDeclareVariable = false;
+		haveDeclaredVariable = false;
 		TemporaryMemoryBank.resetMemory();
+		receivedWords.clear();
+		receivedTokens.clear();
 		currentNode = new AssignmentNode(this);
 	}
 
@@ -156,20 +207,49 @@ public class DecafCodeGenerator implements CodeGenerator {
 		}
 	}
 
+	private boolean declareVariableWithLine() {
+		if (receivedWords.size() < 2 || receivedWords.size() % 2 == 1) return false;
+		Symbol type = symbolTable.getSymbol(receivedWords.get(0));
+		if (type == null) return false;
+		for (int i = 1; i < receivedWords.size() - 1; i ++) {
+			if (i % 2 == 0 && !receivedWords.get(i).equals("]")) return false;
+			if (i % 2 == 1 && !receivedWords.get(i).equals("[")) return false;
+
+			if (i % 2 == 0)
+				type = new ArraySymbol(type);
+		}
+
+		if (!receivedTokens.get(receivedTokens.size() - 1).equals("ident"))
+			return false;
+
+		display.allocateVariable(type, receivedWords.get(receivedWords.size()-1));
+		mipsLines.add(new Instruction("addi", new Register("sp"), new Register("sp"), new Immediate(4)));
+		return true;
+	}
+
 	public void declareInstantVariable() throws SyntaxException {
-		if (!variables.empty())
-			throw new SyntaxException("Declaration while variables is not empty.");
+		haveDeclaredVariable = true;
+		if (!canDeclareVariable)
+			throw new SyntaxException("Can't declare variables in this scope.");
 
 		display.allocateVariable(latestRecordedSymbol, scanner.getToken());
 		currentNode = new AssignmentNode(this);
 	}
 
-	public void startScope() {
+	public void startScope() throws Exception {
+		if (savedException != null)
+			throw savedException;
+		receivedWords.clear();
+		receivedTokens.clear();
+		canDeclareVariable = true;
 		display.addNewScope();
 	}
 
 	public void endScope() {
 		display.popScope();
+		receivedWords.clear();
+		receivedTokens.clear();
+		canDeclareVariable = false;
 	}
 
 	public void ifStatement() throws SemanticException, ClassNotFoundException, SyntaxException {

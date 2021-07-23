@@ -49,13 +49,12 @@ public class Display {
 	}
 
 	public Indirect getVariableAddress(String name) throws NoSuchFieldException {
-		System.out.println("hey hey " + name);
 		Integer currentAddress = 0;
 		for (int i = scopes.size() - 1; i > -1; i--) {
 			if (scopes.get(i).hasVariable(name)) {
-				System.out.println(currentAddress + scopes.get(i).getVariableAddress(name));
 				return new Indirect(currentAddress + scopes.get(i).getVariableAddress(name), new Register("sp"));
 			}
+			currentAddress -= scopes.get(i).size;
 		}
 
 		return null;

@@ -1,6 +1,6 @@
 void k(int a) {
+    int x;
     Print(a);
-    a = 2 + 2;
     Print(a);
 }
 

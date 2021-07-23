@@ -9,7 +9,13 @@ import code_generator.instructions.SystemCall;
 import code_generator.operand.*;
 import code_generator.stack.Scope;
 
-public class ArraySymbol implements Primitive {
+public class ArraySymbol extends Symbol implements Primitive {
+	Symbol elementType;
+	public ArraySymbol(Symbol elementType) {
+		super("Array["+elementType.name+"]");
+		this.elementType = elementType;
+	}
+
 	@Override
 	public void addition(Indirect a, Indirect b, Indirect r) throws SemanticException {
 		Register aStartAddress = RegisterBank.allocateRegister(VoidSymbol.get());
