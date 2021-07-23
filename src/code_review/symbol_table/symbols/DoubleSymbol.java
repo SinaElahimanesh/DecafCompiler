@@ -43,7 +43,7 @@ public class DoubleSymbol extends Symbol implements Primitive {
 		DecafCodeGenerator.mipsLines.add(new Instruction("bc1t", new LabelOperand(l1)));
 		DecafCodeGenerator.mipsLines.add(new Instruction("li", r3, new Immediate(0)));
 		Label l2 = LabelMaker.createNonFunctionLabel();
-		DecafCodeGenerator.mipsLines.add(new Instruction("jmp", new LabelOperand(l2)));
+		DecafCodeGenerator.mipsLines.add(new Instruction("j", new LabelOperand(l2)));
 		DecafCodeGenerator.mipsLines.add(l1);
 		DecafCodeGenerator.mipsLines.add(new Instruction("li", r3, new Immediate(1)));
 		DecafCodeGenerator.mipsLines.add(l2);
