@@ -73,8 +73,19 @@ public class MultiplicationNode implements Node {
       } else if (operators.get(i-1).equals("/")) {
 			  ((Primitive)symbol).division(address, child.getAddress(), address);
       } else {
-			
-			}
+        if (!symbol.equals(IntSymbol.get())) {
+          throw new SemanticException("modolo is only for ints");
+        }
+        Register register1 = RegisterBank.allocateRegister(symbol);
+        Register register2 = RegisterBank.allocateRegister(symbol);
+        mipsLines.add(new Instruction("lw", register1, child.getAddress()));
+        mipsLines.add(new Instruction("lw", register2, address));
+        mipsLines.add(new Instruction("div", register2, register1));  
+        mipsLines.add(new Instruction("mfhi", register1));  
+        mipsLines.add(new Instruction("sw", register1, address));
+        RegisterBank.freeRegister(register1);
+        RegisterBank.freeRegister(register2);
+      }
     }
   }
 
