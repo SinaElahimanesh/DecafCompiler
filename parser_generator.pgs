@@ -1412,7 +1412,7 @@
         "start": 83,
         "end": 84,
         "token": "continue",
-        "func": "",
+        "func": "continueLoop",
         "anchorX": 469.0,
         "anchorY": 446.0,
         "isGraph": false,

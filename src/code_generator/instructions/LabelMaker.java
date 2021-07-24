@@ -39,6 +39,11 @@ public final class LabelMaker {
 		return new Label("label____" + id.toString());
 	}
 
+	public static Label createNonFunctionLabel(String comment) {
+		id ++;
+		return new Label("label____" + comment + "___" + id.toString());
+	}
+
 	public static Label createConstantLabel(String constant, String type, int size) {
 		String labelName = type + "_constant____" +
 				String.format("%x", new BigInteger(1, constant.getBytes(StandardCharsets.UTF_8)));

@@ -255,6 +255,10 @@ public class DecafCodeGenerator implements CodeGenerator {
 		mipsLines.add(new Instruction("j", new LabelOperand(endLabels.peek())));
 	}
 
+	public void continueLoop() {
+		mipsLines.add(new Instruction("j", new LabelOperand(labels.get(labels.size() - 3))));	
+	}
+
 	public void ifStatement() throws SemanticException, ClassNotFoundException, SyntaxException {
 		Symbol symbol = currentNode.getSymbol();
 		Indirect address = currentNode.getAddress();
@@ -293,16 +297,16 @@ public class DecafCodeGenerator implements CodeGenerator {
 	}
 
 	public void whileLabel() {
-		Label label = LabelMaker.createNonFunctionLabel();
+		Label label = LabelMaker.createNonFunctionLabel("while");
 		mipsLines.add(label);
 		labels.push(label);
 	}
 
 	public void startFor() throws SemanticException, SyntaxException {
-		Label endLabel = LabelMaker.createNonFunctionLabel();
-		Label startStep = LabelMaker.createNonFunctionLabel();
-		Label startBody = LabelMaker.createNonFunctionLabel();
-		Label startCondition = LabelMaker.createNonFunctionLabel();
+		Label endLabel = LabelMaker.createNonFunctionLabel("for_end");
+		Label startStep = LabelMaker.createNonFunctionLabel("for_step");
+		Label startBody = LabelMaker.createNonFunctionLabel("for_body");
+		Label startCondition = LabelMaker.createNonFunctionLabel("for_cond");
 
 		labels.push(startCondition);
 		labels.push(startBody);
